@@ -33,11 +33,11 @@ public abstract class BaseState
 
 public class Idle : BaseState
 {
-    //ºc³y¨ç¼Æ¡Aclass¦b³Q«Ø¥ß®É¡A·|©I¥s¦¹¨ç¼Æ¡A¨Ã¶Ç¤JPlayerControllerª«¥ó
+    //æ§‹é€ å‡½æ•¸ï¼Œclassåœ¨è¢«å‰µå»ºæ™‚ï¼Œæœƒèª¿ç”¨å‡½æ•¸ï¼Œä¸¦å‚³å…¥PlayerControllerçµ„ä»¶
     public Idle(PlayerController _playerController) : base(_playerController)
     {
         health = playerController.GetComponent<Health>();
-        //¼½©ñ°Êµe
+        //æ’­æ”¾å‹•ç•«
         playerController.PlayAnimation("idle");
         playerController.Stop();
     }
@@ -46,13 +46,13 @@ public class Idle : BaseState
     {
         if (playerController.PressAttackKey())
         {
-            //¤Á´«¨ìattackª¬ºA
+            //è½‰æ›åˆ°attackç‹€æ…‹
             playerController.SetCurrentState(new Attack(playerController));
-            Debug.Log("¤Á´«¦Ü§ğÀ»ª¬ºA");
+            Debug.Log("è½‰æ›åˆ°æ”»æ“Šç‹€æ…‹");
         }
         else if (playerController.PressArrowKey())
         {
-            //¤Á´«¨ìrunª¬ºA
+            //è½‰æ›åˆ°runç‹€æ…‹
             playerController.SetCurrentState(new Run(playerController));
         }
     }
@@ -64,7 +64,7 @@ public class Idle : BaseState
 
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("ÀË´ú¨ì¸I¼²: " + collision.name);
+        Debug.Log("ç¢°è§¸åˆ°ç‰©é«”: " + collision.name);
         if (collision.CompareTag("Enemy"))
         {
             Health playerHealth = collision.GetComponent<Health>();
@@ -75,7 +75,7 @@ public class Idle : BaseState
         }
     }
 
-    public override void OnTriggerStay2D(Collider2D collision) // ­×§ï¡G·s¼W OnTriggerStay2D ¤èªk
+    public override void OnTriggerStay2D(Collider2D collision) // æ›´æ”¹ï¼šæ–°å¢ OnTriggerStay2D æ–¹æ³•
     {
         if (collision.CompareTag("Enemy"))
         {
@@ -91,11 +91,11 @@ public class Idle : BaseState
 
 public class Run : BaseState
 {
-    //ºc³y¨ç¼Æ¡Aclass¦b³Q«Ø¥ß®É¡A·|©I¥s¦¹¨ç¼Æ¡A¨Ã¶Ç¤JPlayerControllerª«¥ó
+    //æ§‹é€ å‡½æ•¸ï¼Œclassåœ¨è¢«å‰µå»ºæ™‚ï¼Œæœƒèª¿ç”¨å‡½æ•¸ï¼Œä¸¦å‚³å…¥PlayerControllerçµ„ä»¶
     public Run(PlayerController _playerController) : base(_playerController)
     {
         health = playerController.GetComponent<Health>();
-        //¼½©ñ°Êµe
+        //æ’­æ”¾å‹•ç•«
         playerController.PlayAnimation("run");
     }
      
@@ -106,11 +106,11 @@ public class Run : BaseState
         {
             // 
             playerController.SetCurrentState(new Attack(playerController));
-            Debug.Log("¤Á´«¦Ü§ğÀ»ª¬ºA");
+            Debug.Log("è½‰æ›åˆ°æ”»æ“Šç‹€æ…‹");
         }
         else if (!playerController.PressArrowKey())
         {
-            //¤Á´«¨ìidleª¬ºA
+            //è½‰æ›åˆ°idleç‹€æ…‹
             playerController.SetCurrentState(new Idle(playerController));
         }
     }
@@ -122,7 +122,7 @@ public class Run : BaseState
     }
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("ÀË´ú¨ì¸I¼²: " + collision.name);
+        Debug.Log("ç¢°è§¸åˆ°ç‰©é«”: " + collision.name);
         if (collision.CompareTag("Enemy"))
         { 
             if (health.currentHealth >0)
@@ -132,7 +132,7 @@ public class Run : BaseState
         }
     }
 
-    public override void OnTriggerStay2D(Collider2D collision) // ­×§ï¡G·s¼W OnTriggerStay2D ¤èªk
+    public override void OnTriggerStay2D(Collider2D collision) // æ›´æ”¹ï¼šæ–°å¢ OnTriggerStay2D æ–¹æ³•
     {
         if (collision.CompareTag("Enemy"))
         {
@@ -149,20 +149,20 @@ public class Run : BaseState
 
 public class Attack : BaseState
 {
-    //ºc³y¨ç¼Æ¡Aclass¦b³Q«Ø¥ß®É¡A·|©I¥s¦¹¨ç¼Æ¡A¨Ã¶Ç¤JPlayerControllerª«¥ó
+    //æ§‹é€ å‡½æ•¸ï¼Œclassåœ¨è¢«å‰µå»ºæ™‚ï¼Œæœƒèª¿ç”¨å‡½æ•¸ï¼Œä¸¦å‚³å…¥PlayerControllerçµ„ä»¶
     public Attack(PlayerController _playerController) : base(_playerController)
     {
         health = playerController.GetComponent<Health>();
         attackManager = playerController.GetComponent<AttackManager>();
 
-        // ®Ú¾Ú¨¤¦âªº²¾°Êª¬ºA¨Ó¼½©ñ¬ÛÀ³ªº°Êµe
+        // æ ¹æ“šç©å®¶çš„ç§»å‹•ç‹€æ…‹ä¾†æ’­æ”¾æ”»æ“Šå‹•ç•«
         if (playerController.PressArrowKey())
         {
-            playerController.PlayAnimation("running_atk"); // ¼½©ñ¹B¦æ¤¤ªº§ğÀ»°Êµe
+            playerController.PlayAnimation("running_atk"); // æ’­æ”¾é‚Šèµ°é‚Šæ”»æ“Šçš„å‹•ç•«
         }
         else
         {
-            playerController.PlayAnimation("atk"); // ¼½©ñÀR¤î§ğÀ»°Êµe
+            playerController.PlayAnimation("atk"); // æ’­æ”¾ç«™ç«‹æ”»æ“Šçš„å‹•ç•«
         }
         //attackManager.PerformAttack(playerController.transform);
         playerController.StartCoroutine(HandleAttackDamage());
@@ -181,29 +181,29 @@ public class Attack : BaseState
         if (playerController.PressArrowKey())
         {
             playerController.SetCurrentState(new Run(playerController));
-            Debug.Log("¤Á´«¦Ü Run ª¬ºA");
+            Debug.Log("è½‰æ›åˆ° Run ç‹€æ…‹");
         }
         else
         {
             playerController.SetCurrentState(new Idle(playerController));
-            Debug.Log("¤Á´«¦Ü Idle ª¬ºA");
+            Debug.Log("è½‰æ›åˆ° Idle ç‹€æ…‹");
         }
     }
     public override void Update()
     {
-        //·íatk°Êµe¼½©ñµ²§ô¡A¦pªG«ö¤U¤è¦VÁä¡A¤Á´«¦Ürunª¬ºA;¦pªG!«ö¤U¤è¦VÁä¡A¤Á´«¦Üidleª¬ºA 
+        //ç•¶atkå‹•ç•«æ’­æ”¾çµæŸï¼Œå¦‚æœæŒ‰ä¸‹æ–¹å‘éµï¼Œè½‰æ›åˆ°runç‹€æ…‹;å¦‚æœ!æŒ‰ä¸‹æ–¹å‘éµï¼Œè½‰æ›åˆ°idleç‹€æ…‹ 
          
         if (playerController.IsAnimationDone("running_atk") || playerController.IsAnimationDone("atk"))
         {
             if (playerController.PressArrowKey())
             {
                 playerController.SetCurrentState(new Run(playerController));
-                Debug.Log("¤Á´«¦ÜRun");
+                Debug.Log("è½‰æ›åˆ°Run");
             }
             else 
             { 
                 playerController.SetCurrentState(new Idle(playerController));
-                Debug.Log("¤Á´«¦ÜIdle");
+                Debug.Log("è½‰æ›åˆ°Idle");
             }
         }
 
@@ -211,7 +211,7 @@ public class Attack : BaseState
 
     public override void FixedUpdate()
     {
-        // §ğÀ»®É¤]¥i¥H²¾°Ê
+        // æ”»æ“Šæ™‚ä¹Ÿå¯ä»¥ç§»å‹•
         playerController.Move();  
         playerController.Face();  
        
@@ -219,7 +219,7 @@ public class Attack : BaseState
     }
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("ÀË´ú¨ì¸I¼²: " + collision.name);
+        Debug.Log("ç¢°è§¸åˆ°ç‰©é«”: " + collision.name);
         if (collision.CompareTag("Enemy"))
         {
             Health playerHealth = collision.GetComponent<Health>();
@@ -230,7 +230,7 @@ public class Attack : BaseState
         }
     }
 
-    public override void OnTriggerStay2D(Collider2D collision) // ­×§ï¡G·s¼W OnTriggerStay2D ¤èªk
+    public override void OnTriggerStay2D(Collider2D collision) // æ›´æ”¹ï¼šæ–°å¢ OnTriggerStay2D æ–¹æ³•
     {
         if (collision.CompareTag("Enemy"))
         {

@@ -51,12 +51,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //ÀË´ú¬O§_«ö¤U¤è¦VÁä
+    //æª¢æ¸¬æ˜¯å¦æŒ‰ä¸‹æ–¹å‘éµ
     public bool PressArrowKey()
     {
         return Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.1 || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.1;
     }
-    //ÀË´ú¬O§_«ö¤U§ğÀ»Áä
+    //æª¢æ¸¬æ˜¯å¦æŒ‰ä¸‹æ”»æ“Šéµ
     public bool PressAttackKey()
     {
         return Input.GetKeyDown(KeyCode.Space);
@@ -67,13 +67,13 @@ public class PlayerController : MonoBehaviour
     
 
 
-    //¨¤¦â²¾°Ê
+    //ç§»å‹•éƒ¨åˆ†
     public void Move()
     {
         float horizontal = Input.GetAxisRaw("Horizontal") * moveSpeed;
         float vertical = Input.GetAxisRaw("Vertical") * moveSpeed;
 
-        rb2d.velocity = new Vector2(horizontal, vertical);
+        rb2d.linearVelocity = new Vector2(horizontal, vertical);
     }
 
     public void Stop()
@@ -81,10 +81,10 @@ public class PlayerController : MonoBehaviour
         float horizontal = 0 * moveSpeed;
         float vertical = 0 * moveSpeed;
 
-        rb2d.velocity = new Vector2(horizontal, vertical);
+        rb2d.linearVelocity = new Vector2(horizontal, vertical);
     }
 
-    //¨¤¦âÂà¦V
+    //èª¿æ•´æ–¹å‘
     public void Face()
     {
         bool flipped = GetComponentInChildren<SpriteRenderer>().flipX;
@@ -97,13 +97,13 @@ public class PlayerController : MonoBehaviour
             GetComponentInChildren<SpriteRenderer>().flipX = true;
         } 
     }
-    //¼½©ñ°Êµe
+    //æ’­æ”¾å‹•ç•«
     public void PlayAnimation(string clip)
     {
         animator.Play(clip);
     }
 
-    //§PÂ_°Êµe¬O§_¼½©ñ§¹²¦(¥u¼½©ñ¤@¦¸ªº°Êµe)(©T©w¼gªk)
+    //åˆ¤æ–·å‹•ç•«æ˜¯å¦æ’­æ”¾å®Œç•¢(åªç”¨æ–¼ä¸€æ¬¡æ€§å‹•ç•«)(ç¢ºèªæ”»æ“Š)
     public bool IsAnimationDone(string _aniName)
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //¤Á´«·í«eª¬ºA
+    //è¨­ç½®ç•¶å‰ç‹€æ…‹
     public void SetCurrentState(BaseState state)
     {
         currentState = state;

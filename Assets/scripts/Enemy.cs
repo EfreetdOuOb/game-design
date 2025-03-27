@@ -6,21 +6,21 @@ public class Enemy : MonoBehaviour
 {
     public float moveSpeed = 1f;
     public Transform target;
-    public float startingHealth = 30f; // ªì©l¥Í©R­È
-    public float currentHealth; // ¥Ø«e¥Í©R­È
+    public float startingHealth = 30f; // åˆå§‹ç”Ÿå‘½å€¼
+    public float currentHealth; // ç•¶å‰ç”Ÿå‘½å€¼
     public AttackManager attackManager;
     private GameManager gameManager;
 
     [Header("iFrames")]
-    [SerializeField] private float iFramesDuration; // µL¼Ä®É¶¡
-    [SerializeField] private int numberOfFlashes; // °{Ã{¦¸¼Æ
-    private SpriteRenderer spriteRend; // ¨¤¦âSprite Renderer
+    [SerializeField] private float iFramesDuration; // ç„¡æ•µæ™‚é–“
+    [SerializeField] private int numberOfFlashes; // é–ƒçˆæ¬¡æ•¸
+    private SpriteRenderer spriteRend; // ç²å–Sprite Renderer
 
     public bool isInvincible = false;
 
     void Start()
     {
-        currentHealth = startingHealth; // ªì©l¤Æ·í«e¥Í©R­È
+        currentHealth = startingHealth; // åˆå§‹åŒ–ç•¶å‰ç”Ÿå‘½å€¼
         gameManager = FindObjectOfType<GameManager>();
         spriteRend = GetComponent<SpriteRenderer>();
         attackManager = GetComponent<AttackManager>();
@@ -30,9 +30,9 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         Vector2 direction = MoveTowardsPlayer();
-        Face(direction); // §ó·s´Â¦V
+        Face(direction); // æ›´æ–°æ–¹å‘
 
-        // ÀË¬d¬O§_¦b§ğÀ»½d³ò¤º
+        // æª¢æŸ¥æ˜¯å¦åœ¨æ”»æ“Šç¯„åœ
         if (target != null && Vector2.Distance(target.position, transform.position) <= attackManager.attackRange)
         {
             AttackPlayer();
@@ -41,25 +41,25 @@ public class Enemy : MonoBehaviour
 
     public Vector2 MoveTowardsPlayer()
     {
-        Vector2 direction = Vector2.zero; // ªì©l¤Æ¤è¦V
+        Vector2 direction = Vector2.zero; // åˆå§‹åŒ–æ–¹å‘
         if (target != null)
         {
             direction = (target.position - transform.position).normalized;
-            // ¥u¦³¦b¶ZÂ÷¨¤¦â§ó»·®É¤~·|²¾°Ê
+            // åªæœ‰åœ¨è·é›¢è¶…éç¯„åœæ™‚æ‰æœƒç§»å‹•
             if (Vector2.Distance(target.position, transform.position) > attackManager.attackRange)
             {
                 transform.Translate(direction * moveSpeed * Time.deltaTime);
             }
         }
-        return direction; // ªğ¦^¤è¦V
+        return direction; // è¿”å›æ–¹å‘
     }
 
     public void TakeDamage(float _damage)
     {
         if (isInvincible) return;
-        // ´î¤Ö¥Í©R­È
+        // æ¸›å°‘ç”Ÿå‘½å€¼
         currentHealth -= _damage;
-        Debug.Log("©Çª«¨ü¨ì¶Ë®`¡A·í«e³Ñ¾l¥Í©R­È: " + currentHealth + "/" + startingHealth);
+        Debug.Log("æ•µäººå—åˆ°å‚·å®³ï¼Œç›®å‰å‰©é¤˜ç”Ÿå‘½å€¼: " + currentHealth + "/" + startingHealth);
 
         if (currentHealth > 0)
         {
@@ -71,10 +71,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // ©Çª«¦º¤`
+    // æ•µäººæ­»äº¡
     private void Die()
     {
-        Debug.Log("©Çª«¦º¤`¡I");
+        Debug.Log("æ•µäººæ­»äº¡ï¼");
         if (gameManager != null)
         {
             gameManager.PlayerScored(100);
@@ -87,18 +87,18 @@ public class Enemy : MonoBehaviour
         bool flipped = GetComponentInChildren<SpriteRenderer>().flipX;
         if (direction.x < 0 && !flipped)
         {
-            GetComponentInChildren<SpriteRenderer>().flipX = true; // ­±´Â¥ª
+            GetComponentInChildren<SpriteRenderer>().flipX = true; // é¢å‘å·¦
         }
         else if (direction.x > 0 && flipped)
         {
-            GetComponentInChildren<SpriteRenderer>().flipX = false; // ­±´Â¥k
+            GetComponentInChildren<SpriteRenderer>().flipX = false; // é¢å‘å³
         }
     }
 
     private IEnumerator Invincibility()
     {
         isInvincible = true;
-        Physics2D.IgnoreLayerCollision(10, 11, true); // ©¿²¤»Pª±®aªº¸I¼²
+        Physics2D.IgnoreLayerCollision(10, 11, true); // å¿½ç•¥èˆ‡ç©å®¶çš„ç¢°æ’
         for (int i = 0; i < numberOfFlashes; i++)
         {
             this.spriteRend.color = new Color(1, 0, 0, 0.5f);
@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
         isInvincible = false;
-        Physics2D.IgnoreLayerCollision(10, 11, false); // «ì´_»Pª±®aªº¸I¼²
+        Physics2D.IgnoreLayerCollision(10, 11, false); // æ¢å¾©èˆ‡ç©å®¶çš„ç¢°æ’
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
             Health playerHealth = collision.GetComponent<Health>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(attackManager.attackDamage); // ¹ïª±®a³y¦¨¶Ë®`
+                playerHealth.TakeDamage(attackManager.attackDamage); // å°ç©å®¶é€ æˆå‚·å®³
             }
         }
     }
@@ -127,16 +127,16 @@ public class Enemy : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Health playerHealth = collision.GetComponent<Health>();
-            if (playerHealth != null && !playerHealth.isInvincible) // ÀË¬d¬O§_³B©óµL¼Äª¬ºA
+            if (playerHealth != null && !playerHealth.isInvincible) // æª¢æŸ¥æ˜¯å¦è™•æ–¼ç„¡æ•µç‹€æ…‹
             {
-                playerHealth.TakeDamage(attackManager.attackDamage); // ¹ïª±®a³y¦¨¶Ë®`
+                playerHealth.TakeDamage(attackManager.attackDamage); // å°ç©å®¶é€ æˆå‚·å®³
             }
         }
     }
 
     private void AttackPlayer()
     {
-        // Ä²µo§ğÀ»
+        // è§¸ç™¼æ”»æ“Š
         attackManager.PerformAttack(target);
     }
 }

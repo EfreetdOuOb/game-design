@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     }
     public void RestartGame()
     {
-        // ¸ü¤J·í«e³õ´º¥H­«·s¶}©l 
+        // è¼‰å…¥ç•¶å‰å ´æ™¯ä»¥é‡æ–°é–‹å§‹ 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void ResumeGame()
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void BackToMenu()//«ö¶s
+    public void BackToMenu()//è¿”å›
     {
         SceneManager.LoadScene("MainMenu");
     }

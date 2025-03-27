@@ -10,25 +10,25 @@ public class Health : MonoBehaviour
     public AttackManager attackManager;
 
     [Header("Health")]
-    [SerializeField] private float startingHealth; // ªì©l¥Í©R­È¡A¥B¤¹³\¦bInspector¤¤½Õ¾ã
+    [SerializeField] private float startingHealth; // åˆå§‹ç”Ÿå‘½å€¼ï¼Œä¸¦å¯ä»¥åœ¨Inspectorä¸­èª¿æ•´
 
     [SerializeField]private HpBar hpBar;
-    public float currentHealth { get; private set; } // ¨¤¦â¥Ø«e¥Í©R­È 
+    public float currentHealth { get; private set; } // å„²å­˜ç•¶å‰ç”Ÿå‘½å€¼ 
     private Animator anim; 
-    private bool isDead = false; // ¬O§_¦º¤`
+    private bool isDead = false; // æ˜¯å¦æ­»äº¡
     public PlayerController playerController;
     public bool isInvincible = false;
 
     [Header("iFrames")]
-    [SerializeField] private float iFramesDuration; // µL¼Ä®É¶¡
-    [SerializeField] private int numberOfFlashes; // °{Ã{¦¸¼Æ
-    private SpriteRenderer spriteRend; // ¨¤¦âSprite Renderer
+    [SerializeField] private float iFramesDuration; // ç„¡æ•µæ™‚é–“
+    [SerializeField] private int numberOfFlashes; // é–ƒçˆæ¬¡æ•¸
+    private SpriteRenderer spriteRend; // ç²å–Sprite Renderer
 
 
      
     private void Awake()
     {
-        // ¦b¶}©l®É³]©w·í«e¥Í©R­È¬°ªì©l­È
+        // åœ¨é–‹å§‹æ™‚è¨­ç½®ç•¶å‰ç”Ÿå‘½å€¼ç‚ºåˆå§‹å€¼
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         spriteRend = GetComponent<SpriteRenderer>();
@@ -41,14 +41,14 @@ public class Health : MonoBehaviour
         
     }
 
-    // ¨¤¦â¨ü¶Ë
+    // ç©å®¶å—å‚·
     public void TakeDamage(int attackDamage)
     {
-        if (isDead || isInvincible  ) return; // ¨¤¦â¦º¤`©ÎµL¼Ä®É¤£³B²z¶Ë®`
+        if (isDead || isInvincible  ) return; // æ­»äº¡æˆ–ç„¡æ•µæ™‚ä¸è™•ç†å‚·å®³
 
-        // ´î¤Ö¥Í©R­È
+        // æ¸›å°‘ç”Ÿå‘½å€¼
         currentHealth -=attackManager.attackDamage;
-        Debug.Log("¨¤¦â¨ü¨ì¶Ë®`¡A·í«e³Ñ¾l¥Í©R­È: " + currentHealth + "/" + startingHealth);
+        Debug.Log("ç©å®¶å—åˆ°å‚·å®³ï¼Œç•¶å‰å‰©é¤˜ç”Ÿå‘½å€¼: " + currentHealth + "/" + startingHealth);
 
         if (currentHealth>0)
         { 
@@ -62,11 +62,11 @@ public class Health : MonoBehaviour
         } 
     }
 
-    // ¨¤¦â¦º¤`
+    // ç©å®¶æ­»äº¡
     private void Die()
     {
         isDead = true;
-        Debug.Log("¨¤¦â¦º¤`¡I"); 
+        Debug.Log("ç©å®¶æ­»äº¡ï¼"); 
         playerController.Stop();
         gameManager.EndGame();
         GetComponent<PlayerController>().enabled = false;
@@ -74,7 +74,7 @@ public class Health : MonoBehaviour
 
      
 
-    // ¨¤¦âµL¼Ä
+    // ç©å®¶ç„¡æ•µ
     private IEnumerator Invincibility()
     {
         isInvincible = true;

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
-    public float attackRange ; // §ğÀ»½d³ò
-    public LayerMask enemyLayers;     // ÀË´úªº¼Ä¤H¼h
-    public int attackDamage ;     // §ğÀ»¶Ë®`
+    public float attackRange ; // æ”»æ“Šç¯„åœ
+    public LayerMask enemyLayers;     // æª¢æ¸¬æ•µäººå±¤
+    public int attackDamage ;     // æ”»æ“Šå‚·å®³
     
 
 
@@ -23,7 +23,7 @@ public class AttackManager : MonoBehaviour
 
     public void PerformAttack(Transform attacker)
     {
-        // ¨Ï¥Î OverlapCircle ÀË¬d§ğÀ»½d³ò¤ºªº¼Ä¤H
+        // ä½¿ç”¨ OverlapCircle æª¢æŸ¥æ”»æ“Šç¯„åœå…§çš„æ•µäºº
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attacker.position, attackRange, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
@@ -31,8 +31,8 @@ public class AttackManager : MonoBehaviour
             Enemy enemyHealth = enemy.GetComponent<Enemy>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(attackDamage); // ¹ï¼Ä¤H³y¦¨¶Ë®`
-                Debug.Log(enemy.name + " ³Q§ğÀ»¤F");
+                enemyHealth.TakeDamage(attackDamage); // å°æ•µäººé€ æˆå‚·å®³
+                Debug.Log(enemy.name + " è¢«æ”»æ“Šäº†");
             }
 
         } 

@@ -63,7 +63,7 @@ public class CameraMove : MonoBehaviour
         return float.MaxValue;
     }
 
-    ¡@
+    
     private float GetBottomLimit()
     {
         Vector2 bottomPoint = new Vector2(transform.position.x, transform.position.y - colliderRadius);
