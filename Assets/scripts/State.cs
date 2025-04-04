@@ -243,3 +243,49 @@ public class Attack : BaseState
 
 }
 
+
+public class Dead : BaseState
+{
+    private bool gameEnded = false;
+
+    //構造函數，class在被創建時，會調用函數，並傳入PlayerController組件
+    public Dead(PlayerController _playerController) : base(_playerController)
+    {
+        health = playerController.GetComponent<Health>();
+        
+        //播放動畫
+        playerController.PlayAnimation("dead");
+        playerController.Stop();
+    }
+
+    public override void Update()
+    {
+        // 等待死亡動畫播放完畢
+        if (!gameEnded && playerController.IsAnimationDone("dead"))
+        {
+            // 通知GameManager遊戲結束
+            GameManager gameManager = Object.FindObjectOfType<GameManager>();
+            if (gameManager != null)
+            {
+                gameManager.EndGame();
+                gameEnded = true;
+                Debug.Log("死亡動畫播放完畢，遊戲結束");
+            }
+        }
+    }
+
+    public override void FixedUpdate()
+    {
+        // 死亡狀態下不移動
+    }
+
+    public override void OnTriggerEnter2D(Collider2D collision)
+    {
+        // 死亡狀態下不處理碰撞
+    }
+
+    public override void OnTriggerStay2D(Collider2D collision)
+    {
+        // 死亡狀態下不處理碰撞
+    }
+}

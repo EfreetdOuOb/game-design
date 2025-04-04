@@ -87,15 +87,15 @@ public class PlayerController : MonoBehaviour
     //調整方向
     public void Face()
     {
-        bool flipped = GetComponentInChildren<SpriteRenderer>().flipX;
-        if (Input.GetAxis("Horizontal") < 0 && flipped)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        if (horizontalInput < 0) // 向左
         {
-            GetComponentInChildren<SpriteRenderer>().flipX = false;
+            transform.localScale = new Vector3(5, 5, 1); // 根據角色大小(5,5,0)設置負X軸翻轉
         }
-        if (Input.GetAxis("Horizontal") > 0 && !flipped)
+        else if (horizontalInput > 0) // 向右
         {
-            GetComponentInChildren<SpriteRenderer>().flipX = true;
-        } 
+            transform.localScale = new Vector3(-5, 5, 1); // 恢復正常大小
+        }
     }
     //播放動畫
     public void PlayAnimation(string clip)
