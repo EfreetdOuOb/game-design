@@ -14,7 +14,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - obj
   - ground
   - wall
   - player
@@ -45,6 +45,9 @@ TagManager:
     locked: 0
   - name: wall
     uniqueID: 2217808283
+    locked: 0
+  - name: enviroment
+    uniqueID: 3955672933
     locked: 0
   m_RenderingLayers:
   - Default
