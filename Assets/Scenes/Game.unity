@@ -1544,6 +1544,26 @@ PrefabInstance:
       propertyPath: numberOfFlashes
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2170098073480688778, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Size.x
+      value: 0.20913044
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170098073480688778, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Size.y
+      value: 0.17276391
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170098073480688778, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.012242511
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170098073480688778, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.09588131
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170098073480688778, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_CompositeOperation
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2313724002426386603, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
       propertyPath: m_Name
       value: player
@@ -1600,6 +1620,30 @@ PrefabInstance:
       propertyPath: hpUITransform
       value: 
       objectReference: {fileID: 888038606}
+    - target: {fileID: 4704027366286199879, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Size.x
+      value: 0.21382721
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704027366286199879, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Size.y
+      value: 0.16952528
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704027366286199879, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.0040054396
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704027366286199879, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.09970228
+      objectReference: {fileID: 0}
+    - target: {fileID: 4704027366286199879, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_CompositeOperation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284061278581276455, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2179,7 +2223,7 @@ Transform:
   m_GameObject: {fileID: 1268041066}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.111, y: 0.505, z: 0}
+  m_LocalPosition: {x: -0.029, y: 0.495, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []

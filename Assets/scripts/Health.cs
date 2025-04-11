@@ -44,18 +44,20 @@ public class Health : MonoBehaviour
     // 玩家受傷
     public void TakeDamage(int attackDamage)
     {
-        if (isDead || isInvincible  ) return; // 死亡或無敵時不處理傷害
+        if (isDead || isInvincible) return; // 死亡或無敵時不處理傷害
 
         // 減少生命值
-        currentHealth -=attackManager.attackDamage;
+        currentHealth -= attackManager.attackDamage;
         Debug.Log("玩家受到傷害，當前剩餘生命值: " + currentHealth + "/" + startingHealth);
 
-        if (currentHealth>0)
+        if (currentHealth > 0)
         { 
             StartCoroutine(Invincibility());
             hpBar.UpdateBar(currentHealth, startingHealth);
+            
+             
         }
-        else if (currentHealth<=0)
+        else if (currentHealth <= 0)
         {
             hpBar.UpdateBar(currentHealth, startingHealth);
             Die();
@@ -67,9 +69,16 @@ public class Health : MonoBehaviour
     {
         isDead = true;
         Debug.Log("玩家死亡！"); 
-        playerController.Stop();
-        gameManager.EndGame();
-        GetComponent<PlayerController>().enabled = false;
+        
+        if (playerController != null)
+        {
+            playerController.Stop();
+            // 切換到死亡狀態
+            playerController.SetCurrentState(new Dead(playerController));
+        }
+        
+        // 不在這裡直接調用EndGame，讓Dead狀態處理這個邏輯
+        // 也不禁用PlayerController，讓狀態機來管理
     }
 
      
@@ -92,6 +101,6 @@ public class Health : MonoBehaviour
 
     internal void TakeDamage()
     {
-        throw new NotImplementedException();
+        TakeDamage(attackManager.attackDamage);
     }
 }
