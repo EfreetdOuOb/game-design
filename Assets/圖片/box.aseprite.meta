@@ -167,8 +167,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 54}
   - name: Frame_2
     originalName: 
-    pivot: {x: 0.5263158, y: 0}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
