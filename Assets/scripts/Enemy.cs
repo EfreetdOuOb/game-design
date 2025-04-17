@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         currentHealth = startingHealth; // 初始化當前生命值
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindFirstObjectByType<GameManager>();
         spriteRend = GetComponent<SpriteRenderer>();
         attackManager = GetComponent<AttackManager>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
