@@ -9,18 +9,17 @@ public class UIManager : MonoBehaviour
     private GameManager gameManager;
     
     [Header("TIME")]
-    [SerializeField] private float timer ;
+    [SerializeField] private float gameTime = 0f; // 改為正計時
     public Text timerText;
     public Text scoreText;
     public GameObject gameOverMenu; 
     public GameObject gamePauseMenu;
 
-    public bool isTimeOut = false;
     private int score;
 
     void Start()
     {
-        gameManager= FindObjectOfType<GameManager>();
+        gameManager = FindFirstObjectByType<GameManager>();
         score = 0;
         UpdateScoreText();
         gameOverMenu.SetActive(false);
@@ -30,43 +29,29 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         Timer();
-
     }
 
     private void Timer()
     {
-        if (isTimeOut == false)
-        { 
-            timer -= Time.deltaTime; 
-            timerText.text = timer.ToString("F0"); 
-            if (timer <= 0)
-            {
-                isTimeOut = true;
-                timerText.text = "00:00";
-                  
-            }
-        }
+        // 正常計時
+        gameTime += Time.deltaTime;
+        
+        // 格式化為分:秒
+        int minutes = Mathf.FloorToInt(gameTime / 60f);
+        int seconds = Mathf.FloorToInt(gameTime % 60f);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
-
-     
 
     public void IncreaseScore(int amount)
     {
-        if (!isTimeOut)
-        {
-            score += amount;
-            UpdateScoreText();
-        }
+        score += amount;
+        UpdateScoreText();
     }
 
     void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();
     }
-
-     
-
-    
 
     public void ShowGameOverMenu()  
     {
@@ -77,11 +62,4 @@ public class UIManager : MonoBehaviour
     {
         gamePauseMenu.SetActive(true);
     }
-
-    
-    
-    
-
-    
-    
 }

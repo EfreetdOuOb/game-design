@@ -116,4 +116,9 @@ public class PlayerController : MonoBehaviour
     {
         currentState = state;
     }
+
+    public bool IsDead()
+    {
+        return currentState is Dead;
+    }
 }
