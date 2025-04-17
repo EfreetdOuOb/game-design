@@ -1,64 +1,55 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Box : MonoBehaviour
 {
-
     private Animator animator;
     private BoxState currentState;
-    private bool playerInRange = false; // 玩家是否在範圍內
-
-
+    public TouchArea touchArea; // 使用 public 這樣可以在 Inspector 中設置
+    
     private void Awake()
     { 
         animator = GetComponent<Animator>();
+        // 如果沒有在 Inspector 中設置，嘗試在子物件中查找
+        if (touchArea == null)
+        {
+            touchArea = GetComponentInChildren<TouchArea>();
+        }
+        
+        // 確保 TouchArea 知道它所屬的 Box
+        if (touchArea != null)
+        {
+            touchArea.SetBox(this);
+        }
+        else
+        {
+            Debug.LogError("TouchArea 未找到，請確保它已被正確設置。");
+        }
     }
+    
     void Start()
     {
-
         SetCurrentState(new Unopened(this));
     }
 
     void Update()
     {
-        currentState.Update();
-        
-        // 檢測玩家是否在範圍內且按下F鍵
-        if (playerInRange && PressInteractKey()) // 使用 PressInteractKey() 方法
+        if (currentState != null)
         {
-            currentState.OnInteract();
+            currentState.Update();
         }
     }
 
     void FixedUpdate()
     {
-        currentState.FixedUpdate(); 
-
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        // 檢測是否是玩家進入範圍
-        if (collision.CompareTag("Player"))
+        if (currentState != null)
         {
-            playerInRange = true;
+            currentState.FixedUpdate();
         }
-        currentState.OnTriggerEnter2D(collision);
     }
     
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        // 檢測是否是玩家離開範圍
-        if (collision.CompareTag("Player"))
-        {
-            playerInRange = false;
-        }
-        currentState.OnTriggerExit2D(collision);
-    }
-    
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        currentState.OnTriggerStay2D(collision);
-    }
+    // Box 不再需要觸發器方法，由 TouchArea 負責處理
     
     //檢測是否按下F鍵
     public bool PressInteractKey()
@@ -66,29 +57,39 @@ public class Box : MonoBehaviour
         return Input.GetKeyDown(KeyCode.F);
     }
     
-    //檢測玩家是否在範圍內
-    public bool IsPlayerInRange()
+    //設置玩家是否在範圍內的狀態，由 TouchArea 調用
+    public void SetPlayerInRange(bool inRange)
     {
-        return playerInRange;
+        if (currentState != null)
+        {
+            currentState.SetPlayerInRange(inRange);
+        }
     }
     
     public void PlayAnimation(string clip)
     {
-        animator.Play(clip);
+        if (animator != null)
+        {
+            animator.Play(clip);
+        }
+        else
+        {
+            Debug.LogError("Animator 未找到，請確保它已被正確設置。");
+        }
     }
 
     //判斷動畫是否播放完畢(只用於一次性動畫) 
     public bool IsAnimationDone(string _aniName)
     {
+        if (animator == null) return false;
+        
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         return (stateInfo.IsName(_aniName) && stateInfo.normalizedTime >= 1.0);
     }
-
 
     //設置當前狀態
     public void SetCurrentState(BoxState state)
     {
         currentState = state;
     }
-
 }
