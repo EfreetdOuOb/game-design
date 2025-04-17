@@ -96,18 +96,16 @@ public class Enemy : MonoBehaviour
     }
 
     private IEnumerator Invincibility()
-    {
-        isInvincible = true;
-        Physics2D.IgnoreLayerCollision(10, 11, true); // 忽略與玩家的碰撞
+    { 
+        
         for (int i = 0; i < numberOfFlashes; i++)
         {
             this.spriteRend.color = new Color(1, 0, 0, 0.5f);
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
             this.spriteRend.color = Color.white;
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
-        }
-        isInvincible = false;
-        Physics2D.IgnoreLayerCollision(10, 11, false); // 恢復與玩家的碰撞
+        } 
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

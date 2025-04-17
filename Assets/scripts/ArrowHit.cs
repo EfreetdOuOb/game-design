@@ -10,6 +10,7 @@ public class ArrowHit : MonoBehaviour
     private float shootTimer = 0f;
     private PlayerController playerController;
     private Health playerHealth;
+    private int objLayerNumber; // 用於存儲 "obj" 圖層的編號
 
     void Start()
     {
@@ -25,6 +26,9 @@ public class ArrowHit : MonoBehaviour
         {
             Debug.LogError("無法找到玩家物件！");
         }
+        
+        // 獲取 "obj" 圖層的編號
+        objLayerNumber = LayerMask.NameToLayer("obj");
     }
  
     void Update()
@@ -49,8 +53,25 @@ public class ArrowHit : MonoBehaviour
         // 如果有敵人在範圍內，才發射箭矢
         if (AreEnemiesNearby())
         {
-            Instantiate(arrowPrefab, transform.position, transform.rotation);
-            Debug.Log("發射箭矢！");
+            // 根據玩家的 localScale 判斷面向方向
+            // 玩家面向左邊時 localScale.x 為正數，面向右邊時為負數
+            bool isFacingRight = playerController.transform.localScale.x < 0;
+
+            // 設置箭矢旋轉角度
+            Quaternion arrowRotation = Quaternion.Euler(0, isFacingRight ? 180 : 0, 0); // 180度翻轉箭矢
+
+            // 實例化箭矢並設定正確方向
+            GameObject arrow = Instantiate(arrowPrefab, transform.position, arrowRotation);
+
+            // 如果箭矢有Rigidbody2D，設置其初始速度
+            Rigidbody2D arrowRb = arrow.GetComponent<Rigidbody2D>();
+            if (arrowRb != null)
+            {
+                float direction = isFacingRight ? 1 : -1; // 根據面向方向設置速度
+                arrowRb.linearVelocity = new Vector2(direction * 10f, 0); // 箭矢速度，可以調整
+            }
+
+            Debug.Log("發射箭矢！方向: " + (isFacingRight ? "右" : "左"));
         }
     }
     
@@ -75,5 +96,18 @@ public class ArrowHit : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 檢查是否擊中 "obj" 圖層的物體
+        if (collision.gameObject.layer == objLayerNumber)
+        {
+            Debug.Log("箭矢擊中 obj 圖層物體，箭矢被摧毀");
+            // 箭矢擊中 "obj" 圖層物體後銷毀
+            Destroy(gameObject);
+        }
+        
+        // 其他碰撞處理...
     }
 }
