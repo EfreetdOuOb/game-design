@@ -175,6 +175,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de91e64fcbf9154bb7ae8a017ecf3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
   damage: 15
-  destroyDistance: 100
+  lifeTime: 5

@@ -1,0 +1,103 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Slime : Monster
+{
+    // 特定於史萊姆的屬性
+    [Header("史萊姆特定屬性")]
+    public float attackInterval = 1.5f; // 攻擊間隔
+    private float attackTimer = 0f;
+    
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+    
+    protected override void Start()
+    {
+        // 設置初始屬性
+        moveSpeed = 1f; // 史萊姆移動較慢
+        attackRange = 1.2f; // 史萊姆攻擊範圍較小
+        detectionRange = 5f; // 史萊姆檢測範圍
+        
+        base.Start();
+    }
+    
+    protected override void Update()
+    {
+        base.Update();
+        
+        // 更新攻擊計時器
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime;
+        }
+    }
+    
+    // 覆寫移動方法，更適合元氣騎士風格的2D遊戲
+    public override Vector2 MoveTowardsPlayer()
+    {
+        Vector2 direction = Vector2.zero; // 初始化方向
+        
+        if (target != null)
+        {
+            direction = (target.position - transform.position).normalized;
+            
+            // 面向玩家
+            Face(direction);
+            
+            // 只有在距離超過攻擊範圍時才會移動
+            if (Vector2.Distance(target.position, transform.position) > attackRange)
+            {
+                // 正常移動
+                transform.Translate(direction * moveSpeed * Time.deltaTime);
+            }
+        }
+        
+        return direction; // 返回方向
+    }
+    
+    // 覆寫面向方法
+    public override void Face(Vector2 direction)
+    {
+        if (spriteRend != null)
+        {
+            bool flipped = spriteRend.flipX;
+            if (direction.x < 0 && !flipped)
+            {
+                spriteRend.flipX = true; // 面向左
+            }
+            else if (direction.x > 0 && flipped)
+            {
+                spriteRend.flipX = false; // 面向右
+            }
+        }
+    }
+    
+    // 覆寫攻擊方法，增加攻擊間隔
+    public override void Attack()
+    {
+        if (attackTimer <= 0)
+        {
+            base.Attack();
+            attackTimer = attackInterval;
+        }
+    }
+    
+    // 獲取各種狀態
+    protected override MonsterState GetIdleState()
+    {
+        return new SlimeIdle(this);
+    }
+    
+    protected override MonsterState GetHurtState()
+    {
+        return new SlimeHurt(this);
+    }
+    
+    protected override MonsterState GetDeadState()
+    {
+        return new SlimeDead(this);
+    }
+} 

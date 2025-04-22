@@ -20,12 +20,27 @@ public class Arrow : MonoBehaviour
         // 檢查是否擊中敵人
         if (collision.CompareTag("Enemy"))
         {
-            // 獲取敵人的 Enemy 組件並造成傷害
-            Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy != null)
+            bool damageDealt = false;
+            
+            // 檢查是否是Monster類型（新的敵人系統）
+            Monster monster = collision.GetComponent<Monster>();
+            if (monster != null)
             {
-                enemy.TakeDamage(damage);
-                Debug.Log("箭矢擊中敵人，造成 " + damage + " 點傷害！");
+                monster.TakeDamage(damage);
+                Debug.Log("箭矢擊中怪物，造成 " + damage + " 點傷害！怪物當前生命值：" + monster.currentHealth);
+                damageDealt = true;
+            }
+            
+            // 如果不是Monster，檢查是否是舊的Enemy類型
+            if (!damageDealt)
+            {
+                Enemy enemy = collision.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(damage);
+                    Debug.Log("箭矢擊中敵人(舊系統)，造成 " + damage + " 點傷害！");
+                    damageDealt = true;
+                }
             }
             
             // 箭矢擊中敵人後銷毀
