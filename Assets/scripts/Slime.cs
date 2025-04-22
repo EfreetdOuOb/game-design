@@ -35,7 +35,6 @@ public class Slime : Monster
         }
     }
     
-    // 覆寫移動方法，更適合元氣騎士風格的2D遊戲
     public override Vector2 MoveTowardsPlayer()
     {
         Vector2 direction = Vector2.zero; // 初始化方向

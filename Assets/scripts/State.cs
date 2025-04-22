@@ -44,11 +44,11 @@ public class Idle : BaseState
 
     public override void Update()
     {
-        if (playerController.PressAttackKey())
+        if (playerController.PressDashKey() && playerController.CanDash())
         {
-            //轉換到attack狀態
-            playerController.SetCurrentState(new Attack(playerController));
-            Debug.Log("轉換到攻擊狀態");
+            // 轉換到閃避狀態
+            playerController.Dash();
+            Debug.Log("轉換到閃避狀態");
         }
         else if (playerController.PressArrowKey())
         {
@@ -102,11 +102,11 @@ public class Run : BaseState
 
     public override void Update()
     {
-        if (playerController.PressAttackKey())
+        if (playerController.PressDashKey() && playerController.CanDash())
         {
-            // 
-            playerController.SetCurrentState(new Attack(playerController));
-            Debug.Log("轉換到攻擊狀態");
+            // 轉換到閃避狀態
+            playerController.Dash();
+            Debug.Log("轉換到閃避狀態");
         }
         else if (!playerController.PressArrowKey())
         {
@@ -287,5 +287,48 @@ public class Dead : BaseState
     public override void OnTriggerStay2D(Collider2D collision)
     {
         // 死亡狀態下不處理碰撞
+    }
+}
+
+// 閃避狀態 (Dash不需要單獨的狀態，因為使用協程來處理)
+public class Dash : BaseState
+{
+    public Dash(PlayerController _playerController) : base(_playerController)
+    {
+        health = playerController.GetComponent<Health>();
+        // 播放閃避動畫
+        playerController.PlayAnimation("dash");
+    }
+    
+    public override void Update()
+    {
+        // 檢查是否還在閃避中
+        if (!playerController.IsDashing())
+        {
+            // 如果閃避結束了，根據是否按下方向鍵決定轉換到哪個狀態
+            if (playerController.PressArrowKey())
+            {
+                playerController.SetCurrentState(new Run(playerController));
+            }
+            else
+            {
+                playerController.SetCurrentState(new Idle(playerController));
+            }
+        }
+    }
+    
+    public override void FixedUpdate()
+    {
+        // 閃避的物理移動由 DashCoroutine 處理
+    }
+    
+    public override void OnTriggerEnter2D(Collider2D collision)
+    {
+        // 閃避時可以不處理碰撞
+    }
+    
+    public override void OnTriggerStay2D(Collider2D collision)
+    {
+        // 閃避時可以不處理碰撞
     }
 }

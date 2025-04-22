@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening; // 引入DOTween
 
 public abstract class Monster : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public abstract class Monster : MonoBehaviour
     [Tooltip("怪物的初始生命值")]
     public float startingHealth = 30f; // 初始生命值 
     public float currentHealth; // 當前生命值
+    
+    [Header("物理屬性")]
+    [Tooltip("摩擦力係數")]
+    public float friction = 0.2f; // 摩擦力係數
+    [Tooltip("粘滯阻力係數")]
+    public float dragRatio = 0.8f; // 粘滯阻力係數
+    [Tooltip("速度倍增器")]
+    public float speedMultiplier = 1.0f; // 速度倍增器
     
     // 組件引用
     protected Transform target;
@@ -28,11 +37,26 @@ public abstract class Monster : MonoBehaviour
     // 無敵相關
     [Header("傷害效果")]
     [Tooltip("受傷後閃爍的次數")]
-    [SerializeField] protected int numberOfFlashes = 1; // 閃爍次數
-    [SerializeField] protected float flashDuration = 0.5f; // 閃爍持續時間
+    public int numberOfFlashes = 1; // 閃爍次數
+    public float flashDuration = 0.5f; // 閃爍持續時間
+    
+    [Header("擊退效果")]
+    [Tooltip("怪物被擊退的距離")]
+    public float knockbackDistance = 1.0f; // 擊退距離
+    [Tooltip("怪物被擊退的時間")]
+    public float knockbackDuration = 0.3f; // 擊退持續時間
+    [Tooltip("怪物被擊退時產生的灰塵特效預製體")]
+    public GameObject dustParticlePrefab; // 灰塵粒子特效預製體
+    [Tooltip("怪物被擊退產生特效的速度閾值")]
+    public float dustSpawnThreshold = 0.5f; // 特效產生的速度閾值
     
     public GameObject detectionArea; // 檢測範圍空物件
     public GameObject attackArea; // 攻擊範圍空物件
+    
+    // 擊退相關
+    protected Vector2 knockbackDirection; // 擊退方向
+    protected bool isBeingKnockedBack = false; // 是否正在被擊退
+    protected ParticleSystem currentDustEffect; // 當前的灰塵特效
     
     protected virtual void Awake()
     {
@@ -45,9 +69,8 @@ public abstract class Monster : MonoBehaviour
         if (rb2d != null)
         {
             rb2d.freezeRotation = true; // 凍結旋轉
-            rb2d.mass = 10000f; // 設置極大質量
             rb2d.linearDamping = 10f; // 高阻力
-            rb2d.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation; // 凍結位置和旋轉
+            rb2d.constraints = RigidbodyConstraints2D.FreezeRotation; // 凍結旋轉但允許位置移動，以便擊退效果
         }
         
         // 在Awake中初始化當前血量，確保怪物一開始就有正確的血量
@@ -62,31 +85,38 @@ public abstract class Monster : MonoBehaviour
         
         // 設置初始狀態為閒置
         SetCurrentState(GetIdleState());
-        
-        
     }
     
     protected virtual void Update()
     {
         // 更新當前狀態
-        if (currentState != null)
+        if (currentState != null && !isBeingKnockedBack)
         {
             currentState.Update();
+        }
+        
+        // 檢查是否需要停止灰塵特效
+        if (currentDustEffect != null && rb2d != null && rb2d.linearVelocity.magnitude < dustSpawnThreshold)
+        {
+            StopDustEffect();
         }
     }
     
     protected virtual void FixedUpdate()
     {
         // 更新物理
-        if (currentState != null)
+        if (currentState != null && !isBeingKnockedBack)
         {
             currentState.FixedUpdate();
         }
+        
+        // 應用拖曳力和摩擦力
+        Drag(Time.fixedDeltaTime);
     }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (currentState != null)
+        if (currentState != null && !isBeingKnockedBack)
         {
             currentState.OnTriggerEnter2D(collision);
         }
@@ -94,7 +124,7 @@ public abstract class Monster : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (currentState != null)
+        if (currentState != null && !isBeingKnockedBack)
         {
             currentState.OnTriggerStay2D(collision);
         }
@@ -115,7 +145,7 @@ public abstract class Monster : MonoBehaviour
     public virtual Vector2 MoveTowardsPlayer()
     {
         Vector2 direction = Vector2.zero; // 初始化方向
-        if (target != null)
+        if (target != null && !isBeingKnockedBack)
         {
             direction = (target.position - transform.position).normalized;
             // 只有在距離超過攻擊範圍時才會移動
@@ -139,9 +169,12 @@ public abstract class Monster : MonoBehaviour
     // 攻擊方法
     public virtual void Attack()
     {
-        if (attackManager != null && target != null)
+        if (attackManager != null && target != null && !isBeingKnockedBack)
         {
-            attackManager.PerformAttack(target);
+            // 使用新的攻擊機制，啟動攻擊動畫
+            attackManager.StartAttacking(target);
+            PlayAnimation("bite"); // 播放攻擊動畫
+            Debug.Log(gameObject.name + " 開始攻擊動畫");
         }
     }
     
@@ -250,12 +283,102 @@ public abstract class Monster : MonoBehaviour
         }
     }
     
+    // 擊退方法
+    public virtual void Knockback(Vector2 sourcePosition, float force = 1.0f)
+    {
+        if (isBeingKnockedBack) return; // 如果已經在被擊退，則忽略
+        
+        // 計算擊退方向（從攻擊源位置指向怪物）
+        knockbackDirection = (Vector2)transform.position - sourcePosition;
+        knockbackDirection.Normalize();
+        
+        // 使用DOTween實現擊退效果
+        isBeingKnockedBack = true;
+        
+        // 計算擊退距離和時間
+        float distance = knockbackDistance * force;
+        
+        // 使用DOTween移動怪物
+        transform.DOMove(
+            (Vector2)transform.position + knockbackDirection * distance, 
+            knockbackDuration
+        ).SetEase(Ease.OutQuad) // 緩出效果，開始快然後變慢
+         .OnComplete(() => {
+            isBeingKnockedBack = false; // 結束擊退狀態
+         });
+        
+        // 產生灰塵特效
+        SpawnDustEffect();
+    }
+    
+    // 結束擊退狀態的協程
+    protected virtual IEnumerator EndKnockback(float duration, RigidbodyConstraints2D originalConstraints)
+    {
+        yield return new WaitForSeconds(duration);
+        
+        // 完成後恢復原狀
+        isBeingKnockedBack = false;
+    }
+    
+    // 產生灰塵特效
+    protected virtual void SpawnDustEffect()
+    {
+        if (dustParticlePrefab != null)
+        {
+            // 計算灰塵特效的生成位置（怪物腳下）
+            Vector3 dustPosition = transform.position;
+            dustPosition.y -= spriteRend.bounds.extents.y * 0.8f; // 將特效放在怪物腳下
+            
+            // 實例化粒子系統並設為子物件
+            GameObject dustObj = Instantiate(dustParticlePrefab, dustPosition, Quaternion.identity, transform);
+            
+            // 調整特效位置，使其位於怪物腳下
+            dustObj.transform.localPosition = new Vector3(0, -spriteRend.bounds.extents.y * 0.8f, 0);
+            
+            // 獲取粒子系統組件
+            ParticleSystem dustParticle = dustObj.GetComponent<ParticleSystem>();
+            if (dustParticle != null)
+            {
+                // 保存引用以便後續管理
+                currentDustEffect = dustParticle;
+                
+                // 開始粒子系統播放
+                dustParticle.Play();
+                
+                // 擊退結束後自動銷毀特效
+                Destroy(dustObj, knockbackDuration + 0.5f);
+            }
+            else
+            {
+                Debug.LogWarning("灰塵預製體缺少粒子系統組件!");
+            }
+        }
+    }
+    
+    // 檢查並停止當前的灰塵特效
+    protected virtual void StopDustEffect()
+    {
+        if (currentDustEffect != null)
+        {
+            // 停止發射新粒子
+            currentDustEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            // 清除引用
+            currentDustEffect = null;
+        }
+    }
+    
     // 受傷方法
     public virtual void TakeDamage(float damage)
     {
         // 減少生命值
         currentHealth -= damage;
         Debug.Log(gameObject.name + " 受到傷害，目前剩餘生命值: " + currentHealth + "/" + startingHealth);
+        
+        // 只有活著的怪物才會被擊退
+        if (target != null && currentHealth > 0)
+        {
+            Knockback(target.position); // 從玩家方向擊退
+        }
         
         if (currentHealth > 0)
         {
@@ -265,8 +388,16 @@ public abstract class Monster : MonoBehaviour
         }
         else if (currentHealth <= 0)
         {
-            // 轉換到死亡狀態
-            SetCurrentState(GetDeadState());
+            // 如果可以復活，則調用復活邏輯
+            if (CanRevive())
+            {
+                OnRevive();
+            }
+            else
+            {
+                // 血量歸零且無法復活，立即摧毀
+                Die();
+            }
         }
     }
     
@@ -286,11 +417,30 @@ public abstract class Monster : MonoBehaviour
     public virtual void Die()
     {
         Debug.Log(gameObject.name + " 死亡！");
+        
+        // 在死亡時停止所有DOTween動畫
+        DOTween.Kill(transform);
+        
+        // 加分
         if (gameManager != null)
         {
             gameManager.PlayerScored(100);
         }
+        
+        // 立即銷毀物件
         Destroy(gameObject);
+    }
+    
+    // 檢查是否可以復活（默認為false，子類可以覆寫）
+    protected virtual bool CanRevive()
+    {
+        return false;
+    }
+    
+    // 復活邏輯（子類需要覆寫）
+    protected virtual void OnRevive()
+    {
+        // 默認不執行任何操作
     }
     
     // 在編輯器中繪製範圍
@@ -322,4 +472,33 @@ public abstract class Monster : MonoBehaviour
     {
         return startingHealth;
     }
-} 
+    
+    // 獲取擊退狀態
+    public bool IsBeingKnockedBack()
+    {
+        return isBeingKnockedBack;
+    }
+    
+    // 獲取當前速度
+    public virtual float Speed()
+    {
+        if (currentState != null && currentState.GetType().Name.Contains("Idle"))
+            return 0;
+        
+        return moveSpeed * speedMultiplier;
+    }
+    
+    // 添加摩擦力和粘滯阻力
+    protected virtual void Drag(float dT)
+    {
+        if (rb2d == null) return;
+        
+        var v = rb2d.linearVelocity;
+        
+        // 添加摩擦力
+        rb2d.AddForce(-friction * rb2d.mass * 9.8f * v.normalized);
+        
+        // 粘滯阻力
+        rb2d.AddForce(-dragRatio * rb2d.mass * v);
+    }
+}
