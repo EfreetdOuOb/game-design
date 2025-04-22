@@ -307,12 +307,12 @@ public class SlimeHurt : MonsterState
     
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        // 受傷狀態下不處理碰撞
+        // 不再處理碰撞造成的玩家傷害
     }
     
     public override void OnTriggerStay2D(Collider2D collision)
     {
-        // 受傷狀態下不處理碰撞
+        // 不再處理碰撞造成的玩家傷害
     }
 }
 
