@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5658893112139472280}
   - component: {fileID: 7629600051837640981}
   - component: {fileID: 7600487235251920117}
+  - component: {fileID: 2468827818318932574}
   - component: {fileID: 8562505475919199131}
   - component: {fileID: 791530828557593825}
   m_Layer: 11
@@ -151,7 +152,7 @@ BoxCollider2D:
   m_Offset: {x: 0.0006144941, y: 0.095042296}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 0.5, y: -1.0526316}
     oldSize: {x: 0.26, y: 0.19}
     newSize: {x: 0.26, y: 0.19}
     adaptiveTilingThreshold: 0.5
@@ -167,7 +168,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4826012425688880541}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5dc00fa969e5fde4ea9e47baa83564f5, type: 3}
   m_Name: 
@@ -180,6 +181,28 @@ MonoBehaviour:
   iFramesDuration: 0.5
   numberOfFlashes: 1
   isInvincible: 0
+--- !u!114 &2468827818318932574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4826012425688880541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7eeb618967c8fe4ba74e0ee34372dd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1
+  detectionRange: 5
+  attackRange: 1.5
+  startingHealth: 30
+  currentHealth: 0
+  iFramesDuration: 0.5
+  numberOfFlashes: 1
+  isInvincible: 0
+  bounceSpeed: 2
+  bounceCooldown: 1.5
 --- !u!114 &8562505475919199131
 MonoBehaviour:
   m_ObjectHideFlags: 0
