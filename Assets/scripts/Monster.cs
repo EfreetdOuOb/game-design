@@ -29,7 +29,7 @@ public abstract class Monster : MonoBehaviour
     protected Rigidbody2D rb2d;
     protected Animator animator;
     protected SpriteRenderer spriteRend;
-    protected AttackManager attackManager;
+    public AttackManager attackManager;
     protected GameManager gameManager;
     
     // 狀態機
@@ -171,8 +171,11 @@ public abstract class Monster : MonoBehaviour
         {
             // 使用攻擊管理器啟動攻擊
             attackManager.StartAttacking(target);
-            PlayAnimation("attack");
-            attackManager.AttackTrigger();
+            PlayAnimation("attack"); 
+            
+            GetComponent<MonsterAttackManager>().AttackTrigger(); // 調用攻擊觸發 
+             
+            attackManager.StopAttacking();
             Debug.Log(gameObject.name + " 開始攻擊");
         }
     }

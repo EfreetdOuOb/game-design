@@ -37085,10 +37085,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
+    - target: {fileID: 4791789229040384562, guid: be812bede572b44479948e5f76900a41, type: 3}
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6755546342362329183, guid: be812bede572b44479948e5f76900a41, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 243934200}
+    - target: {fileID: 6755546342362329183, guid: be812bede572b44479948e5f76900a41, type: 3}
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7409398071247223438, guid: be812bede572b44479948e5f76900a41, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.74
@@ -37262,6 +37270,10 @@ PrefabInstance:
       propertyPath: hpBar
       value: 
       objectReference: {fileID: 888038609}
+    - target: {fileID: 8196235526500979758, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8648618477969170657, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: uiRoot
       value: 

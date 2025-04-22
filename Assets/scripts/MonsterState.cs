@@ -36,9 +36,7 @@ public class SlimeIdle : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 更新閒置計時器
         idleTimer += Time.deltaTime;
@@ -107,9 +105,7 @@ public class SlimeWander : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 更新移動計時器
         wanderTimer += Time.deltaTime;
@@ -131,9 +127,7 @@ public class SlimeWander : MonsterState
     }
     
     public override void FixedUpdate()
-    {
-        // 如果怪物正在被擊退，不進行移動
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 在隨機方向上移動
         monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
@@ -161,8 +155,7 @@ public class SlimeChase : MonsterState
     
     public override void Update()
     {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+         
         
         // 檢測玩家是否在攻擊範圍內
         if (monster.IsPlayerInAttackRange())
@@ -181,9 +174,7 @@ public class SlimeChase : MonsterState
     }
     
     public override void FixedUpdate()
-    {
-        // 如果怪物正在被擊退，不進行移動
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 追蹤玩家
         monster.MoveTowardsPlayer();
@@ -217,9 +208,7 @@ public class SlimeAttack : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 更新攻擊計時器
         attackTimer += Time.deltaTime;
@@ -241,10 +230,11 @@ public class SlimeAttack : MonsterState
             // 檢測玩家是否仍在攻擊範圍內
             if (monster.IsPlayerInAttackRange())
             {
+                 monster.attackManager.StopAttacking();
                 // 立即開始新的攻擊
-                monster.Attack();
-                attackAnimationPlaying = true;
-                monster.GetComponent<MonsterAttackManager>().AttackTrigger(); // 調用攻擊觸發
+                 monster.Attack();  
+                attackAnimationPlaying = true; // 設置動畫播放標誌
+                
                 Debug.Log("玩家仍在攻擊範圍內，史萊姆繼續攻擊");
             }
             else
@@ -296,9 +286,7 @@ public class SlimeHurt : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 更新受傷計時器
         hurtTimer += Time.deltaTime;
@@ -439,8 +427,7 @@ public class SkeletonIdle : MonsterState
     
     public override void Update()
     {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+         
         
         // 更新閒置計時器
         idleTimer += Time.deltaTime;
@@ -510,8 +497,7 @@ public class SkeletonWander : MonsterState
     
     public override void Update()
     {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+         
         
         // 更新移動計時器
         wanderTimer += Time.deltaTime;
@@ -533,9 +519,7 @@ public class SkeletonWander : MonsterState
     }
     
     public override void FixedUpdate()
-    {
-        // 如果怪物正在被擊退，不進行移動
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 在隨機方向上移動
         monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
@@ -562,9 +546,7 @@ public class SkeletonChase : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 檢測玩家是否在攻擊範圍內
         if (monster.IsPlayerInAttackRange())
@@ -583,9 +565,7 @@ public class SkeletonChase : MonsterState
     }
     
     public override void FixedUpdate()
-    {
-        // 如果怪物正在被擊退，不進行移動
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 追蹤玩家
         monster.MoveTowardsPlayer();
@@ -619,9 +599,7 @@ public class SkeletonAttack : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 更新攻擊計時器
         attackTimer += Time.deltaTime;
@@ -644,8 +622,8 @@ public class SkeletonAttack : MonsterState
             if (monster.IsPlayerInAttackRange())
             {
                 // 立即開始新的攻擊
-                monster.Attack();
-                attackAnimationPlaying = true;
+                monster.Attack(); // 播放攻擊動畫
+                attackAnimationPlaying = true; // 設置動畫播放標誌
                 monster.GetComponent<MonsterAttackManager>().AttackTrigger(); // 調用攻擊觸發
                 Debug.Log("玩家仍在攻擊範圍內，骷髏繼續攻擊");
             }
@@ -698,9 +676,7 @@ public class SkeletonHurt : MonsterState
     }
     
     public override void Update()
-    {
-        // 如果怪物正在被擊退，不進行狀態更新
-        if (monster.IsBeingKnockedBack()) return;
+    { 
         
         // 更新受傷計時器
         hurtTimer += Time.deltaTime;

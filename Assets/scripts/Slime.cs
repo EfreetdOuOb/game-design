@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Slime : Monster
-{
-    // 特定於史萊姆的屬性
-    [Header("史萊姆特定屬性")]
-    public float attackInterval = 1.5f; // 攻擊間隔
-    private float attackTimer = 0f;
+{ 
+     
+     
     
     protected override void Awake()
     {
@@ -26,11 +24,7 @@ public class Slime : Monster
     {
         base.Update();
         
-        // 更新攻擊計時器
-        if (attackTimer > 0)
-        {
-            attackTimer -= Time.deltaTime;
-        }
+         
     }
     
     public override Vector2 MoveTowardsPlayer()
@@ -75,11 +69,10 @@ public class Slime : Monster
     // 覆寫攻擊方法，增加攻擊間隔
     public override void Attack()
     {
-        if (attackTimer <= 0)
-        {
+         
             base.Attack();
-            attackTimer = attackInterval;
-        }
+             
+         
     }
     
     // 獲取各種狀態
