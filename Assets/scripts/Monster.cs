@@ -47,6 +47,8 @@ public abstract class Monster : MonoBehaviour
     public float knockbackDuration = 0.3f; // 擊退持續時間
     [Tooltip("怪物被擊退時產生的灰塵特效預製體")]
     public GameObject dustParticlePrefab; // 灰塵粒子特效預製體
+    [Tooltip("特效生成位置（可選），不設置則默認在怪物腳下")]
+    public Transform effectSpawnPoint; // 特效生成位置
     [Tooltip("怪物被擊退產生特效的速度閾值")]
     public float dustSpawnThreshold = 0.5f; // 特效產生的速度閾值
     
@@ -69,6 +71,7 @@ public abstract class Monster : MonoBehaviour
         if (rb2d != null)
         {
             rb2d.freezeRotation = true; // 凍結旋轉
+            rb2d.mass = 100000f;
             rb2d.linearDamping = 10f; // 高阻力
             rb2d.constraints = RigidbodyConstraints2D.FreezeRotation; // 凍結旋轉但允許位置移動，以便擊退效果
         }
@@ -93,12 +96,6 @@ public abstract class Monster : MonoBehaviour
         if (currentState != null && !isBeingKnockedBack)
         {
             currentState.Update();
-        }
-        
-        // 檢查是否需要停止灰塵特效
-        if (currentDustEffect != null && rb2d != null && rb2d.linearVelocity.magnitude < dustSpawnThreshold)
-        {
-            StopDustEffect();
         }
     }
     
@@ -307,17 +304,8 @@ public abstract class Monster : MonoBehaviour
             isBeingKnockedBack = false; // 結束擊退狀態
          });
         
-        // 產生灰塵特效
+        // 立即產生灰塵特效
         SpawnDustEffect();
-    }
-    
-    // 結束擊退狀態的協程
-    protected virtual IEnumerator EndKnockback(float duration, RigidbodyConstraints2D originalConstraints)
-    {
-        yield return new WaitForSeconds(duration);
-        
-        // 完成後恢復原狀
-        isBeingKnockedBack = false;
     }
     
     // 產生灰塵特效
@@ -325,15 +313,28 @@ public abstract class Monster : MonoBehaviour
     {
         if (dustParticlePrefab != null)
         {
-            // 計算灰塵特效的生成位置（怪物腳下）
-            Vector3 dustPosition = transform.position;
-            dustPosition.y -= spriteRend.bounds.extents.y * 0.8f; // 將特效放在怪物腳下
+            Transform spawnPoint;
+            
+            // 如果設置了特效生成點，使用它；否則使用怪物腳下位置
+            if (effectSpawnPoint != null)
+            {
+                spawnPoint = effectSpawnPoint;
+            }
+            else
+            {
+                // 計算灰塵特效的生成位置（怪物腳下）
+                Vector3 dustPosition = transform.position;
+                dustPosition.y -= spriteRend.bounds.extents.y * 0.8f; // 將特效放在怪物腳下
+                
+                // 實例化一個臨時點
+                GameObject tempPoint = new GameObject("TempEffectPoint");
+                tempPoint.transform.position = dustPosition;
+                tempPoint.transform.SetParent(transform);
+                spawnPoint = tempPoint.transform;
+            }
             
             // 實例化粒子系統並設為子物件
-            GameObject dustObj = Instantiate(dustParticlePrefab, dustPosition, Quaternion.identity, transform);
-            
-            // 調整特效位置，使其位於怪物腳下
-            dustObj.transform.localPosition = new Vector3(0, -spriteRend.bounds.extents.y * 0.8f, 0);
+            GameObject dustObj = Instantiate(dustParticlePrefab, spawnPoint.position, Quaternion.identity, transform);
             
             // 獲取粒子系統組件
             ParticleSystem dustParticle = dustObj.GetComponent<ParticleSystem>();
@@ -345,26 +346,37 @@ public abstract class Monster : MonoBehaviour
                 // 開始粒子系統播放
                 dustParticle.Play();
                 
-                // 擊退結束後自動銷毀特效
-                Destroy(dustObj, knockbackDuration + 0.5f);
+                // 獲取粒子系統的主模塊
+                var main = dustParticle.main;
+                // 設置停止行為：EmitAndDestroy，這樣粒子會自然完成生命週期後銷毀
+                main.stopAction = ParticleSystemStopAction.Destroy;
+                
+                // 在擊退結束時停止發射新粒子
+                StartCoroutine(StopEffectAfterKnockback(dustParticle));
             }
             else
             {
                 Debug.LogWarning("灰塵預製體缺少粒子系統組件!");
             }
+            
+            // 如果使用了臨時點，在適當時候銷毀它
+            if (effectSpawnPoint == null)
+            {
+                Destroy(spawnPoint.gameObject, knockbackDuration + 1.0f);
+            }
         }
     }
     
-    // 檢查並停止當前的灰塵特效
-    protected virtual void StopDustEffect()
+    // 擊退結束後停止發射新粒子
+    private IEnumerator StopEffectAfterKnockback(ParticleSystem ps)
     {
-        if (currentDustEffect != null)
-        {
-            // 停止發射新粒子
-            currentDustEffect.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-            // 清除引用
-            currentDustEffect = null;
-        }
+        if (ps == null) yield break;
+        
+        // 等待擊退結束
+        yield return new WaitForSeconds(knockbackDuration);
+        
+        // 停止發射新粒子，但讓現有粒子完成生命週期
+        ps.Stop(false, ParticleSystemStopBehavior.StopEmitting);
     }
     
     // 受傷方法
