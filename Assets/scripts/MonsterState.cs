@@ -206,13 +206,11 @@ public class SlimeAttack : MonsterState
     private float attackTimer = 0f;
     private float attackCooldown = 1.5f; // 攻擊冷卻時間
     private bool hasAttacked = false;
-    private bool attackAnimationPlaying = false;
     
     public SlimeAttack(Monster _monster) : base(_monster)
     {
         // 播放攻擊動畫並啟動攻擊
         monster.Attack();
-        attackAnimationPlaying = true;
         monster.Stop(); // 攻擊時停止移動
     }
     
@@ -225,42 +223,39 @@ public class SlimeAttack : MonsterState
         attackTimer += Time.deltaTime;
         
         // 檢測動畫是否播放完畢
-        if (attackAnimationPlaying && monster.IsAnimationDone("bite"))
+        if (!hasAttacked && monster.IsAnimationDone("bite"))
         {
-            attackAnimationPlaying = false;
             hasAttacked = true;
         }
         
-        // 攻擊冷卻結束
-        if (attackTimer >= attackCooldown && hasAttacked)
+        // 如果玩家在攻擊範圍內且攻擊冷卻結束
+        if (monster.IsPlayerInAttackRange())
         {
-            // 重置攻擊狀態
-            hasAttacked = false;
-            attackTimer = 0f;
-            
-            // 檢測玩家是否仍在攻擊範圍內
-            if (monster.IsPlayerInAttackRange())
+            if (attackTimer >= attackCooldown && hasAttacked)
             {
-                // 立即開始新的攻擊
+                // 重置攻擊狀態
+                hasAttacked = false;
+                attackTimer = 0f;
+                
+                // 開始新的攻擊
                 monster.Attack();
-                attackAnimationPlaying = true;
-                Debug.Log("玩家仍在攻擊範圍內，史萊姆繼續攻擊");
+                Debug.Log("玩家在攻擊範圍內，史萊姆繼續攻擊");
+            }
+        }
+        else
+        {
+            // 如果玩家在檢測範圍內但超出攻擊範圍
+            if (monster.IsPlayerInDetectionRange())
+            {
+                // 轉換到追蹤狀態
+                monster.SetCurrentState(new SlimeChase(monster));
+                Debug.Log("玩家離開攻擊範圍，史萊姆開始追蹤");
             }
             else
             {
-                // 如果玩家在檢測範圍內但超出攻擊範圍
-                if (monster.IsPlayerInDetectionRange())
-                {
-                    // 轉換到追蹤狀態
-                    monster.SetCurrentState(new SlimeChase(monster));
-                    Debug.Log("玩家離開攻擊範圍，史萊姆開始追蹤");
-                }
-                else
-                {
-                    // 玩家離開檢測範圍，回到閒置狀態
-                    monster.SetCurrentState(new SlimeIdle(monster));
-                    Debug.Log("玩家離開檢測範圍，史萊姆回到閒置狀態");
-                }
+                // 玩家離開檢測範圍，回到閒置狀態
+                monster.SetCurrentState(new SlimeIdle(monster));
+                Debug.Log("玩家離開檢測範圍，史萊姆回到閒置狀態");
             }
         }
     }
@@ -272,12 +267,12 @@ public class SlimeAttack : MonsterState
     
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        // 不再處理碰撞造成的玩家傷害
+        // 不處理碰撞
     }
     
     public override void OnTriggerStay2D(Collider2D collision)
     {
-        // 不再處理碰撞造成的玩家傷害
+        // 不處理碰撞
     }
 }
 

@@ -3,10 +3,10 @@ using UnityEngine;
 public class PlayerAttackManager : AttackManager
 {
     [Header("玩家攻擊設定")]
-    public LayerMask enemyLayers;  // 敵人層級遮罩
+    public LayerMask enemyLayer;  // 敵人層級遮罩
     
     [Header("玩家傷害設定")]
-    [SerializeField] private int additionalDamage = 0;    // 額外傷害（來自裝備、技能等）
+    [SerializeField] private int additionalDamage = 0;    // 額外傷害（來自武器、技能等）
     [SerializeField] private float damageMultiplier = 1f; // 傷害倍率
     
     // 重寫獲取傷害值的方法
@@ -18,22 +18,20 @@ public class PlayerAttackManager : AttackManager
 
     public override void AttackTrigger()
     {
-        if (!isAttacking || hasDamaged) return;
+        if (!isAttacking || hasDamaged || currentTarget == null) return;
         
         // 檢測攻擊範圍內的敵人
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, attackRange, enemyLayers);
-        
-        foreach (Collider2D enemy in hitEnemies)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(GetAttackPosition(), attackRange, enemyLayer);
+        foreach (Collider2D hit in hits)
         {
-            Monster monster = enemy.GetComponent<Monster>();
-            if (monster != null)
+            Health enemyHealth = hit.GetComponent<Health>();
+            if (enemyHealth != null && !enemyHealth.isInvincible)
             {
                 int finalDamage = GetAttackDamage();
-                monster.TakeDamage(finalDamage);
-                Debug.Log($"玩家對 {enemy.name} 造成 {finalDamage} 點傷害（基礎:{baseAttackDamage} + 額外:{additionalDamage}) x {damageMultiplier}");
+                enemyHealth.TakeDamage(finalDamage);
+                Debug.Log($"玩家對 {hit.gameObject.name} 造成 {finalDamage} 點傷害（基礎:{baseAttackDamage} + 額外:{additionalDamage}) x {damageMultiplier}");
             }
         }
-        
         hasDamaged = true;
     }
     

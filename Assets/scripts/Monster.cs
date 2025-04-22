@@ -169,10 +169,9 @@ public abstract class Monster : MonoBehaviour
     {
         if (attackManager != null && target != null && !isBeingKnockedBack)
         {
-            // 使用新的攻擊機制，啟動攻擊動畫
+            // 使用攻擊管理器啟動攻擊
             attackManager.StartAttacking(target);
-            PlayAnimation("bite"); // 播放攻擊動畫
-            Debug.Log(gameObject.name + " 開始攻擊動畫");
+            Debug.Log(gameObject.name + " 開始攻擊");
         }
     }
     
@@ -259,7 +258,7 @@ public abstract class Monster : MonoBehaviour
         if (animator != null)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            return (stateInfo.IsName(clipName) && stateInfo.normalizedTime >= 1.0);
+            return stateInfo.IsName(clipName) && stateInfo.normalizedTime >= 1.0f;
         }
         return false;
     }
