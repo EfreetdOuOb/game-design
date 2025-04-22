@@ -25,7 +25,7 @@ public abstract class Monster : MonoBehaviour
     public float speedMultiplier = 1.0f; // 速度倍增器
     
     // 組件引用
-    protected Transform target;
+    public Transform target;
     protected Rigidbody2D rb2d;
     protected Animator animator;
     protected SpriteRenderer spriteRend;

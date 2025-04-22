@@ -64,7 +64,7 @@ public class Idle : BaseState
 
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("碰觸到物體: " + collision.name);
+        /*Debug.Log("碰觸到物體: " + collision.name);
         if (collision.CompareTag("Enemy"))
         {
             Health playerHealth = collision.GetComponent<Health>();
@@ -72,19 +72,19 @@ public class Idle : BaseState
             {
                 playerHealth.TakeDamage();  
             }
-        }
+        }*/
     }
 
     public override void OnTriggerStay2D(Collider2D collision) // 更改：新增 OnTriggerStay2D 方法
     {
-        if (collision.CompareTag("Enemy"))
+        /*if (collision.CompareTag("Enemy"))
         {
             
             if ( health.currentHealth >0 && !health.isInvincible)
             {
                 health.TakeDamage();
             }
-        }
+        }*/
     }
     
 }
@@ -122,126 +122,32 @@ public class Run : BaseState
     }
     public override void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("碰觸到物體: " + collision.name);
+        /*Debug.Log("碰觸到物體: " + collision.name);
         if (collision.CompareTag("Enemy"))
         { 
             if (health.currentHealth >0)
             {
                 health.TakeDamage();
             }
-        }
+        }*/
     }
 
     public override void OnTriggerStay2D(Collider2D collision) // 更改：新增 OnTriggerStay2D 方法
     {
-        if (collision.CompareTag("Enemy"))
+        /*if (collision.CompareTag("Enemy"))
         {
             if (health.currentHealth > 0&& !health.isInvincible)
             {
                 health.TakeDamage();
             }
-        }
+        }*/
     }
 
 
 
 }
 
-public class Attack : BaseState
-{
-    //構造函數，class在被創建時，會調用函數，並傳入PlayerController組件
-    public Attack(PlayerController _playerController) : base(_playerController)
-    {
-        health = playerController.GetComponent<Health>();
-        attackManager = playerController.GetComponent<AttackManager>();
 
-        // 根據玩家的移動狀態來播放攻擊動畫
-        if (playerController.PressArrowKey())
-        {
-            playerController.PlayAnimation("running_atk"); // 播放邊走邊攻擊的動畫
-        }
-        else
-        {
-            playerController.PlayAnimation("atk"); // 播放站立攻擊的動畫
-        }
-        //attackManager.PerformAttack(playerController.transform);
-        playerController.StartCoroutine(HandleAttackDamage());
-
-        playerController.Stop();
-    }
-    private IEnumerator HandleAttackDamage()
-    { 
-        while (!playerController.IsAnimationDone("running_atk") && !playerController.IsAnimationDone("atk"))
-        {
-            yield return null; 
-        }
-         
-        attackManager.PerformAttack(playerController.transform);
-         
-        if (playerController.PressArrowKey())
-        {
-            playerController.SetCurrentState(new Run(playerController));
-            Debug.Log("轉換到 Run 狀態");
-        }
-        else
-        {
-            playerController.SetCurrentState(new Idle(playerController));
-            Debug.Log("轉換到 Idle 狀態");
-        }
-    }
-    public override void Update()
-    {
-        //當atk動畫播放結束，如果按下方向鍵，轉換到run狀態;如果!按下方向鍵，轉換到idle狀態 
-         
-        if (playerController.IsAnimationDone("running_atk") || playerController.IsAnimationDone("atk"))
-        {
-            if (playerController.PressArrowKey())
-            {
-                playerController.SetCurrentState(new Run(playerController));
-                Debug.Log("轉換到Run");
-            }
-            else 
-            { 
-                playerController.SetCurrentState(new Idle(playerController));
-                Debug.Log("轉換到Idle");
-            }
-        }
-
-    }
-
-    public override void FixedUpdate()
-    {
-        // 攻擊時也可以移動
-        playerController.Move();  
-        playerController.Face();  
-       
-        
-    }
-    public override void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("碰觸到物體: " + collision.name);
-        if (collision.CompareTag("Enemy"))
-        {
-            Health playerHealth = collision.GetComponent<Health>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage();
-            }
-        }
-    }
-
-    public override void OnTriggerStay2D(Collider2D collision) // 更改：新增 OnTriggerStay2D 方法
-    {
-        if (collision.CompareTag("Enemy"))
-        {
-            if (health.currentHealth > 0 && !health.isInvincible)
-            {
-                health.TakeDamage();
-            }
-        }
-    }
-
-}
 
 
 public class Dead : BaseState

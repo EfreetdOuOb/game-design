@@ -7,7 +7,6 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     private GameManager gameManager;
-    public AttackManager attackManager;
 
     [Header("Health")]
     [SerializeField] private float startingHealth; // 初始生命值，並可以在Inspector中調整
@@ -42,20 +41,18 @@ public class Health : MonoBehaviour
     }
 
     // 玩家受傷
-    public void TakeDamage(int attackDamage)
+    public void TakeDamage(float damage)
     {
         if (isDead || isInvincible) return; // 死亡或無敵時不處理傷害
 
         // 減少生命值
-        currentHealth -= attackManager.attackDamage;
-        Debug.Log("玩家受到傷害，當前剩餘生命值: " + currentHealth + "/" + startingHealth);
+        currentHealth -= damage;
+        Debug.Log($"玩家受到 {damage} 點傷害，當前剩餘生命值: {currentHealth}/{startingHealth}");
 
         if (currentHealth > 0)
         { 
             StartCoroutine(Invincibility());
             hpBar.UpdateBar(currentHealth, startingHealth);
-            
-             
         }
         else if (currentHealth <= 0)
         {
@@ -76,12 +73,7 @@ public class Health : MonoBehaviour
             // 切換到死亡狀態
             playerController.SetCurrentState(new Dead(playerController));
         }
-        
-        // 不在這裡直接調用EndGame，讓Dead狀態處理這個邏輯
-        // 也不禁用PlayerController，讓狀態機來管理
     }
-
-     
 
     // 玩家無敵
     private IEnumerator Invincibility()
@@ -90,17 +82,12 @@ public class Health : MonoBehaviour
         Physics2D.IgnoreLayerCollision(10, 11, true);
         for (int i = 0; i < numberOfFlashes; i++)
         {
-            spriteRend.color = new Color( 1, 0, 0, 0.5f);
+            spriteRend.color = new Color(1, 0, 0, 0.5f);
             yield return new WaitForSeconds(iFramesDuration/(numberOfFlashes*2));
-            spriteRend.color =  Color.white;
+            spriteRend.color = Color.white;
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
         isInvincible = false;
         Physics2D.IgnoreLayerCollision(10, 11, false); 
-    }
-
-    internal void TakeDamage()
-    {
-        TakeDamage(attackManager.attackDamage);
     }
 }

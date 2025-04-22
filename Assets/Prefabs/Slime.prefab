@@ -154,7 +154,6 @@ GameObject:
   - component: {fileID: 8184042157864304594}
   - component: {fileID: 7656513150711281989}
   - component: {fileID: 7766751267409266084}
-  - component: {fileID: 5886114384746818617}
   - component: {fileID: 8184497748247184741}
   m_Layer: 11
   m_Name: Slime
@@ -320,7 +319,7 @@ MonoBehaviour:
   target: {fileID: 3311840310541996238, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
   startingHealth: 30
   currentHealth: 0
-  attackManager: {fileID: 5886114384746818617}
+  attackManager: {fileID: 0}
   iFramesDuration: 0.5
   numberOfFlashes: 1
   isInvincible: 0
@@ -344,6 +343,7 @@ MonoBehaviour:
   friction: 0
   dragRatio: 10
   speedMultiplier: 1
+  target: {fileID: 0}
   numberOfFlashes: 1
   flashDuration: 0.5
   knockbackDistance: 1
@@ -354,23 +354,6 @@ MonoBehaviour:
   detectionArea: {fileID: 7445604589205847449}
   attackArea: {fileID: 1814879701241405184}
   attackInterval: 1.5
---- !u!114 &5886114384746818617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8212918305510923514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c6bd8ef5b1f45640a8f2850bd127c51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRange: 0.1
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 1024
-  attackDamage: 10
 --- !u!50 &8184497748247184741
 Rigidbody2D:
   serializedVersion: 5

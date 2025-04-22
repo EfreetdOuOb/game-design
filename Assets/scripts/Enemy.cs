@@ -110,31 +110,31 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        /*if (collision.CompareTag("Player"))
         {
             Health playerHealth = collision.GetComponent<Health>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(attackManager.attackDamage); // 對玩家造成傷害
             }
-        }
+        }*/
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        /*if (collision.CompareTag("Player"))
         {
             Health playerHealth = collision.GetComponent<Health>();
             if (playerHealth != null && !playerHealth.isInvincible) // 檢查是否處於無敵狀態
             {
                 playerHealth.TakeDamage(attackManager.attackDamage); // 對玩家造成傷害
             }
-        }
+        }*/
     }
 
     private void AttackPlayer()
     {
         // 觸發攻擊
-        attackManager.PerformAttack(target);
+       /* attackManager.PerformAttack(target);*/
     }
 }
