@@ -18,21 +18,23 @@ public class PlayerAttackManager : AttackManager
 
     public override void AttackTrigger()
     {
+        // 只有在攻擊狀態且未造成傷害時才進行判定
         if (!isAttacking || hasDamaged || currentTarget == null) return;
-        
-        // 檢測攻擊範圍內的敵人
-        Collider2D[] hits = Physics2D.OverlapCircleAll(GetAttackPosition(), attackRange, enemyLayer);
+
+        // 檢測攻擊範圍內的玩家
+        Collider2D[] hits = Physics2D.OverlapCircleAll(GetAttackPosition(), attackRange,enemyLayer);
         foreach (Collider2D hit in hits)
         {
-            Health enemyHealth = hit.GetComponent<Health>();
-            if (enemyHealth != null && !enemyHealth.isInvincible)
-            {
-                int finalDamage = GetAttackDamage();
-                enemyHealth.TakeDamage(finalDamage);
-                Debug.Log($"玩家對 {hit.gameObject.name} 造成 {finalDamage} 點傷害（基礎:{baseAttackDamage} + 額外:{additionalDamage}) x {damageMultiplier}");
-            }
+             
+                Health playerHealth = hit.GetComponent<Health>();
+                if (playerHealth != null && !playerHealth.isInvincible)
+                {
+                    int finalDamage = GetAttackDamage();
+                    playerHealth.TakeDamage(finalDamage);
+                    hasDamaged = true;
+                    Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
+                } 
         }
-        hasDamaged = true;
     }
     
     // 設置額外傷害

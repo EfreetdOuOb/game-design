@@ -171,6 +171,8 @@ public abstract class Monster : MonoBehaviour
         {
             // 使用攻擊管理器啟動攻擊
             attackManager.StartAttacking(target);
+            PlayAnimation("attack");
+            attackManager.AttackTrigger();
             Debug.Log(gameObject.name + " 開始攻擊");
         }
     }

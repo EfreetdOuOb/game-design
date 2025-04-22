@@ -29,7 +29,7 @@ public class MonsterAttackManager : AttackManager
     {
         base.StartAttacking(target);
         // 播放攻擊動畫
-        monster.PlayAnimation("bite");
+        monster.PlayAnimation("attack");
     }
 
     public override void StopAttacking()
@@ -39,21 +39,23 @@ public class MonsterAttackManager : AttackManager
 
     public override void AttackTrigger()
     {
-        // 只有在攻擊動畫播放中且未造成傷害時才進行判定
+        // 只有在攻擊狀態且未造成傷害時才進行判定
         if (!isAttacking || hasDamaged || currentTarget == null) return;
-        
+
         // 檢測攻擊範圍內的玩家
-        Collider2D hit = Physics2D.OverlapCircle(GetAttackPosition(), attackRange, playerLayer);
-        if (hit != null)
-        {
-            Health playerHealth = hit.GetComponent<Health>();
-            if (playerHealth != null && !playerHealth.isInvincible)
-            {
-                int finalDamage = GetAttackDamage();
-                playerHealth.TakeDamage(finalDamage);
-                hasDamaged = true;
-                Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害（基礎:{baseAttackDamage} + 額外:{additionalDamage}) x {damageMultiplier}");
-            }
+        Collider2D[] hits = Physics2D.OverlapCircleAll(GetAttackPosition(), attackRange , playerLayer);
+        foreach (Collider2D hit in hits)
+        { 
+             
+                Health playerHealth = hit.GetComponent<Health>();
+                if (playerHealth != null && !playerHealth.isInvincible)
+                {
+                    int finalDamage = GetAttackDamage();
+                    playerHealth.TakeDamage(finalDamage);
+                    hasDamaged = true;
+                    Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
+                }
+             
         }
     }
     

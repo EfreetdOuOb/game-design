@@ -206,11 +206,13 @@ public class SlimeAttack : MonsterState
     private float attackTimer = 0f;
     private float attackCooldown = 1.5f; // 攻擊冷卻時間
     private bool hasAttacked = false;
+    private bool attackAnimationPlaying = false;
     
     public SlimeAttack(Monster _monster) : base(_monster)
     {
         // 播放攻擊動畫並啟動攻擊
         monster.Attack();
+        attackAnimationPlaying = true;
         monster.Stop(); // 攻擊時停止移動
     }
     
@@ -223,39 +225,43 @@ public class SlimeAttack : MonsterState
         attackTimer += Time.deltaTime;
         
         // 檢測動畫是否播放完畢
-        if (!hasAttacked && monster.IsAnimationDone("bite"))
+        if (attackAnimationPlaying && monster.IsAnimationDone("attack"))
         {
+            attackAnimationPlaying = false;
             hasAttacked = true;
         }
         
-        // 如果玩家在攻擊範圍內且攻擊冷卻結束
-        if (monster.IsPlayerInAttackRange())
+        // 攻擊冷卻結束
+        if (attackTimer >= attackCooldown && hasAttacked)
         {
-            if (attackTimer >= attackCooldown && hasAttacked)
+            // 重置攻擊狀態
+            hasAttacked = false;
+            attackTimer = 0f;
+            
+            // 檢測玩家是否仍在攻擊範圍內
+            if (monster.IsPlayerInAttackRange())
             {
-                // 重置攻擊狀態
-                hasAttacked = false;
-                attackTimer = 0f;
-                
-                // 開始新的攻擊
+                // 立即開始新的攻擊
                 monster.Attack();
-                Debug.Log("玩家在攻擊範圍內，史萊姆繼續攻擊");
-            }
-        }
-        else
-        {
-            // 如果玩家在檢測範圍內但超出攻擊範圍
-            if (monster.IsPlayerInDetectionRange())
-            {
-                // 轉換到追蹤狀態
-                monster.SetCurrentState(new SlimeChase(monster));
-                Debug.Log("玩家離開攻擊範圍，史萊姆開始追蹤");
+                attackAnimationPlaying = true;
+                monster.GetComponent<MonsterAttackManager>().AttackTrigger(); // 調用攻擊觸發
+                Debug.Log("玩家仍在攻擊範圍內，史萊姆繼續攻擊");
             }
             else
             {
-                // 玩家離開檢測範圍，回到閒置狀態
-                monster.SetCurrentState(new SlimeIdle(monster));
-                Debug.Log("玩家離開檢測範圍，史萊姆回到閒置狀態");
+                // 如果玩家在檢測範圍內但超出攻擊範圍
+                if (monster.IsPlayerInDetectionRange())
+                {
+                    // 轉換到追蹤狀態
+                    monster.SetCurrentState(new SlimeChase(monster));
+                    Debug.Log("玩家離開攻擊範圍，史萊姆開始追蹤");
+                }
+                else
+                {
+                    // 玩家離開檢測範圍，回到閒置狀態
+                    monster.SetCurrentState(new SlimeIdle(monster));
+                    Debug.Log("玩家離開檢測範圍，史萊姆回到閒置狀態");
+                }
             }
         }
     }
@@ -338,7 +344,6 @@ public class SlimeHurt : MonsterState
 // 史萊姆的死亡狀態
 public class SlimeDead : MonsterState
 {
-    private bool deathProcessed = false;
     
     public SlimeDead(Monster _monster) : base(_monster)
     {
@@ -350,9 +355,8 @@ public class SlimeDead : MonsterState
     public override void Update()
     {
         // 檢查死亡動畫是否播放完畢
-        if (!deathProcessed && monster.IsAnimationDone("dead"))
-        {
-            deathProcessed = true;
+        if (monster.IsAnimationDone("dead"))
+        { 
             // 立即摧毀怪物
             monster.Die();
         }
@@ -623,7 +627,7 @@ public class SkeletonAttack : MonsterState
         attackTimer += Time.deltaTime;
         
         // 檢測動畫是否播放完畢
-        if (attackAnimationPlaying && monster.IsAnimationDone("bite"))
+        if (attackAnimationPlaying && monster.IsAnimationDone("attack"))
         {
             attackAnimationPlaying = false;
             hasAttacked = true;
@@ -642,6 +646,7 @@ public class SkeletonAttack : MonsterState
                 // 立即開始新的攻擊
                 monster.Attack();
                 attackAnimationPlaying = true;
+                monster.GetComponent<MonsterAttackManager>().AttackTrigger(); // 調用攻擊觸發
                 Debug.Log("玩家仍在攻擊範圍內，骷髏繼續攻擊");
             }
             else

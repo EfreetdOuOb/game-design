@@ -10,10 +10,14 @@ public abstract class AttackManager : MonoBehaviour
     protected bool isAttacking = false;
     protected bool hasDamaged = false;
     protected Transform currentTarget;
+    
+
+
 
     // 開始攻擊
     public virtual void StartAttacking(Transform target)
     {
+        
         isAttacking = true;
         hasDamaged = false;
         currentTarget = target;
