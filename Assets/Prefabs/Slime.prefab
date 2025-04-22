@@ -336,8 +336,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7eeb618967c8fe4ba74e0ee34372dd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  detectionRange: 10
+  moveSpeed: 3
+  detectionRange: 16
   attackRange: 1.5
   startingHealth: 30
   currentHealth: 0
@@ -346,9 +346,10 @@ MonoBehaviour:
   speedMultiplier: 1
   numberOfFlashes: 1
   flashDuration: 0.5
-  knockbackDistance: 2
+  knockbackDistance: 1
   knockbackDuration: 0.3
   dustParticlePrefab: {fileID: 5837031498886096114, guid: 8a7548516be5f864fbb785c1f61c2b69, type: 3}
+  effectSpawnPoint: {fileID: 0}
   dustSpawnThreshold: 0.5
   detectionArea: {fileID: 7445604589205847449}
   attackArea: {fileID: 1814879701241405184}

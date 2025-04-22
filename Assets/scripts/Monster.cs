@@ -6,13 +6,14 @@ using DG.Tweening; // 引入DOTween
 public abstract class Monster : MonoBehaviour
 {
     // 基本屬性
-    public float moveSpeed = 1f;
+    [Header("基礎屬性")]
+    public float moveSpeed ;
     [Tooltip("怪物檢測玩家的範圍，超出此範圍怪物將回到閒置狀態")]
-    public float detectionRange = 5f; // 檢測範圍
+    public float detectionRange ; // 檢測範圍
     [Tooltip("怪物攻擊玩家的範圍，進入此範圍怪物將停止移動並攻擊")]
-    public float attackRange = 1.5f; // 攻擊範圍
+    public float attackRange ; // 攻擊範圍
     [Tooltip("怪物的初始生命值")]
-    public float startingHealth = 30f; // 初始生命值 
+    public float startingHealth ; // 初始生命值 
     public float currentHealth; // 當前生命值
     
     [Header("物理屬性")]

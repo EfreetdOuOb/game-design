@@ -17,9 +17,7 @@ public class Slime : Monster
     protected override void Start()
     {
         // 設置初始屬性
-        moveSpeed = 1f; // 史萊姆移動較慢
-        attackRange = 1.2f; // 史萊姆攻擊範圍較小
-        detectionRange = 5f; // 史萊姆檢測範圍
+        
         
         base.Start();
     }
