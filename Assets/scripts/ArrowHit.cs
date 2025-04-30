@@ -71,7 +71,7 @@ public class ArrowHit : MonoBehaviour
                 arrowRb.linearVelocity = new Vector2(direction * 10f, 0); // 箭矢速度，可以調整
             }
 
-            Debug.Log("發射箭矢！方向: " + (isFacingRight ? "右" : "左"));
+            
         }
     }
     

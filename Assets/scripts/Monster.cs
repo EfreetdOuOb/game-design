@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening; // 引入DOTween
-
+using Pathfinding;
 public abstract class Monster : MonoBehaviour
 {
     // 基本屬性
@@ -24,6 +24,7 @@ public abstract class Monster : MonoBehaviour
     [Tooltip("速度倍增器")]
     public float speedMultiplier = 1.0f; // 速度倍增器
     
+    
     // 組件引用
     public Transform target;
     protected Rigidbody2D rb2d;
@@ -31,6 +32,13 @@ public abstract class Monster : MonoBehaviour
     protected SpriteRenderer spriteRend;
     public AttackManager attackManager;
     protected GameManager gameManager;
+    protected Seeker seeker;
+    protected List<Vector3> pathPointList; //路徑點列表
+    protected int currentIndex = 0; //路徑點的索引
+    protected float pathGenerateInterval = 0.5f; //每0.5秒生成一次路徑
+    protected float pathGenerateTimer = 0f;//計時器
+    
+
     
     // 狀態機
     protected MonsterState currentState;
@@ -63,6 +71,7 @@ public abstract class Monster : MonoBehaviour
     
     protected virtual void Awake()
     {
+        seeker = GetComponent<Seeker>();
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRend = GetComponentInChildren<SpriteRenderer>();
@@ -93,8 +102,12 @@ public abstract class Monster : MonoBehaviour
     
     protected virtual void Update()
     {
+        //檢查遊戲是否暫停
+        var gm = FindFirstObjectByType<GameManager>();
+        if (gm != null && gm.isPaused)
+            return;
         // 更新當前狀態
-        if (currentState != null && !isBeingKnockedBack)
+        if (currentState != null )
         {
             currentState.Update();
         }
@@ -103,7 +116,7 @@ public abstract class Monster : MonoBehaviour
     protected virtual void FixedUpdate()
     {
         // 更新物理
-        if (currentState != null && !isBeingKnockedBack)
+        if (currentState != null )
         {
             currentState.FixedUpdate();
         }
@@ -114,7 +127,7 @@ public abstract class Monster : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (currentState != null && !isBeingKnockedBack)
+        if (currentState != null )
         {
             currentState.OnTriggerEnter2D(collision);
         }
@@ -122,7 +135,7 @@ public abstract class Monster : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (currentState != null && !isBeingKnockedBack)
+        if (currentState != null )
         {
             currentState.OnTriggerStay2D(collision);
         }
@@ -143,13 +156,22 @@ public abstract class Monster : MonoBehaviour
     public virtual Vector2 MoveTowardsPlayer()
     {
         Vector2 direction = Vector2.zero; // 初始化方向
-        if (target != null && !isBeingKnockedBack)
+        if (target != null)
         {
-            direction = (target.position - transform.position).normalized;
-            // 只有在距離超過攻擊範圍時才會移動
-            if (Vector2.Distance(target.position, transform.position) > attackRange)
+            float distance = Vector2.Distance(target.position, transform.position);
+            if (distance < detectionRange)
             {
-                transform.Translate(direction * moveSpeed * Time.deltaTime);
+                AutoPath(); // 調用 AutoPath()
+                if (pathPointList != null && pathPointList.Count > 0)
+                {
+                    // 追擊玩家：優先用路徑點方向
+                    direction = (pathPointList[currentIndex] - transform.position).normalized;
+                }
+                else
+                {
+                    // 沒有路徑點時直接朝向玩家
+                    direction = (target.position - transform.position).normalized;
+                }
             }
         }
         return direction; // 返回方向
@@ -167,7 +189,7 @@ public abstract class Monster : MonoBehaviour
     // 攻擊方法
     public virtual void Attack()
     {
-        if (attackManager != null && target != null && !isBeingKnockedBack)
+        if (attackManager != null && target != null )
         {
             // 使用攻擊管理器啟動攻擊
             attackManager.StartAttacking(target);
@@ -373,7 +395,7 @@ public abstract class Monster : MonoBehaviour
     }
     
     // 擊退結束後停止發射新粒子
-    private IEnumerator StopEffectAfterKnockback(ParticleSystem ps)
+    protected IEnumerator StopEffectAfterKnockback(ParticleSystem ps)
     {
         if (ps == null) yield break;
         
@@ -477,7 +499,38 @@ public abstract class Monster : MonoBehaviour
             Gizmos.DrawWireSphere(attackArea.transform.position, attackRange);
         }
     }
+    //自動尋路
+    protected void AutoPath()
+    {
+        //當前路徑表為空時，進行路徑計算
+        if(pathPointList == null || pathPointList.Count <= 0)
+        {
+            GeneratePath(target.position);
+        }//當敵人到達當前路徑點時，遞增索引currentIndex並進行路徑計算
+        else if(Vector2.Distance(transform.position,pathPointList[currentIndex])<= 0.1f)
+        {
+            currentIndex++;
+            if(currentIndex>=pathPointList.Count)
+                GeneratePath(target.position);
+        }
+
+    }
+
+    //獲取路徑點
+    private void GeneratePath(Vector3 target)
+    {
+        currentIndex = 0;
+        //三個參數:起點、終點、回調函數
+        seeker.StartPath(transform.position , target, Path =>
+        {
+            pathPointList = Path.vectorPath;
+
+        });
+
+    }
     
+
+
     // 獲取當前血量
     public float GetCurrentHealth()
     {

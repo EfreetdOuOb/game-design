@@ -75,7 +75,7 @@ public class Arrow : MonoBehaviour
         // 檢查是否擊中 "obj" 圖層的物體
         else if (collision.gameObject.layer == objLayerNumber)
         {
-            Debug.Log("箭矢擊中 obj 圖層物體，箭矢被摧毀");
+            
             // 箭矢擊中 "obj" 圖層物體後銷毀
             Destroy(gameObject);
         }

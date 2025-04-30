@@ -176,8 +176,7 @@ public class SlimeChase : MonsterState
     public override void FixedUpdate()
     { 
         
-        // 追蹤玩家
-        monster.MoveTowardsPlayer();
+         
     }
     
     public override void OnTriggerEnter2D(Collider2D collision)

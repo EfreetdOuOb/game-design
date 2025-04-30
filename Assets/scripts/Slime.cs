@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Pathfinding;
 public class Slime : Monster
 { 
      
@@ -22,31 +22,28 @@ public class Slime : Monster
     
     protected override void Update()
     {
+        // 檢查遊戲是否暫停
+        var gm = FindFirstObjectByType<GameManager>();
+        if (gm != null && gm.isPaused)
+            return;
         base.Update();
-        
+        if (currentState is SlimeChase)
+        {
+            Vector2 direction = MoveTowardsPlayer();
+             
+            if (direction != Vector2.zero)
+            {
+                Face(direction);
+                transform.Translate(direction * moveSpeed * Time.fixedDeltaTime);
+            }
+        }
          
     }
     
-    public override Vector2 MoveTowardsPlayer()
+    protected override void FixedUpdate()
     {
-        Vector2 direction = Vector2.zero; // 初始化方向
-        
-        if (target != null)
-        {
-            direction = (target.position - transform.position).normalized;
-            
-            // 面向玩家
-            Face(direction);
-            
-            // 只有在距離超過攻擊範圍時才會移動
-            if (Vector2.Distance(target.position, transform.position) > attackRange)
-            {
-                // 正常移動
-                transform.Translate(direction * moveSpeed * Time.deltaTime);
-            }
-        }
-        
-        return direction; // 返回方向
+        base.FixedUpdate();
+ 
     }
     
     // 覆寫面向方法

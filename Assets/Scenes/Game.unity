@@ -796,7 +796,7 @@ MonoBehaviour:
   - {fileID: 152378742}
   enemy: {fileID: 6894217504608792256}
   waves:
-  - enemy: {fileID: 5897619677866503278, guid: be812bede572b44479948e5f76900a41, type: 3}
+  - enemy: {fileID: 5913761278106991370, guid: 381a5622b33c05a4fb71034693408663, type: 3}
     count: 10
     timeBetweenSpawn: 2
 --- !u!4 &663805879
