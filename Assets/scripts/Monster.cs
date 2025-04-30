@@ -502,6 +502,14 @@ public abstract class Monster : MonoBehaviour
     //自動尋路
     protected void AutoPath()
     {
+        //間隔一定時間來獲得路徑
+        pathGenerateTimer+=Time.deltaTime;
+        if(pathGenerateTimer>=pathGenerateInterval)
+        {
+            GeneratePath(target.position);
+            pathGenerateTimer=0;//重製計時器
+        }
+
         //當前路徑表為空時，進行路徑計算
         if(pathPointList == null || pathPointList.Count <= 0)
         {
