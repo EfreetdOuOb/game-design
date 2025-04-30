@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  detectionRange: 16
+  detectionRange: 10
   attackRange: 1.5
   startingHealth: 30
   currentHealth: 0
@@ -205,6 +205,7 @@ MonoBehaviour:
   dragRatio: 10
   speedMultiplier: 1
   target: {fileID: 0}
+  attackManager: {fileID: 0}
   numberOfFlashes: 1
   flashDuration: 0.5
   knockbackDistance: 1
@@ -214,7 +215,6 @@ MonoBehaviour:
   dustSpawnThreshold: 0.5
   detectionArea: {fileID: 2720605168190476134}
   attackArea: {fileID: 5218251912350705023}
-  attackInterval: 1.5
 --- !u!50 &3860086005013571653
 Rigidbody2D:
   serializedVersion: 5
