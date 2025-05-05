@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7043984811738020676}
   - component: {fileID: 5114633619608056276}
   - component: {fileID: 6826993055770043531}
+  - component: {fileID: 8250130433447060753}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -291,6 +292,21 @@ MonoBehaviour:
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
+--- !u!114 &8250130433447060753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973499377916439614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad974363f1d38d489f4bef257ca2a88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propPrefabs:
+  - prefab: {fileID: 2908834547270901770, guid: ab51f2210a8ea8e49bc8cbd2ca544d83, type: 3}
+    dropPercentage: 100
 --- !u!1 &2121355306693362620
 GameObject:
   m_ObjectHideFlags: 0

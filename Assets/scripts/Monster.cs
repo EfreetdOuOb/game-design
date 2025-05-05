@@ -32,6 +32,7 @@ public abstract class Monster : MonoBehaviour
     protected SpriteRenderer spriteRend;
     public AttackManager attackManager;
     protected GameManager gameManager;
+    protected PickUpSpawner pickUpSpawner;//掉落道具腳本引用
     protected Seeker seeker;
     protected List<Vector3> pathPointList; //路徑點列表
     protected int currentIndex = 0; //路徑點的索引
@@ -76,6 +77,7 @@ public abstract class Monster : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         attackManager = GetComponent<AttackManager>();
+        pickUpSpawner = GetComponent<PickUpSpawner>();
         
         // 設置剛體屬性，防止被玩家撞開
         if (rb2d != null)
@@ -465,7 +467,7 @@ public abstract class Monster : MonoBehaviour
         {
             gameManager.PlayerScored(100);
         }
-        
+        pickUpSpawner.DropItems();//掉落道具
         // 立即銷毀物件
         Destroy(gameObject);
     }
