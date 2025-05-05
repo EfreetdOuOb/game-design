@@ -161,7 +161,7 @@ public abstract class Monster : MonoBehaviour
             float distance = Vector2.Distance(target.position, transform.position);
             if (distance < detectionRange)
             {
-                AutoPath(); // 調用 AutoPath()
+                AutoPath(); // 調用 AutoPath() 
                 if (pathPointList != null && pathPointList.Count > 0)
                 {
                     // 追擊玩家：優先用路徑點方向
@@ -502,8 +502,14 @@ public abstract class Monster : MonoBehaviour
     //自動尋路
     protected void AutoPath()
     {
-        //間隔一定時間來獲得路徑
+        //玩家不能為空
+        if(target==null){
+            return; 
+        } 
+
         pathGenerateTimer+=Time.deltaTime;
+
+        //間隔一定時間來獲得路徑
         if(pathGenerateTimer>=pathGenerateInterval)
         {
             GeneratePath(target.position);
@@ -511,17 +517,21 @@ public abstract class Monster : MonoBehaviour
         }
 
         //當前路徑表為空時，進行路徑計算
-        if(pathPointList == null || pathPointList.Count <= 0)
+        if(pathPointList == null || pathPointList.Count <= 0 || pathPointList.Count<=currentIndex)
         {
             GeneratePath(target.position);
         }//當敵人到達當前路徑點時，遞增索引currentIndex並進行路徑計算
-        else if(Vector2.Distance(transform.position,pathPointList[currentIndex])<= 0.1f)
+        else if(currentIndex<pathPointList.Count)
         {
-            currentIndex++;
-            if(currentIndex>=pathPointList.Count)
-                GeneratePath(target.position);
-        }
-
+            if(Vector2.Distance(transform.position,pathPointList[currentIndex])<= 0.1f)
+            {
+                currentIndex++;
+                if(currentIndex>=pathPointList.Count)
+                {
+                    GeneratePath(target.position); 
+                }   
+            } 
+        } 
     }
 
     //獲取路徑點
