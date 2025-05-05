@@ -432,10 +432,10 @@ public abstract class Monster : MonoBehaviour
             {
                 OnRevive();
             }
-            else
+            else 
             {
-                // 血量歸零且無法復活，立即摧毀
-                Die();
+                SetCurrentState(GetDeadState());
+                
             }
         }
     }
