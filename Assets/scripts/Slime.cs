@@ -34,7 +34,7 @@ public class Slime : Monster
             if (direction != Vector2.zero)
             {
                 Face(direction);
-                transform.Translate(direction * moveSpeed * Time.fixedDeltaTime);
+                transform.Translate(direction * moveSpeed * Time.deltaTime);//裡面使用deltaTime而不是fixedDeltaTime，fixedDeltaTime會根據幀數改變怪物速度
             }
         }
          
