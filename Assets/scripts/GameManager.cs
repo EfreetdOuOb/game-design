@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             }
             else 
             { 
-                ResumeGame();
+                ResumeGame(); 
             }
         }
         
@@ -83,8 +83,26 @@ public class GameManager : MonoBehaviour
         // 檢查是否還有波次可以生成
         bool hasMoreWaves = enemySpawner != null && enemySpawner.HasRemainingWaves();
         
+        // 檢查是否從戰鬥狀態轉為非戰鬥狀態
+        bool wasInCombat = isInCombat;
+        
         // 確認是否有敵人或還有波次，表示處於戰鬥狀態
         isInCombat = (enemies.Length > 0 || hasMoreWaves);
+        
+        // 如果剛從戰鬥狀態轉為非戰鬥狀態，並且沒有更多波次，則顯示房間完成 UI
+        if (wasInCombat && !isInCombat && !hasMoreWaves)
+        {
+            RoomComplete();
+        }
+    }
+    
+    // 房間完成方法
+    public void RoomComplete()
+    {
+        if (uiManager != null)
+        {
+            uiManager.ShowRoomCompleteMenu();
+        }
     }
     
     // 定期檢查敵人的協程

@@ -7,13 +7,20 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private GameManager gameManager;
+    private EnemySpawner enemySpawner;
+    [Header("UI組件")]
+    public GameObject gameOverMenu; 
+    public GameObject gamePauseMenu;
+    public GameObject roomCompleteMenu;
+
+    
     
     [Header("TIME")]
     [SerializeField] private float gameTime = 0f; // 改為正計時
     public Text timerText;
     public Text scoreText;
-    public GameObject gameOverMenu; 
-    public GameObject gamePauseMenu;
+ 
+    
 
     private int score;
 
@@ -29,7 +36,13 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         Timer();
+        if(enemySpawner._allWavesCompleted==true)
+        {
+            ShowRoomCompleteMenu();
+        }
     }
+
+    
 
     private void Timer()
     {
@@ -61,5 +74,21 @@ public class UIManager : MonoBehaviour
     public void ShowGamePauseMenu()
     {
         gamePauseMenu.SetActive(true);
+    }
+    
+    public void ShowRoomCompleteMenu()
+    {
+        roomCompleteMenu.SetActive(true);
+        
+        // 啟動協程等待半秒後關閉
+        StartCoroutine(HideRoomCompleteMenuAfterDelay(0.5f));
+    }
+    
+    // 延遲關閉房間完成 UI 的協程
+    private IEnumerator HideRoomCompleteMenuAfterDelay(float delay)
+    {
+        // 使用 WaitForSecondsRealtime 確保即使遊戲暫停也會計時
+        yield return new WaitForSecondsRealtime(delay);
+        roomCompleteMenu.SetActive(false);
     }
 }

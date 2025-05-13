@@ -127,6 +127,12 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "bc36e3f6-b336-401c-9261-9e8b3ace1135",
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []

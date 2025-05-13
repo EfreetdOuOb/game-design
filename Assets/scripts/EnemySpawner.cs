@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using UnityEngine; 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("怪物重生點")]
     [SerializeField] private Transform[] spawnPoints;
+    [Header("敵人(玩家)")]
     [SerializeField] private PlayerController enemy;
+    [Header("波次")]
     public Wave[] waves;
     private Wave _currentWave;
     private int _currentWaveIndex;
-    private bool _allWavesCompleted = false;
+    public bool _allWavesCompleted = false;
+
+
+     
+    
     
     private void Start()
     {
