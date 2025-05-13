@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine; 
-
+using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -26,15 +26,18 @@ public class PlayerController : MonoBehaviour
     private bool canDash = true; // 是否可以閃避
     private bool isDashing = false; // 是否正在閃避中
     private float dashCooldownTimer = 0f; // 閃避冷卻計時器
+    public Vector2 inputDirection;
     
     private Rigidbody2D rb2d;
     private Animator animator;
     private BaseState currentState;
+    public InputActions inputActions;
 
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        inputActions = new InputActions();
     }
     void Start() 
     {
@@ -45,7 +48,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         currentState.Update();
-        
+        inputDirection = inputActions.GamePlay.Move.ReadValue<Vector2>();
         // 更新閃避冷卻
         if (!canDash)
         {
@@ -64,6 +67,7 @@ public class PlayerController : MonoBehaviour
         var pos = Camera.main.WorldToScreenPoint(hpPoint.position);
         RectTransformUtility.ScreenPointToLocalPointInRectangle(uiRoot, pos, null, out var p);
         hpUITransform.anchoredPosition = p;
+        
 
     }
 
@@ -102,10 +106,9 @@ public class PlayerController : MonoBehaviour
         // 如果正在閃避中，則不允許常規移動
         if (isDashing) return;
         
-        float horizontal = Input.GetAxisRaw("Horizontal") * moveSpeed;
-        float vertical = Input.GetAxisRaw("Vertical") * moveSpeed;
+        rb2d.linearVelocity = inputDirection * moveSpeed;
 
-        rb2d.linearVelocity = new Vector2(horizontal, vertical);
+        
     }
 
     public void Stop()
@@ -231,6 +234,18 @@ public class PlayerController : MonoBehaviour
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         return (stateInfo.IsName(_aniName) && stateInfo.normalizedTime >= 1.0);
+    }
+
+
+    public void OnEnable()
+    {
+        inputActions.Enable();
+    }
+
+
+    public void OnDisable()
+    {
+        inputActions.Disable(); 
     }
 
 
