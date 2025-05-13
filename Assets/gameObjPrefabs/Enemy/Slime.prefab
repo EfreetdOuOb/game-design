@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 1.7
-  baseAttackDamage: 10
+  baseAttackDamage: 40
   attackPoint: {fileID: 9014704779946595880}
   playerLayer:
     serializedVersion: 2
