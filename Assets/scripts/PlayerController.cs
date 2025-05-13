@@ -4,12 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private Transform hpPoint;
-    [SerializeField]
-    private RectTransform uiRoot;
-    [SerializeField]
-    private RectTransform hpUITransform;
+    
 
     public float moveSpeed;   
     
@@ -63,12 +58,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        currentState.FixedUpdate();
-        var pos = Camera.main.WorldToScreenPoint(hpPoint.position);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(uiRoot, pos, null, out var p);
-        hpUITransform.anchoredPosition = p;
-        
-
+        currentState.FixedUpdate(); 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

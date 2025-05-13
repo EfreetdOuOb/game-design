@@ -13,6 +13,10 @@ public class UIManager : MonoBehaviour
     public GameObject gamePauseMenu;
     public GameObject roomCompleteMenu;
 
+
+    public Slider healthSlider;//血量
+    public Slider dodgeCDSlider;//閃避冷卻條
+
     
     
     [Header("TIME")]
@@ -27,6 +31,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         gameManager = FindFirstObjectByType<GameManager>();
+        enemySpawner = FindFirstObjectByType<EnemySpawner>();
         score = 0;
         UpdateScoreText();
         gameOverMenu.SetActive(false);
@@ -42,7 +47,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    
+    //血量條UI
+    public void UpdateHelthSlider(float maxHealth, float currentHealth)
+    {
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = currentHealth;
+    }
 
     private void Timer()
     {

@@ -3,16 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
     private GameManager gameManager;
 
-    [Header("Health")]
-    [SerializeField] private float startingHealth; // 初始生命值，並可以在Inspector中調整
+    [Header("血量")]
+    [SerializeField] public float maxHealth; // 初始生命值，並可以在Inspector中調整
+    [SerializeField] public float currentHealth { get; private set; } // 儲存當前生命值 
 
-    [SerializeField]private HpBar hpBar;
-    public float currentHealth { get; private set; } // 儲存當前生命值 
+    [Header("UI")]
+    public UnityEvent<float ,float> OnHealthUpdate;
+ 
+
     private Animator anim; 
     private bool isDead = false; // 是否死亡
     public PlayerController playerController;
@@ -28,11 +32,11 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         // 在開始時設置當前生命值為初始值
-        currentHealth = startingHealth;
+        currentHealth = maxHealth;
+        OnHealthUpdate?.Invoke(maxHealth,currentHealth);//初始化
         anim = GetComponent<Animator>();
         spriteRend = GetComponent<SpriteRenderer>();
         gameManager = FindFirstObjectByType<GameManager>();
-        hpBar.UpdateBar(currentHealth,startingHealth);
     }
      
     void Update()
@@ -47,18 +51,17 @@ public class Health : MonoBehaviour
 
         // 減少生命值
         currentHealth -= damage;
-        Debug.Log($"玩家受到 {damage} 點傷害，當前剩餘生命值: {currentHealth}/{startingHealth}");
+        Debug.Log($"玩家受到 {damage} 點傷害，當前剩餘生命值: {currentHealth}/{maxHealth}");
 
         if (currentHealth > 0)
         { 
             StartCoroutine(Invincibility());
-            hpBar.UpdateBar(currentHealth, startingHealth);
         }
         else if (currentHealth <= 0)
         {
-            hpBar.UpdateBar(currentHealth, startingHealth);
             Die();
         } 
+        OnHealthUpdate?.Invoke(maxHealth,currentHealth);
     }
 
     // 玩家死亡
