@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine; 
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 public class PlayerController : MonoBehaviour
 {
     
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCooldown = 1.5f; // 閃避冷卻時間
     [Tooltip("閃避特效預製體")]
     [SerializeField] private GameObject dashEffectPrefab; // 閃避特效預製體
+    public UnityEvent<float> OnDodgeUpdate;
     
     private bool canDash = true; // 是否可以閃避
     private bool isDashing = false; // 是否正在閃避中
@@ -47,7 +49,8 @@ public class PlayerController : MonoBehaviour
         // 更新閃避冷卻
         if (!canDash)
         {
-            dashCooldownTimer -= Time.deltaTime;
+            OnDodgeUpdate?.Invoke(dashCooldownTimer);//更新冷卻條，傳入冷卻時間。
+            dashCooldownTimer -= Time.deltaTime; 
             if (dashCooldownTimer <= 0)
             {
                 canDash = true;

@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     private GameManager gameManager;
     private EnemySpawner enemySpawner;
+
     [Header("UI組件")]
     public GameObject gameOverMenu; 
     public GameObject gamePauseMenu;
@@ -15,7 +16,7 @@ public class UIManager : MonoBehaviour
 
 
     public Slider healthSlider;//血量
-    public Slider dodgeCDSlider;//閃避冷卻條
+    public Slider dodgeCdSlider;//閃避冷卻條
 
     
     
@@ -53,6 +54,28 @@ public class UIManager : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
     }
+    //閃避CD條UI
+    public void DodgeCdSlider(float CdTime)
+    {
+        StartCoroutine(UpdateCdCoroutine(CdTime));
+    }
+    //CD條過度效果
+    public IEnumerator UpdateCdCoroutine(float CdTime)
+    {
+        dodgeCdSlider.maxValue = CdTime;
+        dodgeCdSlider.value = CdTime;
+
+        float elapsedTime = 0f;
+
+        while(elapsedTime<CdTime)
+        {
+            dodgeCdSlider.value = elapsedTime;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+
 
     private void Timer()
     {
