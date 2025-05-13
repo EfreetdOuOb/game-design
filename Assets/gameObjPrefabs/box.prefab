@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 5530312891342413122}
   - component: {fileID: 3490766534798284095}
   m_Layer: 13
-  m_Name: boxCollider
+  m_Name: boxLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2253911629886400664, guid: 1abbe0fe6a3dc394e9f5e54d1396522f, type: 3}
       propertyPath: m_Name
-      value: box 1
+      value: box
       objectReference: {fileID: 0}
     - target: {fileID: -2253911629886400664, guid: 1abbe0fe6a3dc394e9f5e54d1396522f, type: 3}
       propertyPath: m_Layer
