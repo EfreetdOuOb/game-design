@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public UIManager uiManager;    
     public EnemySpawner enemySpawner;
+    public PlayerController playerController;
     public bool isInCombat = false; // 戰鬥狀態標誌
     public bool isPaused = false;
     
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         uiManager = FindFirstObjectByType<UIManager>();
+        playerController = GetComponent<PlayerController>();
         Time.timeScale = 1;
         StartCoroutine(CheckEnemiesRoutine());
     }
@@ -108,6 +110,7 @@ public class GameManager : MonoBehaviour
         uiManager.ShowGamePauseMenu();
         isPaused = true;
         isInCombat = false; // 遊戲暫停時關閉戰鬥狀態
+        
     }
 
     public void PlayerScored(int score)
