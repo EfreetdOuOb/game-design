@@ -14,6 +14,13 @@ public class PickUpItem : MonoBehaviour
     [SerializeField] private PickUpType pickUpType;
     [SerializeField] private int value;
 
+    private Health health;
+
+    private void Awake()
+    {
+        health = FindFirstObjectByType<Health>();
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.gameObject.GetComponent<PlayerController>())
@@ -48,7 +55,7 @@ public class PickUpItem : MonoBehaviour
     private void HandleHealingPotionPickUp()
     {
         //增加玩家的生命值
-
+        health.RestoreHealth(value);
 
     }
 

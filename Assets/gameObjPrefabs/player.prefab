@@ -197,7 +197,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_Name
-      value: player 1
+      value: player
       objectReference: {fileID: 0}
     - target: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_Layer
@@ -241,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.x
@@ -301,13 +301,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4058713433911123833}
-    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6398471246927771729}
-    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8164034106412821380}
+    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6249826241983634996}
     - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5321349945483521614}
@@ -323,8 +320,35 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
   m_PrefabInstance: {fileID: 7327819348476690796}
   m_PrefabAsset: {fileID: 0}
---- !u!61 &4058713433911123833
-BoxCollider2D:
+--- !u!50 &8164034106412821380
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363062652295960068}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!70 &6249826241983634996
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -355,93 +379,11 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_CompositeOperation: 2
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.0059635043, y: 0.10842491}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 0.31, y: 0.35}
-    newSize: {x: 0.31, y: 0.35}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.16357261, y: 0.14620824}
-  m_EdgeRadius: 0
---- !u!61 &6398471246927771729
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 363062652295960068}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0062074363, y: 0.10917482}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 0.31, y: 0.35}
-    newSize: {x: 0.31, y: 0.35}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.16411823, y: 0.1448912}
-  m_EdgeRadius: 0
---- !u!50 &8164034106412821380
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 363062652295960068}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
+  m_Offset: {x: -0.0039976477, y: 0.15430953}
+  m_Size: {x: 0.15520911, y: 0.24555615}
+  m_Direction: 0
 --- !u!114 &5321349945483521614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,8 +396,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a49b08473ed411499ee3e6fd31b4f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 200
-  hpBar: {fileID: 0}
+  maxHealth: 0
+  OnHealthUpdate:
+    m_PersistentCalls:
+      m_Calls: []
   playerController: {fileID: 8648618477969170657}
   isInvincible: 0
   iFramesDuration: 1
@@ -472,14 +416,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ecbe0f2421bc04469c77b6a2930cd97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpPoint: {fileID: 5216492020982802588}
-  uiRoot: {fileID: 0}
-  hpUITransform: {fileID: 0}
   moveSpeed: 7
   dashDistance: 3
   dashDuration: 0.2
   dashCooldown: 1.5
   dashEffectPrefab: {fileID: 5837031498886096114, guid: 8a7548516be5f864fbb785c1f61c2b69, type: 3}
+  OnDodgeUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  inputDirection: {x: 0, y: 0}
 --- !u!114 &8196235526500979758
 MonoBehaviour:
   m_ObjectHideFlags: 0

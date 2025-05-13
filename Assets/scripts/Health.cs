@@ -61,8 +61,25 @@ public class Health : MonoBehaviour
         {
             Die();
         } 
-        OnHealthUpdate?.Invoke(maxHealth,currentHealth);
+        OnHealthUpdate?.Invoke(maxHealth,currentHealth);//更新玩家血量UI
     }
+
+
+    //恢復血量
+    public virtual void RestoreHealth(float value)
+    {
+        if(currentHealth ==maxHealth ) return;//滿血就返回
+
+        if(currentHealth + value > maxHealth)//回血不超過最大血量
+        {
+            currentHealth = maxHealth;
+        }else
+        {
+            currentHealth += value;
+        }
+        OnHealthUpdate?.Invoke(maxHealth,currentHealth);//更新血量UI
+    }
+
 
     // 玩家死亡
     private void Die()
