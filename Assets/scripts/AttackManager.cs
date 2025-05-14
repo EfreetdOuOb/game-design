@@ -5,7 +5,7 @@ public abstract class AttackManager : MonoBehaviour
     [Header("攻擊基礎設定")]
     public float attackRange = 1f;     // 攻擊範圍
     [SerializeField] protected int baseAttackDamage = 10;  // 基礎攻擊傷害
-    [SerializeField] protected Transform attackPoint;      // 攻擊判定點
+    [SerializeField] public Transform attackPoint;      // 攻擊判定點改為public，讓Monster可以直接訪問
     
     protected bool isAttacking = false;
     protected bool hasDamaged = false;
@@ -38,7 +38,7 @@ public abstract class AttackManager : MonoBehaviour
     }
 
     // 獲取攻擊判定位置
-    protected Vector2 GetAttackPosition()
+    public Vector2 GetAttackPosition()
     {
         return attackPoint != null ? attackPoint.position : transform.position;
     }

@@ -196,16 +196,11 @@ public class SlimeAttack : MonsterState
     private float attackTimer = 0f;
     private float attackCooldown = 1.5f; // 攻擊冷卻時間
     private bool hasAttacked = false;
-    private bool attackAnimationPlaying = false;
-    private bool damageApplied = false; // 是否已經應用了傷害
-    private float attackDamageFrame = 0.5f; // 攻擊動畫中觸發傷害的時間點（動畫進度為0-1）
     
     public SlimeAttack(Monster _monster) : base(_monster)
     {
-        // 播放攻擊動畫並啟動攻擊
+        // 啟動攻擊，動畫和傷害判定由 MonsterAttackManager 處理
         monster.Attack();
-        attackAnimationPlaying = true;
-        damageApplied = false;
         monster.Stop(); // 攻擊時停止移動
     }
     
@@ -214,23 +209,9 @@ public class SlimeAttack : MonsterState
         // 更新攻擊計時器
         attackTimer += Time.deltaTime;
         
-        // 檢查是否應該觸發傷害（在動畫播放到特定幀時）
-        if (attackAnimationPlaying && !damageApplied)
-        {
-            AnimatorStateInfo stateInfo = monster.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.IsName("attack") && stateInfo.normalizedTime >= attackDamageFrame)
-            {
-                // 在動畫播放到傷害幀時應用傷害
-                monster.GetComponent<MonsterAttackManager>().AttackTrigger();
-                damageApplied = true;
-                Debug.Log(monster.gameObject.name + " 在動畫中點造成傷害");
-            }
-        }
-        
         // 檢測動畫是否播放完畢
-        if (attackAnimationPlaying && monster.IsAnimationDone("attack"))
+        if (!hasAttacked && monster.IsAnimationDone("attack"))
         {
-            attackAnimationPlaying = false;
             hasAttacked = true;
             monster.attackManager.StopAttacking();
         }
@@ -241,14 +222,12 @@ public class SlimeAttack : MonsterState
             // 重置攻擊狀態
             hasAttacked = false;
             attackTimer = 0f;
-            damageApplied = false;
             
             // 檢測玩家是否仍在攻擊範圍內
             if (monster.IsPlayerInAttackRange())
             {
                 // 立即開始新的攻擊循環
                 monster.Attack();
-                attackAnimationPlaying = true; // 設置動畫播放標誌
                 Debug.Log("玩家仍在攻擊範圍內，史萊姆繼續攻擊");
             }
             else
@@ -602,16 +581,11 @@ public class SkeletonAttack : MonsterState
     private float attackTimer = 0f;
     private float attackCooldown = 1.2f; // 攻擊冷卻時間
     private bool hasAttacked = false;
-    private bool attackAnimationPlaying = false;
-    private bool damageApplied = false; // 是否已經應用了傷害
-    private float attackDamageFrame = 0.6f; // 攻擊動畫中觸發傷害的時間點（動畫進度為0-1）
     
     public SkeletonAttack(Monster _monster) : base(_monster)
     {
-        // 播放攻擊動畫並啟動攻擊
+        // 啟動攻擊，動畫和傷害判定由 MonsterAttackManager 處理
         monster.Attack();
-        attackAnimationPlaying = true;
-        damageApplied = false;
         monster.Stop(); // 攻擊時停止移動
     }
     
@@ -620,23 +594,9 @@ public class SkeletonAttack : MonsterState
         // 更新攻擊計時器
         attackTimer += Time.deltaTime;
         
-        // 檢查是否應該觸發傷害（在動畫播放到特定幀時）
-        if (attackAnimationPlaying && !damageApplied)
-        {
-            AnimatorStateInfo stateInfo = monster.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.IsName("attack") && stateInfo.normalizedTime >= attackDamageFrame)
-            {
-                // 在動畫播放到傷害幀時應用傷害
-                monster.GetComponent<MonsterAttackManager>().AttackTrigger();
-                damageApplied = true;
-                Debug.Log(monster.gameObject.name + " 在動畫中點造成傷害");
-            }
-        }
-        
         // 檢測動畫是否播放完畢
-        if (attackAnimationPlaying && monster.IsAnimationDone("attack"))
+        if (!hasAttacked && monster.IsAnimationDone("attack"))
         {
-            attackAnimationPlaying = false;
             hasAttacked = true;
             monster.attackManager.StopAttacking();
         }
@@ -647,14 +607,12 @@ public class SkeletonAttack : MonsterState
             // 重置攻擊狀態
             hasAttacked = false;
             attackTimer = 0f;
-            damageApplied = false;
             
             // 檢測玩家是否仍在攻擊範圍內
             if (monster.IsPlayerInAttackRange())
             {
                 // 立即開始新的攻擊循環
                 monster.Attack();
-                attackAnimationPlaying = true; // 設置動畫播放標誌
                 Debug.Log("玩家仍在攻擊範圍內，骷髏繼續攻擊");
             }
             else

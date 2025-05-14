@@ -193,12 +193,11 @@ public abstract class Monster : MonoBehaviour
     {
         if (attackManager != null && target != null)
         {
-            // 使用攻擊管理器啟動攻擊
+            // 使用攻擊管理器啟動攻擊，動畫播放由 MonsterAttackManager 負責
             attackManager.StartAttacking(target);
-            PlayAnimation("attack"); 
             
-            // 不再在這裡直接調用攻擊觸發
-            // 攻擊觸發應該在動畫的特定幀發生，由狀態機來控制
+            // 不再在這裡播放動畫，讓 MonsterAttackManager 負責播放
+            // PlayAnimation("attack"); 
             
             Debug.Log(gameObject.name + " 開始攻擊");
         }
@@ -214,9 +213,10 @@ public abstract class Monster : MonoBehaviour
         {
             checkPosition = detectionArea.transform.position;
         }
-        else if (attackArea != null && range == attackRange)
+        else if (range == attackRange && attackManager != null && attackManager.attackPoint != null)
         {
-            checkPosition = attackArea.transform.position;
+            // 使用攻擊管理器中的攻擊點進行判定
+            checkPosition = attackManager.attackPoint.position;
         }
         
         float distanceToPlayer = Vector2.Distance(target.position, checkPosition);
@@ -227,13 +227,14 @@ public abstract class Monster : MonoBehaviour
     // 檢查是否在攻擊範圍內
     public virtual bool IsPlayerInAttackRange()
     {
-        Vector3 checkPosition = transform.position;
-        if (attackArea != null)
-        {
-            checkPosition = attackArea.transform.position;
-        }
-        
         if (target == null) return false;
+        
+        Vector3 checkPosition = transform.position;
+        if (attackManager != null && attackManager.attackPoint != null)
+        {
+            // 使用攻擊管理器中的攻擊點進行判定
+            checkPosition = attackManager.attackPoint.position;
+        }
         
         float distanceToPlayer = Vector2.Distance(target.position, checkPosition);
         
@@ -243,6 +244,8 @@ public abstract class Monster : MonoBehaviour
     // 檢查是否在檢測範圍內但在攻擊範圍外
     public virtual bool IsPlayerInDetectionRange()
     {
+        if (target == null) return false;
+        
         Vector3 checkPosition = transform.position;
         Vector3 attackCheckPosition = transform.position;
         
@@ -251,12 +254,11 @@ public abstract class Monster : MonoBehaviour
             checkPosition = detectionArea.transform.position;
         }
         
-        if (attackArea != null)
+        if (attackManager != null && attackManager.attackPoint != null)
         {
-            attackCheckPosition = attackArea.transform.position;
+            // 使用攻擊管理器中的攻擊點進行判定
+            attackCheckPosition = attackManager.attackPoint.position;
         }
-        
-        if (target == null) return false;
         
         float distanceToPlayer = Vector2.Distance(target.position, checkPosition);
         float attackDistanceToPlayer = Vector2.Distance(target.position, attackCheckPosition);

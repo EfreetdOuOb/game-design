@@ -9,13 +9,61 @@ public class MonsterAttackManager : AttackManager
     [SerializeField] private int additionalDamage = 0;    // 額外傷害（來自怪物等級、狀態等）
     [SerializeField] private float damageMultiplier = 1f; // 傷害倍率
     
+    [Header("攻擊動畫設定")]
+    [Tooltip("攻擊動畫中觸發傷害的時間點（0-1）")]
+    [Range(0f, 1f)]
+    public float attackDamageFrame = 0.5f; // 默認在動畫中間造成傷害
+    
     private Animator animator;
     private Monster monster;
+    private bool attackAnimationPlaying = false;
+    private string attackAnimationName = "attack"; // 儲存攻擊動畫名稱，便於檢查
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         monster = GetComponent<Monster>();
+        
+        // 確保攻擊點存在
+        if (attackPoint == null)
+        {
+            Debug.LogWarning(gameObject.name + " 沒有設置攻擊點！將使用怪物中心點作為攻擊點。");
+            // 創建一個默認的攻擊點
+            GameObject newAttackPoint = new GameObject("AttackPoint");
+            newAttackPoint.transform.SetParent(transform);
+            newAttackPoint.transform.localPosition = Vector3.zero; // 默認在怪物中心
+            attackPoint = newAttackPoint.transform;
+        }
+    }
+
+    private void Update()
+    {
+        // 如果正在攻擊並且還沒有造成傷害，檢查動畫進度
+        if (isAttacking && !hasDamaged && attackAnimationPlaying)
+        {
+            CheckAttackAnimation();
+        }
+    }
+
+    // 檢查攻擊動畫進度，在適當時機觸發傷害
+    private void CheckAttackAnimation()
+    {
+        if (animator != null)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.IsName(attackAnimationName) && stateInfo.normalizedTime >= attackDamageFrame)
+            {
+                // 當動畫進度達到指定幀時觸發攻擊
+                AttackTrigger();
+            }
+            
+            // 如果動畫已經播放完成，結束這次攻擊
+            if (stateInfo.normalizedTime >= 1.0f)
+            {
+                attackAnimationPlaying = false;
+                // 注意：我們不在這裡調用StopAttacking，因為這應該由狀態機來控制
+            }
+        }
     }
 
     // 重寫獲取傷害值的方法
@@ -31,13 +79,20 @@ public class MonsterAttackManager : AttackManager
         
         // 重置傷害標誌，允許新的攻擊造成傷害
         hasDamaged = false;
+        attackAnimationPlaying = true;
         
-        // 播放攻擊動畫
-        // 動畫播放已經移到Monster.Attack()方法中
+        // 強制設置動畫的當前時間為0，確保從頭開始播放
+        if (animator != null)
+        {
+            animator.Play(attackAnimationName, 0, 0f);
+        }
+        
+        // 注意：動畫播放已經移到Monster.Attack()方法中
     }
 
     public override void StopAttacking()
     {
+        attackAnimationPlaying = false;
         base.StopAttacking();
     }
 
@@ -46,20 +101,22 @@ public class MonsterAttackManager : AttackManager
         // 只有在攻擊狀態且未造成傷害時才進行判定
         if (!isAttacking || hasDamaged || currentTarget == null) return;
 
+        // 使用攻擊點而不是攻擊區域來判定
+        Vector2 attackPos = GetAttackPosition();
+        
         // 檢測攻擊範圍內的玩家
-        Collider2D[] hits = Physics2D.OverlapCircleAll(GetAttackPosition(), attackRange , playerLayer);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange, playerLayer);
+        
         foreach (Collider2D hit in hits)
         { 
-             
-                Health playerHealth = hit.GetComponent<Health>();
-                if (playerHealth != null && !playerHealth.isInvincible)
-                {
-                    int finalDamage = GetAttackDamage();
-                    playerHealth.TakeDamage(finalDamage);
-                    hasDamaged = true;
-                    Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
-                }
-             
+            Health playerHealth = hit.GetComponent<Health>();
+            if (playerHealth != null && !playerHealth.isInvincible)
+            {
+                int finalDamage = GetAttackDamage();
+                playerHealth.TakeDamage(finalDamage);
+                hasDamaged = true;
+                Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
+            }
         }
     }
     
@@ -85,5 +142,23 @@ public class MonsterAttackManager : AttackManager
     public void AddDamageMultiplier(float multiplier)
     {
         damageMultiplier *= multiplier;
+    }
+
+    // 在Unity編輯器中繪製攻擊範圍
+    protected override void OnDrawGizmosSelected()
+    {
+        // 使用基類的繪製功能
+        base.OnDrawGizmosSelected();
+        
+        // 額外繪製攻擊點
+        Vector2 attackPos = Application.isPlaying ? GetAttackPosition() : (attackPoint != null ? attackPoint.position : transform.position);
+        
+        // 繪製一個較小的實心球體表示攻擊點
+        Gizmos.color = new Color(1, 0, 0, 0.5f); // 半透明紅色
+        Gizmos.DrawSphere(attackPos, 0.1f);
+        
+        // 繪製攻擊範圍
+        Gizmos.color = new Color(1, 0, 0, 0.2f); // 更透明的紅色
+        Gizmos.DrawWireSphere(attackPos, attackRange);
     }
 } 
