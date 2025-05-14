@@ -64,6 +64,21 @@ public class Skeleton : Monster
         }
     }
     
+    // 覆寫計算經驗值的方法，骷髏是更強的怪物，給予更多經驗值
+    protected override int CalculateExpValue()
+    {
+        // 如果骷髏已經復活過一次，則給予額外的經驗值獎勵
+        int baseExp = 150; // 骷髏基礎經驗值為150
+        
+        if (hasRevived)
+        {
+            // 已經復活過的骷髏經驗值加成
+            return baseExp + 75; // 額外給予75點經驗值
+        }
+        
+        return baseExp;
+    }
+    
     // 覆寫檢查是否可以復活的方法
     protected override bool CanRevive()
     {

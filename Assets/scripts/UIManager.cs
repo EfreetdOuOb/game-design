@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
 
     public Slider healthSlider;//血量
     public Slider dodgeCdSlider;//閃避冷卻條
+    public Slider expSlider; // 經驗值條
+    public Text levelText; // 等級文本
 
     
     
@@ -24,17 +26,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float gameTime = 0f; // 改為正計時
     public Text timerText;
     public Text scoreText;
+    public Text expText; // 經驗值文本
  
     
 
     private int score;
+    private int playerExp; // 玩家經驗值
 
     void Start()
     {
         gameManager = FindFirstObjectByType<GameManager>();
         enemySpawner = FindFirstObjectByType<EnemySpawner>();
         score = 0;
+        playerExp = 0;
         UpdateScoreText();
+        UpdateExpText();
         gameOverMenu.SetActive(false);
         gamePauseMenu.SetActive(false);
     }
@@ -94,9 +100,32 @@ public class UIManager : MonoBehaviour
         UpdateScoreText();
     }
 
+    // 增加經驗值的方法
+    public void IncreaseExp(int amount)
+    {
+        playerExp += amount;
+        UpdateExpText();
+        
+        // 如果有玩家經驗系統組件，則傳遞經驗值
+        PlayerExperience playerExpSystem = FindFirstObjectByType<PlayerExperience>();
+        if (playerExpSystem != null)
+        {
+            playerExpSystem.GainExperience(amount);
+        }
+    }
+
     void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();
+    }
+    
+    // 更新經驗值文本
+    void UpdateExpText()
+    {
+        if (expText != null)
+        {
+            expText.text = "EXP: " + playerExp.ToString();
+        }
     }
 
     public void ShowGameOverMenu()  
@@ -114,7 +143,7 @@ public class UIManager : MonoBehaviour
         roomCompleteMenu.SetActive(true);
         
         // 啟動協程等待半秒後關閉
-        StartCoroutine(HideRoomCompleteMenuAfterDelay(0.5f));
+        StartCoroutine(HideRoomCompleteMenuAfterDelay(1.5f));
     }
     
     // 延遲關閉房間完成 UI 的協程

@@ -131,9 +131,20 @@ public class GameManager : MonoBehaviour
         
     }
 
+    // 原來的加分方法，現在同時增加經驗值
     public void PlayerScored(int score)
     {
         uiManager.IncreaseScore(score);
+        
+        // 同時增加經驗值，可以設置不同的轉換比例
+        int expGained = score; // 假設1分=1經驗值，可以根據需要調整
+        uiManager.IncreaseExp(expGained);
+    }
+    
+    // 新增純經驗值獲取方法
+    public void PlayerGainedExp(int exp)
+    {
+        uiManager.IncreaseExp(exp);
     }
     
     public void RestartGame()

@@ -72,6 +72,12 @@ public class Slime : Monster
          
     }
     
+    // 覆寫計算經驗值的方法，史萊姆是弱小怪物，給的經驗值較少
+    protected override int CalculateExpValue()
+    {
+        return 50; // 史萊姆給予50點經驗值
+    }
+    
     // 獲取各種狀態
     protected override MonsterState GetIdleState()
     {

@@ -462,14 +462,23 @@ public abstract class Monster : MonoBehaviour
         // 在死亡時停止所有DOTween動畫
         DOTween.Kill(transform);
         
-        // 加分
+        // 給予玩家經驗值而不是分數
         if (gameManager != null)
         {
-            gameManager.PlayerScored(100);
+            // 根據怪物的不同可以給予不同的經驗值
+            int expValue = CalculateExpValue();
+            gameManager.PlayerGainedExp(expValue);
         }
         pickUpSpawner.DropItems();//掉落道具
         // 立即銷毀物件
         Destroy(gameObject);
+    }
+    
+    // 計算經驗值的方法，可以根據怪物類型、難度等因素進行計算
+    protected virtual int CalculateExpValue()
+    {
+        // 基礎經驗值為100，子類可以覆寫此方法以提供不同的經驗值
+        return 100;
     }
     
     // 檢查是否可以復活（默認為false，子類可以覆寫）
