@@ -9,7 +9,7 @@ public class PlayerExperience : MonoBehaviour
     [Header("等級系統")]
     public int currentLevel = 1;
     public float currentExp = 0f;
-    public float expToNextLevel = 100f;
+    public float expToNextLevel = 300f;
     public float expMultiplier = 1.2f; // 每次升級後下一級所需經驗的倍數
 
     [Header("UI組件")]
@@ -17,7 +17,8 @@ public class PlayerExperience : MonoBehaviour
     public Text levelText;
 
     [Header("事件")]
-    public UnityEvent OnLevelUp;
+    public UnityEvent<float, float> OnExpUpdate; // 添加經驗值更新事件，參數為當前經驗值和下一級所需經驗值
+    public UnityEvent<int> OnLevelUp; // 修改事件參數為等級
 
     private UIManager uiManager;
 
@@ -31,6 +32,9 @@ public class PlayerExperience : MonoBehaviour
     public void GainExperience(float amount)
     {
         currentExp += amount;
+        
+        // 觸發經驗值更新事件
+        OnExpUpdate?.Invoke(currentExp, expToNextLevel);
         
         // 檢查是否升級
         while (currentExp >= expToNextLevel)
@@ -48,8 +52,8 @@ public class PlayerExperience : MonoBehaviour
         currentLevel++;
         expToNextLevel = Mathf.Floor(expToNextLevel * expMultiplier);
         
-        // 觸發升級事件
-        OnLevelUp?.Invoke();
+        // 觸發升級事件，傳入當前等級
+        OnLevelUp?.Invoke(currentLevel);
         
         Debug.Log("升級到 " + currentLevel + " 級！");
     }

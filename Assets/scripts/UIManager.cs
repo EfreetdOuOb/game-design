@@ -81,6 +81,46 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // 經驗值條UI更新方法
+    public void UpdateExpSlider(float currentExp, float maxExp)
+    {
+        StartCoroutine(UpdateExpCoroutine(currentExp, maxExp));
+    }
+
+    // 經驗值條平滑過渡效果
+    public IEnumerator UpdateExpCoroutine(float currentExp, float maxExp)
+    {
+        if (expSlider == null) yield break;
+
+        // 設置最大值和當前值
+        expSlider.maxValue = maxExp;
+        
+        // 平滑過渡動畫
+        float startValue = expSlider.value;
+        float targetValue = currentExp;
+        float duration = 0.5f; // 過渡時間
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            expSlider.value = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 確保最終值正確
+        expSlider.value = targetValue;
+    }
+    
+    // 更新等級文本
+    public void UpdateLevelText(int level)
+    {
+        if (levelText != null)
+        {
+            levelText.text = "Lv." + level.ToString();
+        }
+    }
+
 
 
     private void Timer()
