@@ -63,7 +63,7 @@ public class EnemySpawner : MonoBehaviour
     {
         // 如果所有波次都已完成
         if (_allWavesCompleted)
-            return false;
+            return true;
         
         // 如果還有未觸發的波次
         if (_currentWaveIndex < waves.Length)
