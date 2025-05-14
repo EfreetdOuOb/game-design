@@ -20,7 +20,7 @@ public class Health : MonoBehaviour
     private Animator anim; 
     private bool isDead = false; // 是否死亡
     public PlayerController playerController;
-    public bool isInvincible = false;
+    public bool isInvincible = false; // 是否無敵（用於遠程和近戰）
 
     [Header("iFrames")]
     [SerializeField] private float iFramesDuration; // 無敵時間
@@ -98,16 +98,29 @@ public class Health : MonoBehaviour
     // 玩家無敵
     private IEnumerator Invincibility()
     {
+        // 設置無敵狀態，這個標誌在 MonsterAttackManager 中會檢查
         isInvincible = true;
+        
+        // 設置物理層碰撞忽略（用於子彈等物理碰撞）
         Physics2D.IgnoreLayerCollision(10, 11, true);
+        
+        // 閃爍視覺效果
         for (int i = 0; i < numberOfFlashes; i++)
         {
-            spriteRend.color = new Color(1, 0, 0, 0.5f);
+            spriteRend.color = new Color(1, 0, 0, 0.5f); // 紅色閃爍
             yield return new WaitForSeconds(iFramesDuration/(numberOfFlashes*2));
-            spriteRend.color = Color.white;
+            spriteRend.color = Color.white; // 恢復原色
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
+        
+        // 無敵結束
         isInvincible = false;
         Physics2D.IgnoreLayerCollision(10, 11, false); 
+    }
+    
+    // 獲取玩家是否處於無敵狀態
+    public bool IsInvincible()
+    {
+        return isInvincible;
     }
 }

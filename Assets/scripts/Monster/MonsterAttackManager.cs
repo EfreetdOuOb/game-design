@@ -57,10 +57,17 @@ public class MonsterAttackManager : AttackManager
                 AttackTrigger();
             }
             
-            // 如果動畫已經播放完成，結束這次攻擊
+            // 如果動畫已經播放完成，結束這次攻擊並開始冷卻計時
             if (stateInfo.normalizedTime >= 1.0f)
             {
                 attackAnimationPlaying = false;
+                
+                // 開始攻擊冷卻
+                if (monster != null)
+                {
+                    monster.StartAttackCooldown();
+                }
+                
                 // 注意：我們不在這裡調用StopAttacking，因為這應該由狀態機來控制
             }
         }
@@ -76,6 +83,20 @@ public class MonsterAttackManager : AttackManager
     public override void StartAttacking(Transform target)
     {
         base.StartAttacking(target);
+        
+        // 在攻擊前讓怪物面向玩家
+        if (target != null && monster != null && monster.spriteRend != null)
+        {
+            float x = target.position.x - transform.position.x;
+            if (x > 0)
+            {
+                monster.spriteRend.flipX = false; // 假設精靈默認面向右側
+            }
+            else
+            {
+                monster.spriteRend.flipX = true; // 面向左側
+            }
+        }
         
         // 重置傷害標誌，允許新的攻擊造成傷害
         hasDamaged = false;
@@ -109,13 +130,30 @@ public class MonsterAttackManager : AttackManager
         
         foreach (Collider2D hit in hits)
         { 
+            // 獲取玩家生命值組件
             Health playerHealth = hit.GetComponent<Health>();
+            
+            // 檢查玩家是否存在且不處於無敵狀態
             if (playerHealth != null && !playerHealth.isInvincible)
             {
+                // 計算最終傷害值
                 int finalDamage = GetAttackDamage();
+                
+                // 對玩家造成傷害
                 playerHealth.TakeDamage(finalDamage);
+                
+                // 標記已造成傷害，防止一次攻擊多次判定
                 hasDamaged = true;
+                
                 Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
+            }
+            else if (playerHealth != null && playerHealth.isInvincible)
+            {
+                // 玩家處於無敵狀態，攻擊無效
+                Debug.Log($"{gameObject.name} 攻擊了無敵狀態的玩家，無效！");
+                
+                // 標記已造成傷害，防止之後的無效判定
+                hasDamaged = true;
             }
         }
     }

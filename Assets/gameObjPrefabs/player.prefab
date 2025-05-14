@@ -466,6 +466,9 @@ MonoBehaviour:
   expMultiplier: 1.2
   expSlider: {fileID: 0}
   levelText: {fileID: 0}
+  OnExpUpdate:
+    m_PersistentCalls:
+      m_Calls: []
   OnLevelUp:
     m_PersistentCalls:
       m_Calls: []

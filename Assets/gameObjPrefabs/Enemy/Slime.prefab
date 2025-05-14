@@ -181,13 +181,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   detectionRange: 10.5
-  attackRange: 1.5
+  attackRange: 1.2
   startingHealth: 30
   currentHealth: 0
   friction: 0
   dragRatio: 10
   speedMultiplier: 1
+  attackCooldown: 2
   target: {fileID: 0}
+  spriteRend: {fileID: 0}
   attackManager: {fileID: 0}
   numberOfFlashes: 1
   flashDuration: 0.5

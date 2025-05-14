@@ -33,6 +33,9 @@ public class UIManager : MonoBehaviour
     private int score;
     private int playerExp; // 玩家經驗值
 
+    // 儲存當前運行的經驗值協程
+    private Coroutine expUpdateCoroutine = null;
+
     void Start()
     {
         gameManager = FindFirstObjectByType<GameManager>();
@@ -84,7 +87,14 @@ public class UIManager : MonoBehaviour
     // 經驗值條UI更新方法
     public void UpdateExpSlider(float currentExp, float maxExp)
     {
-        StartCoroutine(UpdateExpCoroutine(currentExp, maxExp));
+        // 如果有正在運行的協程，先停止它
+        if (expUpdateCoroutine != null)
+        {
+            StopCoroutine(expUpdateCoroutine);
+        }
+        
+        // 啟動新的協程並保存引用
+        expUpdateCoroutine = StartCoroutine(UpdateExpCoroutine(currentExp, maxExp));
     }
 
     // 經驗值條平滑過渡效果
@@ -92,7 +102,7 @@ public class UIManager : MonoBehaviour
     {
         if (expSlider == null) yield break;
 
-        // 設置最大值和當前值
+        // 設置最大值 - 這很重要，確保slider的最大值已更新
         expSlider.maxValue = maxExp;
         
         // 平滑過渡動畫
@@ -100,7 +110,26 @@ public class UIManager : MonoBehaviour
         float targetValue = currentExp;
         float duration = 0.5f; // 過渡時間
         float elapsedTime = 0f;
+        
+        // 如果目標值小於起始值（例如升級時經驗值歸零），先將slider歸零
+        if (targetValue < startValue)
+        {
+            // 快速過渡到0
+            duration = 0.2f;
+            while (elapsedTime < duration)
+            {
+                expSlider.value = Mathf.Lerp(startValue, 0, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            
+            // 重置時間和起始值，準備向目標值過渡
+            elapsedTime = 0f;
+            startValue = 0f;
+            duration = 0.3f; // 較短的過渡時間
+        }
 
+        // 標準過渡動畫
         while (elapsedTime < duration)
         {
             expSlider.value = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
@@ -110,6 +139,7 @@ public class UIManager : MonoBehaviour
 
         // 確保最終值正確
         expSlider.value = targetValue;
+        expUpdateCoroutine = null; // 清除協程引用
     }
     
     // 更新等級文本

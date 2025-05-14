@@ -193,8 +193,6 @@ public class SlimeChase : MonsterState
 // 史萊姆的攻擊狀態
 public class SlimeAttack : MonsterState
 {
-    private float attackTimer = 0f;
-    private float attackCooldown = 1.5f; // 攻擊冷卻時間
     private bool hasAttacked = false;
     
     public SlimeAttack(Monster _monster) : base(_monster)
@@ -206,27 +204,23 @@ public class SlimeAttack : MonsterState
     
     public override void Update()
     { 
-        // 更新攻擊計時器
-        attackTimer += Time.deltaTime;
-        
         // 檢測動畫是否播放完畢
         if (!hasAttacked && monster.IsAnimationDone("attack"))
         {
             hasAttacked = true;
             monster.attackManager.StopAttacking();
+            
+            // 注意：冷卻計時已經由 MonsterAttackManager 在動畫結束時觸發
         }
         
-        // 攻擊冷卻結束後可以進行下一次攻擊
-        if (attackTimer >= attackCooldown && hasAttacked)
+        // 攻擊完成後並且可以再次攻擊時，檢查是否需要繼續攻擊
+        if (hasAttacked && monster.CanAttack())
         {
-            // 重置攻擊狀態
-            hasAttacked = false;
-            attackTimer = 0f;
-            
             // 檢測玩家是否仍在攻擊範圍內
             if (monster.IsPlayerInAttackRange())
             {
                 // 立即開始新的攻擊循環
+                hasAttacked = false;
                 monster.Attack();
                 Debug.Log("玩家仍在攻擊範圍內，史萊姆繼續攻擊");
             }
@@ -578,8 +572,6 @@ public class SkeletonChase : MonsterState
 // 骷髏的攻擊狀態
 public class SkeletonAttack : MonsterState
 {
-    private float attackTimer = 0f;
-    private float attackCooldown = 1.2f; // 攻擊冷卻時間
     private bool hasAttacked = false;
     
     public SkeletonAttack(Monster _monster) : base(_monster)
@@ -591,27 +583,23 @@ public class SkeletonAttack : MonsterState
     
     public override void Update()
     { 
-        // 更新攻擊計時器
-        attackTimer += Time.deltaTime;
-        
         // 檢測動畫是否播放完畢
         if (!hasAttacked && monster.IsAnimationDone("attack"))
         {
             hasAttacked = true;
             monster.attackManager.StopAttacking();
+            
+            // 注意：冷卻計時已經由 MonsterAttackManager 在動畫結束時觸發
         }
         
-        // 攻擊冷卻結束後可以進行下一次攻擊
-        if (attackTimer >= attackCooldown && hasAttacked)
+        // 攻擊完成後並且可以再次攻擊時，檢查是否需要繼續攻擊
+        if (hasAttacked && monster.CanAttack())
         {
-            // 重置攻擊狀態
-            hasAttacked = false;
-            attackTimer = 0f;
-            
             // 檢測玩家是否仍在攻擊範圍內
             if (monster.IsPlayerInAttackRange())
             {
                 // 立即開始新的攻擊循環
+                hasAttacked = false;
                 monster.Attack();
                 Debug.Log("玩家仍在攻擊範圍內，骷髏繼續攻擊");
             }

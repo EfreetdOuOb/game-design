@@ -24,12 +24,17 @@ public abstract class Monster : MonoBehaviour
     [Tooltip("速度倍增器")]
     public float speedMultiplier = 1.0f; // 速度倍增器
     
+    [Header("攻擊設定")]
+    [Tooltip("攻擊冷卻時間（秒）")]
+    public float attackCooldown = 1.5f; // 預設攻擊冷卻時間
+    protected float attackCooldownTimer = 0f; // 攻擊冷卻計時器
+    protected bool canAttack = true; // 是否可以攻擊
     
     // 組件引用
     public Transform target;
     protected Rigidbody2D rb2d;
     protected Animator animator;
-    protected SpriteRenderer spriteRend;
+    public SpriteRenderer spriteRend;
     public AttackManager attackManager;
     protected GameManager gameManager;
     protected PickUpSpawner pickUpSpawner;//掉落道具腳本引用
@@ -108,6 +113,18 @@ public abstract class Monster : MonoBehaviour
         var gm = FindFirstObjectByType<GameManager>();
         if (gm != null && gm.isPaused)
             return;
+            
+        // 更新攻擊冷卻計時器
+        if (!canAttack)
+        {
+            attackCooldownTimer += Time.deltaTime;
+            if (attackCooldownTimer >= attackCooldown)
+            {
+                canAttack = true;
+                attackCooldownTimer = 0f;
+            }
+        }
+        
         // 更新當前狀態
         if (currentState != null )
         {
@@ -191,6 +208,9 @@ public abstract class Monster : MonoBehaviour
     // 攻擊方法
     public virtual void Attack()
     {
+        // 如果在冷卻中，不能攻擊
+        if (!canAttack) return;
+        
         if (attackManager != null && target != null)
         {
             // 使用攻擊管理器啟動攻擊，動畫播放由 MonsterAttackManager 負責
@@ -201,6 +221,26 @@ public abstract class Monster : MonoBehaviour
             
             Debug.Log(gameObject.name + " 開始攻擊");
         }
+    }
+    
+    // 攻擊完成後調用，開始冷卻計時
+    public virtual void StartAttackCooldown()
+    {
+        canAttack = false;
+        attackCooldownTimer = 0f;
+    }
+    
+    // 檢查是否可以攻擊
+    public virtual bool CanAttack()
+    {
+        return canAttack;
+    }
+    
+    // 獲取冷卻進度 (0-1)
+    public virtual float GetAttackCooldownProgress()
+    {
+        if (canAttack) return 1.0f;
+        return attackCooldownTimer / attackCooldown;
     }
     
     // 檢查是否在範圍內
