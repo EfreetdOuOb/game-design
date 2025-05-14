@@ -28,8 +28,12 @@ public class MonsterAttackManager : AttackManager
     public override void StartAttacking(Transform target)
     {
         base.StartAttacking(target);
+        
+        // 重置傷害標誌，允許新的攻擊造成傷害
+        hasDamaged = false;
+        
         // 播放攻擊動畫
-        monster.PlayAnimation("attack");
+        // 動畫播放已經移到Monster.Attack()方法中
     }
 
     public override void StopAttacking()

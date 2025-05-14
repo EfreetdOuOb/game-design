@@ -191,15 +191,15 @@ public abstract class Monster : MonoBehaviour
     // 攻擊方法
     public virtual void Attack()
     {
-        if (attackManager != null && target != null )
+        if (attackManager != null && target != null)
         {
             // 使用攻擊管理器啟動攻擊
             attackManager.StartAttacking(target);
             PlayAnimation("attack"); 
             
-            GetComponent<MonsterAttackManager>().AttackTrigger(); // 調用攻擊觸發 
-             
-            attackManager.StopAttacking();
+            // 不再在這裡直接調用攻擊觸發
+            // 攻擊觸發應該在動畫的特定幀發生，由狀態機來控制
+            
             Debug.Log(gameObject.name + " 開始攻擊");
         }
     }
