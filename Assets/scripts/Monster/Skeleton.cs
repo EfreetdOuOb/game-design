@@ -6,10 +6,10 @@ using UnityEngine;
 public class Skeleton : Monster
 {
     [Header("骷髏特定屬性")]
-    public float attackInterval = 1.2f;    // 攻擊間隔
+    // public float attackInterval = 1.2f;    // 攻擊間隔
     public bool canReviveOnce = true;      // 是否可以復活一次
     private bool hasRevived = false;       // 是否已經復活過
-    private float attackTimer = 0f;
+    // private float attackTimer = 0f;
     
     protected override void Awake()
     {
@@ -29,12 +29,6 @@ public class Skeleton : Monster
     protected override void Update()
     {
         base.Update();
-        
-        // 更新攻擊計時器
-        if (attackTimer > 0)
-        {
-            attackTimer -= Time.deltaTime;
-        }
     }
     
     // 覆寫面向方法
@@ -51,16 +45,6 @@ public class Skeleton : Monster
             {
                 spriteRend.flipX = false; // 面向右
             }
-        }
-    }
-    
-    // 覆寫攻擊方法，增加攻擊間隔
-    public override void Attack()
-    {
-        if (attackTimer <= 0)
-        {
-            base.Attack();
-            attackTimer = attackInterval;
         }
     }
     

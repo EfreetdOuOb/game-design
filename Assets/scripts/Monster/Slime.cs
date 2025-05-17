@@ -63,15 +63,6 @@ public class Slime : Monster
         }
     }
     
-    // 覆寫攻擊方法，增加攻擊間隔
-    public override void Attack()
-    {
-         
-            base.Attack();
-             
-         
-    }
-    
     // 覆寫計算經驗值的方法，史萊姆是弱小怪物，給的經驗值較少
     protected override int CalculateExpValue()
     {

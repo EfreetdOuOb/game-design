@@ -101,8 +101,8 @@ public class Health : MonoBehaviour
         // 設置無敵狀態，這個標誌在 MonsterAttackManager 中會檢查
         isInvincible = true;
         
-        // 設置物理層碰撞忽略（用於子彈等物理碰撞）
-        Physics2D.IgnoreLayerCollision(10, 11, true);
+        // 設置物理層碰撞忽略（用於子彈等物理碰撞） 
+        Physics2D.IgnoreLayerCollision(10, 16, true);
         
         // 閃爍視覺效果
         for (int i = 0; i < numberOfFlashes; i++)
@@ -114,8 +114,8 @@ public class Health : MonoBehaviour
         }
         
         // 無敵結束
-        isInvincible = false;
-        Physics2D.IgnoreLayerCollision(10, 11, false); 
+        isInvincible = false; 
+        Physics2D.IgnoreLayerCollision(10, 16, false);
     }
     
     // 獲取玩家是否處於無敵狀態
