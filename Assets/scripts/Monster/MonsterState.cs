@@ -45,16 +45,14 @@ public class SlimeIdle : MonsterState
         if (monster.IsPlayerInRange(monster.detectionRange))
         {
             // 轉換到追蹤狀態
-            monster.SetCurrentState(new SlimeChase(monster));
-            Debug.Log("史萊姆發現玩家，開始追蹤");
+            monster.SetCurrentState(new SlimeChase(monster)); 
         }
         // 隨機移動
         else if (idleTimer >= nextStateTime)
         {
             if (Random.value > 0.5f) // 50% 機率移動或保持閒置
             {
-                monster.SetCurrentState(new SlimeWander(monster));
-                Debug.Log("史萊姆開始隨機移動");
+                monster.SetCurrentState(new SlimeWander(monster)); 
             }
             else
             {
@@ -114,15 +112,13 @@ public class SlimeWander : MonsterState
         if (monster.IsPlayerInRange(monster.detectionRange))
         {
             // 轉換到追蹤狀態
-            monster.SetCurrentState(new SlimeChase(monster));
-            Debug.Log("史萊姆發現玩家，開始追蹤");
+            monster.SetCurrentState(new SlimeChase(monster)); 
         }
         // 移動時間結束
         else if (wanderTimer >= wanderDuration)
         {
             // 回到閒置狀態
-            monster.SetCurrentState(new SlimeIdle(monster));
-            Debug.Log("史萊姆停止隨機移動，回到閒置狀態");
+            monster.SetCurrentState(new SlimeIdle(monster)); 
         }
     }
     
@@ -161,15 +157,13 @@ public class SlimeChase : MonsterState
         if (monster.IsPlayerInAttackRange())
         {
             // 轉換到攻擊狀態
-            monster.SetCurrentState(new SlimeAttack(monster));
-            Debug.Log("史萊姆進入攻擊範圍");
+            monster.SetCurrentState(new SlimeAttack(monster)); 
         }
         // 檢測玩家是否超出追蹤範圍
         else if (!monster.IsPlayerInRange(monster.detectionRange))
         {
             // 回到閒置狀態
-            monster.SetCurrentState(new SlimeIdle(monster));
-            Debug.Log("玩家離開，史萊姆回到閒置狀態");
+            monster.SetCurrentState(new SlimeIdle(monster)); 
         }
     }
     
@@ -221,8 +215,7 @@ public class SlimeAttack : MonsterState
             {
                 // 立即開始新的攻擊循環
                 hasAttacked = false;
-                monster.Attack();
-                Debug.Log("玩家仍在攻擊範圍內，史萊姆繼續攻擊");
+                monster.Attack(); 
             }
             else
             {
@@ -230,14 +223,12 @@ public class SlimeAttack : MonsterState
                 if (monster.IsPlayerInDetectionRange())
                 {
                     // 轉換到追蹤狀態
-                    monster.SetCurrentState(new SlimeChase(monster));
-                    Debug.Log("玩家離開攻擊範圍，史萊姆開始追蹤");
+                    monster.SetCurrentState(new SlimeChase(monster)); 
                 }
                 else
                 {
                     // 玩家離開檢測範圍，回到閒置狀態
-                    monster.SetCurrentState(new SlimeIdle(monster));
-                    Debug.Log("玩家離開檢測範圍，史萊姆回到閒置狀態");
+                    monster.SetCurrentState(new SlimeIdle(monster)); 
                 }
             }
         }

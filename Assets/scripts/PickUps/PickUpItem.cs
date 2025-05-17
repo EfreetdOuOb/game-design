@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using Unity.VisualScripting;
 
 public class PickUpItem : MonoBehaviour
 {  
@@ -11,8 +13,20 @@ public class PickUpItem : MonoBehaviour
         HealingPotion
         
     }
+
+    [Header("道具類型")]
     [SerializeField] private PickUpType pickUpType;
     [SerializeField] private int value;
+
+    [Header("上拋動畫")]
+    [SerializeField]private float trowHeight = 1f;
+    [SerializeField]private float trowDuration = 1f;
+
+    [Header("拾取範圍")]
+    [SerializeField]private float pickUpDistance = 3f;
+    [SerializeField]private float moveSpeed = 5f;
+    private bool canPickUp = false;
+
 
     private Health health;
 
@@ -21,9 +35,33 @@ public class PickUpItem : MonoBehaviour
         health = FindFirstObjectByType<Health>();
     }
 
+    private void Start()
+    {
+        ThrowItem();
+    }
+
+    private void Update()
+    {
+        if(canPickUp && Vector2.Distance(transform.position,health.transform.position)<pickUpDistance)
+        {
+            Vector2 dir = (health.transform.position-transform.position).normalized;
+            transform.Translate(dir*moveSpeed*Time.deltaTime);
+        }
+    }
+
+    //上拋動畫
+    private void ThrowItem()
+    {
+        transform.DOJump(transform.position,trowHeight,1,trowDuration)
+        .OnComplete(()=>{
+            canPickUp = true;
+        });
+    }
+
+
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.GetComponent<PlayerController>())
+        if(canPickUp && collision.gameObject.GetComponent<PlayerController>())
         {
             CollectPickUp();
         }
@@ -49,7 +87,7 @@ public class PickUpItem : MonoBehaviour
     private void HandleCoinPickUp()
     {
         //增加玩家的金幣數量
-
+        GameManager.Instance.AddCoins(value);
     }
 
     private void HandleHealingPotionPickUp()

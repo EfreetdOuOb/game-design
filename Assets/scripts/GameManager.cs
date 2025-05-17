@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    public static GameManager Instance {get;private set;}
     public UIManager uiManager;    
     public EnemySpawner enemySpawner;
     public PlayerController playerController;
@@ -15,11 +17,27 @@ public class GameManager : MonoBehaviour
     
     private float checkInterval = 1f; // 檢查間隔
     private float timer = 0f;
+    private int coinCount;
 
-    void Start()
+    private void Awake()
     {
         uiManager = FindFirstObjectByType<UIManager>();
         playerController = GetComponent<PlayerController>();
+
+        if(Instance == null)
+        {
+            Instance = this;
+        }else if(Instance != null)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);//加載新場景時候告訴unity不要銷毀該物件
+    }
+
+    void Start()
+    {
+        
         Time.timeScale = 1;
         StartCoroutine(CheckEnemiesRoutine());
     }
@@ -48,6 +66,21 @@ public class GameManager : MonoBehaviour
             timer = 0f;
         }
     }
+
+    //增加金幣
+    public void AddCoins(int value)
+    {
+        coinCount += value;
+        UICoinCountText.UpdateText(coinCount);//更新金幣文字UI
+    }
+
+    //減少金幣
+    public void RemoveCoins(int value)
+    {
+        coinCount -= value;
+        UICoinCountText.UpdateText(coinCount);//更新金幣文字UI
+    }
+
     
     // 檢查戰鬥狀態的方法
     private void CheckCombatStatus()

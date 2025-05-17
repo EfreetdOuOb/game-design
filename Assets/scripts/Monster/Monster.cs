@@ -574,7 +574,7 @@ public abstract class Monster : MonoBehaviour
         {
             GeneratePath(target.position);
         }//當敵人到達當前路徑點時，遞增索引currentIndex並進行路徑計算
-        else if(currentIndex<pathPointList.Count)
+        else if(currentIndex < pathPointList.Count)
         {
             if(Vector2.Distance(transform.position,pathPointList[currentIndex])<= 0.1f)
             {
