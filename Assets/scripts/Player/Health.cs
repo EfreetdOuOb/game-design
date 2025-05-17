@@ -44,6 +44,11 @@ public class Health : MonoBehaviour
         
     }
 
+    public void UIUpdateHealthSlider()
+    {
+        UIManager.Instance.UpdateHelthSlider(maxHealth,currentHealth);
+    }
+
     // 玩家受傷
     public void TakeDamage(float damage)
     {
@@ -61,6 +66,9 @@ public class Health : MonoBehaviour
         {
             Die();
         } 
+        //顯示受傷害數值
+        GameManager.Instance.ShowText("-" + damage, transform.position, Color.red);
+
         OnHealthUpdate?.Invoke(maxHealth,currentHealth);//更新玩家血量UI
     }
 
@@ -93,6 +101,7 @@ public class Health : MonoBehaviour
             // 切換到死亡狀態
             playerController.SetCurrentState(new Dead(playerController));
         }
+        UIManager.Instance.ShowGameOverMenu();
     }
 
     // 玩家無敵

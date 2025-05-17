@@ -88,12 +88,18 @@ public class PickUpItem : MonoBehaviour
     {
         //增加玩家的金幣數量
         GameManager.Instance.AddCoins(value);
+
+        //顯示拾取金幣數值
+        GameManager.Instance.ShowText("+" + value, transform.position, Color.yellow);
     }
 
     private void HandleHealingPotionPickUp()
     {
         //增加玩家的生命值
         health.RestoreHealth(value);
+
+        //顯示回血數值
+        GameManager.Instance.ShowText("+" + value, transform.position, Color.green);
 
     }
 

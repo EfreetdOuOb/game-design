@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 public class PlayerController : MonoBehaviour
 {
-    
+    public static PlayerController Instance {get; private set;}
 
     public float moveSpeed;   
     
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCooldown = 1.5f; // 閃避冷卻時間
     [Tooltip("閃避特效預製體")]
     [SerializeField] private GameObject dashEffectPrefab; // 閃避特效預製體
-    public UnityEvent<float> OnDodgeUpdate;
+    
     
     private bool canDash = true; // 是否可以閃避
     private bool isDashing = false; // 是否正在閃避中
@@ -32,24 +32,26 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         inputActions = new InputActions();
     }
-    void Start() 
+    private void Start() 
     {
          
         SetCurrentState(new Idle(this));
     }
 
-    void Update()
+    private void Update()
     {
         currentState.Update();
         inputDirection = inputActions.GamePlay.Move.ReadValue<Vector2>();
         // 更新閃避冷卻
         if (!canDash)
         {
-            OnDodgeUpdate?.Invoke(dashCooldownTimer);//更新冷卻條，傳入冷卻時間。
+            //OnDodgeUpdate?.Invoke(dashCooldownTimer);//更新冷卻條，傳入冷卻時間。
+            UIManager.Instance.DodgeCdSlider(dashCooldownTimer);
             dashCooldownTimer -= Time.deltaTime; 
             if (dashCooldownTimer <= 0)
             {
@@ -59,10 +61,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         currentState.FixedUpdate(); 
     }
+
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     { 

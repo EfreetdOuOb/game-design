@@ -23,10 +23,22 @@ public class PlayerExperience : MonoBehaviour
     private UIManager uiManager;
     private bool isLevelingUp = false; // 防止升級時的經驗條更新衝突
 
+    public float maxExp => expToNextLevel; // 這樣可以直接使用 expToNextLevel 作為 maxExp
+
     private void Start()
     {
         uiManager = FindFirstObjectByType<UIManager>();
         UpdateExpUI();
+    }
+
+    public void UIUpdateExpSlider()
+    {
+        UIManager.Instance.UpdateExpSlider(currentExp, expToNextLevel);
+    }
+
+    public void UIUpdateExpText()
+    {
+        UIManager.Instance.UpdateLevelText(currentLevel);
     }
 
     // 獲得經驗值

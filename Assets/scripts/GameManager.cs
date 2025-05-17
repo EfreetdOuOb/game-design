@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject uiShowText;
 
     public static GameManager Instance {get;private set;}
     public UIManager uiManager;    
@@ -23,6 +25,8 @@ public class GameManager : MonoBehaviour
     {
         uiManager = FindFirstObjectByType<UIManager>();
         playerController = GetComponent<PlayerController>();
+        Time.timeScale = 1;
+        StartCoroutine(CheckEnemiesRoutine());
 
         if(Instance == null)
         {
@@ -37,7 +41,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
+        // 每次進入新場景都重新抓 UIManager、PlayerController
+        uiManager = FindFirstObjectByType<UIManager>();
+        playerController = FindFirstObjectByType<PlayerController>();
         Time.timeScale = 1;
         StartCoroutine(CheckEnemiesRoutine());
     }
@@ -79,6 +85,15 @@ public class GameManager : MonoBehaviour
     {
         coinCount -= value;
         UICoinCountText.UpdateText(coinCount);//更新金幣文字UI
+    }
+
+    //提示數值
+    public void ShowText(string str, Vector2 pos, Color color)
+    {
+        Vector2 screenPostion = Camera.main.WorldToScreenPoint(pos);
+        GameObject text = Instantiate(uiShowText, screenPostion,Quaternion.identity);
+        text.transform.SetParent(GameObject.Find("HUD").transform);//UI元素需要Canvas才能顯示
+        text.GetComponent<UIShowText>().SetText(str, color);
     }
 
     

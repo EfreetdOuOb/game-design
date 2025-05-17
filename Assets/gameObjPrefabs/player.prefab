@@ -399,10 +399,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a49b08473ed411499ee3e6fd31b4f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 200
   OnHealthUpdate:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5321349945483521614}
+        m_TargetAssemblyTypeName: Health, Assembly-CSharp
+        m_MethodName: UIUpdateHealthSlider
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   playerController: {fileID: 8648618477969170657}
   isInvincible: 0
   iFramesDuration: 1
@@ -424,9 +436,6 @@ MonoBehaviour:
   dashDuration: 0.2
   dashCooldown: 1.5
   dashEffectPrefab: {fileID: 5837031498886096114, guid: 8a7548516be5f864fbb785c1f61c2b69, type: 3}
-  OnDodgeUpdate:
-    m_PersistentCalls:
-      m_Calls: []
   inputDirection: {x: 0, y: 0}
 --- !u!114 &8196235526500979758
 MonoBehaviour:
@@ -468,10 +477,34 @@ MonoBehaviour:
   levelText: {fileID: 0}
   OnExpUpdate:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 376925239201359515}
+        m_TargetAssemblyTypeName: PlayerExperience, Assembly-CSharp
+        m_MethodName: UIUpdateExpSlider
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnLevelUp:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 376925239201359515}
+        m_TargetAssemblyTypeName: PlayerExperience, Assembly-CSharp
+        m_MethodName: UIUpdateExpText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &640673333343977057 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}

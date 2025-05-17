@@ -482,6 +482,8 @@ public abstract class Monster : MonoBehaviour
                 
             }
         }
+        //顯示受傷害數值
+        GameManager.Instance.ShowText("-" + damage, transform.position, Color.red);
     }
     
     // 受傷閃爍效果

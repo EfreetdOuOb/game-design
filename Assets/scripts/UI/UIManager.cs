@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance {get; private set;}
+
     private GameManager gameManager;
     private EnemySpawner enemySpawner;
 
@@ -35,6 +37,12 @@ public class UIManager : MonoBehaviour
 
     // 儲存當前運行的經驗值協程
     private Coroutine expUpdateCoroutine = null;
+
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
