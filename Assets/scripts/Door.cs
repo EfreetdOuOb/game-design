@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    private Animator _animator;
-    private Collider2D doorLegCollider;
+    private Animator _animator; 
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
-        doorLegCollider = transform.Find("doorLeg").GetComponent<Collider2D>();
+        _animator = GetComponent<Animator>(); 
     }
 
     [ContextMenu(itemName:"Open")]
