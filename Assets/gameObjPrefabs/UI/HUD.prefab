@@ -851,7 +851,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: fe174f83bfe0b2b4fb14110fa340769f, type: 3}
     m_FontSize: 25
     m_FontStyle: 1
     m_BestFit: 0
@@ -1300,6 +1300,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2054811076194907017, guid: 3a6b507171af7014d8e222d871eb0ebc, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: fe174f83bfe0b2b4fb14110fa340769f, type: 3}
     - target: {fileID: 7717363661119333734, guid: 3a6b507171af7014d8e222d871eb0ebc, type: 3}
       propertyPath: m_Name
       value: TimeText
