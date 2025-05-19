@@ -23,9 +23,9 @@ public class RoomFlowController : MonoBehaviour
     public EnemySpawner enemySpawner;
     public float itemTipDuration = 2f;
     public float battleTipDuration = 2f;
+    public GameObject door; // 新增：對應大門
+    public GameObject roomCompletePanel; // 新增：房間完成UI
 
-    private bool battleStarted = false;
-    private bool roomCompleted = false;
     private bool hasStarted = false;
 
     private void Start()
@@ -65,8 +65,7 @@ public class RoomFlowController : MonoBehaviour
         currentStep = RoomStep.StartBattle;
         if (enemySpawner != null)
         {
-            enemySpawner.gameObject.SetActive(true);
-            battleStarted = true;
+            enemySpawner.StartSpawning();
         }
 
         // 5. 等待戰鬥結束
@@ -77,9 +76,18 @@ public class RoomFlowController : MonoBehaviour
 
         // 6. 房間完成
         currentStep = RoomStep.RoomComplete;
-        roomCompleted = true;
+        if (door != null)
+        {
+            var doorComp = door.GetComponent<Door>();
+            if (doorComp != null)
+            {
+                doorComp.Open();
+            }
+        }
+        if (roomCompletePanel != null) roomCompletePanel.SetActive(true); // 顯示房間完成UI
         UIManager.Instance?.ShowRoomCompleteMenu();
         yield return new WaitForSeconds(1.5f);
+        if (roomCompletePanel != null) roomCompletePanel.SetActive(false); // 自動隱藏
 
         // 7. 過場/切換房間
         currentStep = RoomStep.Transition;

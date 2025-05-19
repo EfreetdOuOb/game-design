@@ -13,18 +13,19 @@ public class EnemySpawner : MonoBehaviour
     private int _currentWaveIndex;
     public bool _allWavesCompleted = false;
 
+    private bool hasStarted = false;
 
-     
-    
-    
-    private void Start()
+    public void StartSpawning()
     {
+        if (hasStarted) return;
+        hasStarted = true;
         if (spawnPoints.Length == 0)
         {
             Debug.LogError("No spawn points found!");
             return;
         }
-        _currentWaveIndex = 0; // 初始化為0，在协程中会增加到1
+        _currentWaveIndex = 0;
+        _allWavesCompleted = false;
         StartCoroutine(NextWaveCoroutine());
     }
     
