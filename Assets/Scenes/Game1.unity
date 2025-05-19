@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 481143}
   - component: {fileID: 481145}
   - component: {fileID: 481144}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Entrance4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,6 +395,9 @@ MonoBehaviour:
   currentStep: 0
   box: {fileID: 0}
   itemTipPanel: {fileID: 0}
+  dialoguePanel: {fileID: 0}
+  dialogueBeforeBattle: []
+  dialogueAfterBattle: []
   battleTipPanel: {fileID: 3816754905533421449}
   enemySpawner: {fileID: 1829807326}
   itemTipDuration: 2
@@ -412,7 +415,7 @@ GameObject:
   - component: {fileID: 162822067}
   - component: {fileID: 162822069}
   - component: {fileID: 162822068}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Entrance2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1251,7 +1254,7 @@ GameObject:
   - component: {fileID: 1036089848}
   - component: {fileID: 1036089850}
   - component: {fileID: 1036089849}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Entrance3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1414,6 +1417,9 @@ MonoBehaviour:
   currentStep: 0
   box: {fileID: 0}
   itemTipPanel: {fileID: 0}
+  dialoguePanel: {fileID: 0}
+  dialogueBeforeBattle: []
+  dialogueAfterBattle: []
   battleTipPanel: {fileID: 3816754905533421449}
   enemySpawner: {fileID: 2107255918}
   itemTipDuration: 2
@@ -4472,7 +4478,7 @@ GameObject:
   - component: {fileID: 1701032945}
   - component: {fileID: 1701032947}
   - component: {fileID: 1701032946}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Entrance1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4618,6 +4624,14 @@ MonoBehaviour:
   currentStep: 0
   box: {fileID: 1860684313}
   itemTipPanel: {fileID: 3816754905533421450}
+  dialoguePanel: {fileID: 3816754905533421451}
+  dialogueBeforeBattle:
+  - 123
+  - 456
+  - 789
+  dialogueAfterBattle:
+  - 321
+  - 654
   battleTipPanel: {fileID: 3816754905533421449}
   enemySpawner: {fileID: 663805878}
   itemTipDuration: 2
@@ -8738,6 +8752,9 @@ MonoBehaviour:
   currentStep: 0
   box: {fileID: 0}
   itemTipPanel: {fileID: 0}
+  dialoguePanel: {fileID: 0}
+  dialogueBeforeBattle: []
+  dialogueAfterBattle: []
   battleTipPanel: {fileID: 3816754905533421449}
   enemySpawner: {fileID: 667064724}
   itemTipDuration: 2
@@ -36835,6 +36852,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5065932158572287732, guid: da23b2098aad2784fa9aa2ab31ce11a5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5654121664149746921, guid: da23b2098aad2784fa9aa2ab31ce11a5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -36860,7 +36881,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3740107746155425013, guid: da23b2098aad2784fa9aa2ab31ce11a5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da23b2098aad2784fa9aa2ab31ce11a5, type: 3}
@@ -36874,6 +36896,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5065932158572287732, guid: da23b2098aad2784fa9aa2ab31ce11a5, type: 3}
   m_PrefabInstance: {fileID: 3816754905533421448}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3816754905533421451 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5239271451278314609, guid: da23b2098aad2784fa9aa2ab31ce11a5, type: 3}
+  m_PrefabInstance: {fileID: 3816754905533421448}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5e8e35ee38eea449974b5855edce39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5446534084737095926
 PrefabInstance:
   m_ObjectHideFlags: 0

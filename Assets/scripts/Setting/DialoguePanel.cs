@@ -14,14 +14,21 @@ public class DialoguePanel : MonoBehaviour
         {
             dialogueText.text = lines[i];
             if (nextTip != null) nextTip.SetActive(true);
-            // 等待玩家按下空白鍵或滑鼠左鍵
+
+            // 先等玩家放開按鍵
+            yield return new WaitWhile(() => Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0));
+            // 再等玩家新一次按下
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+
             if (nextTip != null) nextTip.SetActive(false);
         }
         // 等待玩家最後確認（可選）
         dialogueText.text = "按空白鍵或左鍵關閉";
         if (nextTip != null) nextTip.SetActive(true);
+
+        yield return new WaitWhile(() => Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0));
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+
         if (nextTip != null) nextTip.SetActive(false);
         gameObject.SetActive(false);
     }
