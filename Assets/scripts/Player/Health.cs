@@ -67,7 +67,7 @@ public class Health : MonoBehaviour
             Die();
         } 
         //顯示受傷害數值
-        GameManager.Instance.ShowText("-" + damage, transform.position, Color.red);
+        GameManager.Instance.ShowText("-" + damage, transform.position, new Color(1f, 0f, 0f, 1f)); // 更亮的紅色
 
         OnHealthUpdate?.Invoke(maxHealth,currentHealth);//更新玩家血量UI
     }

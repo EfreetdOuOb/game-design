@@ -90,7 +90,7 @@ public class PickUpItem : MonoBehaviour
         GameManager.Instance.AddCoins(value);
 
         //顯示拾取金幣數值
-        GameManager.Instance.ShowText("+" + value, transform.position, Color.yellow);
+        GameManager.Instance.ShowText("+" + value, transform.position, new Color(1f, 1f, 0f, 1f)); // 更亮的黃色
     }
 
     private void HandleHealingPotionPickUp()
@@ -99,7 +99,7 @@ public class PickUpItem : MonoBehaviour
         health.RestoreHealth(value);
 
         //顯示回血數值
-        GameManager.Instance.ShowText("+" + value, transform.position, Color.green);
+        GameManager.Instance.ShowText("+" + value, transform.position, new Color(0f, 1f, 0f, 1f)); // 更亮的綠色
 
     }
 
