@@ -55,7 +55,7 @@ public class LevelFlowController : MonoBehaviour
                 OnLevelFailed();
             }
             // 檢查敵人是否全滅
-            else if (enemySpawner != null && enemySpawner._allWavesCompleted && GameObject.FindObjectsOfType<Enemy>().Length == 0)
+            else if (enemySpawner != null && enemySpawner._allWavesCompleted && GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length == 0)
             {
                 OnLevelCompleted();
             }

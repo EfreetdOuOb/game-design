@@ -17,34 +17,37 @@ public class RoomFlowController : MonoBehaviour
     public RoomStep currentStep = RoomStep.WaitForBoxOpen;
 
     [Header("流程物件")]
-    public GameObject box;
+    public GameObject box; // 可為 null
     public GameObject itemTipPanel;
     public GameObject battleTipPanel;
     public EnemySpawner enemySpawner;
     public float itemTipDuration = 2f;
     public float battleTipDuration = 2f;
-    public GameObject boxHighlight; // 可選：高亮寶箱物件
 
-    private bool boxOpened = false;
     private bool battleStarted = false;
     private bool roomCompleted = false;
+    private bool hasStarted = false;
 
     private void Start()
     {
         StartCoroutine(RoomFlow());
     }
 
+    public void StartRoomFlow()
+    {
+        if (hasStarted) return;
+        hasStarted = true;
+        StartCoroutine(RoomFlow());
+    }
+
     private IEnumerator RoomFlow()
     {
-        // 1. 高亮寶箱（可選）
+        // 1. 等待玩家開啟寶箱（如果有寶箱）
         currentStep = RoomStep.WaitForBoxOpen;
-        if (boxHighlight != null) boxHighlight.SetActive(true);
-        // 等待玩家開啟寶箱
         if (box != null)
         {
             yield return new WaitUntil(() => box.GetComponent<Box>()?.IsOpened == true);
         }
-        if (boxHighlight != null) boxHighlight.SetActive(false);
 
         // 2. 顯示裝備提示
         currentStep = RoomStep.ShowItemTip;
@@ -68,12 +71,13 @@ public class RoomFlowController : MonoBehaviour
 
         // 5. 等待戰鬥結束
         currentStep = RoomStep.WaitForBattleEnd;
-        yield return new WaitUntil(() => enemySpawner != null && enemySpawner._allWavesCompleted && GameObject.FindObjectsOfType<Enemy>().Length == 0);
+        yield return new WaitUntil(() => enemySpawner != null 
+            && enemySpawner._allWavesCompleted 
+            && GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length == 0);
 
         // 6. 房間完成
         currentStep = RoomStep.RoomComplete;
         roomCompleted = true;
-        // 可呼叫 UIManager 顯示房間完成UI
         UIManager.Instance?.ShowRoomCompleteMenu();
         yield return new WaitForSeconds(1.5f);
 
