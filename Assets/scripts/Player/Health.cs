@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    private GameManager gameManager;
+    
 
     [Header("血量")]
     [SerializeField] public float maxHealth; // 初始生命值，並可以在Inspector中調整
@@ -36,7 +36,7 @@ public class Health : MonoBehaviour
         OnHealthUpdate?.Invoke(maxHealth,currentHealth);//初始化
         anim = GetComponent<Animator>();
         spriteRend = GetComponent<SpriteRenderer>();
-        gameManager = FindFirstObjectByType<GameManager>();
+        
     }
      
     void Update()
@@ -109,6 +109,7 @@ public class Health : MonoBehaviour
     {
         // 設置無敵狀態，這個標誌在 MonsterAttackManager 中會檢查
         isInvincible = true;
+        Debug.Log("玩家進入無敵");
         
         // 設置物理層碰撞忽略（用於子彈等物理碰撞） 
         Physics2D.IgnoreLayerCollision(10, 16, true);
@@ -125,6 +126,7 @@ public class Health : MonoBehaviour
         // 無敵結束
         isInvincible = false; 
         Physics2D.IgnoreLayerCollision(10, 16, false);
+        Debug.Log("玩家退出無敵");
     }
     
     // 獲取玩家是否處於無敵狀態
