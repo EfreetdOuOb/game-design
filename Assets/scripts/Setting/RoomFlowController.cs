@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+// using ItemTipPanel; // 移除這個 using 指示詞
+using TMPro; // 如果 ItemTipPanel 中使用了 TMPro
 
 public class RoomFlowController : MonoBehaviour
 {
@@ -135,6 +137,7 @@ public class RoomFlowController : MonoBehaviour
         if (hasStarted || isCompleted) return;
         hasStarted = true;
         Debug.Log($"玩家進入房間：{gameObject.name}");
+        Time.timeScale = 1f; // 確保時間縮放正常
         StartCoroutine(RoomFlow());
     }
 
@@ -160,10 +163,38 @@ public class RoomFlowController : MonoBehaviour
         currentStep = RoomStep.ShowItemTip;
         if (itemTipPanel != null)
         {
-            itemTipPanel.SetActive(true);
+            // itemTipPanel.SetActive(true); // 原來的啟用 GameObject 邏輯
+
+            // 假設你已經有了獲取的物品的資料 (name, image, description)
+            // 你需要根據實際情況獲取這些物品資料
+            string itemName = "範例物品名稱"; // 從你的物品系統獲取
+            Sprite itemSprite = null; // 從你的物品系統獲取，可能需要加載資源
+            string itemDescription = "這是一個範例物品的描述。"; // 從你的物品系統獲取
+
+            ItemTipPanel tipPanel = itemTipPanel.GetComponent<ItemTipPanel>();
+            if (tipPanel != null)
+            {
+                tipPanel.ShowItemInfo(itemName, itemSprite, itemDescription);
+            }
+            else
+            {
+                Debug.LogError("ItemTipPanel GameObject 上沒有 ItemTipPanel 腳本！");
+                // 如果沒有腳本，至少先啟用 GameObject
+                itemTipPanel.SetActive(true);
+            }
+
             // 等待玩家按下空白鍵或滑鼠左鍵
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
-            itemTipPanel.SetActive(false);
+            
+            // 隱藏面板
+            if (tipPanel != null)
+            {
+                tipPanel.HidePanel();
+            }
+            else
+            {
+                itemTipPanel.SetActive(false);
+            }
         }
 
         // 3. 戰鬥前的對話（可選）
