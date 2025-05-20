@@ -7,7 +7,13 @@ public class Box : MonoBehaviour
     private Animator animator;
     private BoxState currentState;
     public TouchArea touchArea; // 使用 public 這樣可以在 Inspector 中設置
-    public bool IsOpened { get; set; } = false;
+    public bool IsOpened { get; private set; } = false;
+    
+    [Header("Item Info")]
+    public string itemName = "";
+    public Sprite itemImage;
+    [TextArea(3, 5)]
+    public string itemDescription = "";
     
     private void Awake()
     { 
@@ -92,5 +98,14 @@ public class Box : MonoBehaviour
     public void SetCurrentState(BoxState state)
     {
         currentState = state;
+    }
+
+    public void OpenBox()
+    {
+        if (IsOpened) return;
+        IsOpened = true;
+        // 在這裡可以觸發寶箱打開的動畫或音效等
+        Debug.Log("寶箱打開了！");
+        // 這裡可以添加生成物品或將物品添加到玩家背包的邏輯
     }
 }

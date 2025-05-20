@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 6796956283902967}
   - component: {fileID: 7826058111717267031}
   - component: {fileID: 3246972659575501467}
+  - component: {fileID: 3705772819606938071}
   m_Layer: 5
   m_Name: ItemTipPanel
   m_TagString: Untagged
@@ -334,6 +335,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3705772819606938071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306003575038339558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174ac989304b1aa498f1a7a1d10a4719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemNameText: {fileID: 6077470950482628855}
+  itemImage: {fileID: 2413374503156551269}
+  itemDescriptionText: {fileID: 479327293024086875}
 --- !u!1 &4528854895994515265
 GameObject:
   m_ObjectHideFlags: 0

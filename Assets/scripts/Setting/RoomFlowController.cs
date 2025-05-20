@@ -151,11 +151,25 @@ public class RoomFlowController : MonoBehaviour
 
         // 1. 等待玩家開啟寶箱（如果有寶箱）
         currentStep = RoomStep.WaitForBoxOpen;
+        string acquiredItemName = "";
+        Sprite acquiredItemSprite = null;
+        string acquiredItemDescription = "";
+
         if (box != null)
         {
             yield return new WaitUntil(() => {
                 var boxComp = box != null ? box.GetComponent<Box>() : null;
-                return boxComp == null || boxComp.IsOpened == true;
+                bool opened = boxComp == null || boxComp.IsOpened == true;
+                // 如果寶箱打開了，並且是第一次從這個寶箱獲取物品資料
+                if (opened && boxComp != null && acquiredItemName == "")
+                {
+                    // 從寶箱腳本獲取物品資料
+                    acquiredItemName = boxComp.itemName;
+                    acquiredItemSprite = boxComp.itemImage;
+                    acquiredItemDescription = boxComp.itemDescription;
+                    Debug.Log($"從寶箱獲取物品：{acquiredItemName}");
+                }
+                return opened;
             });
         }
 
@@ -163,23 +177,15 @@ public class RoomFlowController : MonoBehaviour
         currentStep = RoomStep.ShowItemTip;
         if (itemTipPanel != null)
         {
-            // itemTipPanel.SetActive(true); // 原來的啟用 GameObject 邏輯
-
-            // 假設你已經有了獲取的物品的資料 (name, image, description)
-            // 你需要根據實際情況獲取這些物品資料
-            string itemName = "範例物品名稱"; // 從你的物品系統獲取
-            Sprite itemSprite = null; // 從你的物品系統獲取，可能需要加載資源
-            string itemDescription = "這是一個範例物品的描述。"; // 從你的物品系統獲取
-
             ItemTipPanel tipPanel = itemTipPanel.GetComponent<ItemTipPanel>();
             if (tipPanel != null)
             {
-                tipPanel.ShowItemInfo(itemName, itemSprite, itemDescription);
+                // 將從寶箱獲取的物品資料傳遞給 ItemTipPanel
+                tipPanel.ShowItemInfo(acquiredItemName, acquiredItemSprite, acquiredItemDescription);
             }
             else
             {
                 Debug.LogError("ItemTipPanel GameObject 上沒有 ItemTipPanel 腳本！");
-                // 如果沒有腳本，至少先啟用 GameObject
                 itemTipPanel.SetActive(true);
             }
 
