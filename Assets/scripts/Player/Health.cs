@@ -27,6 +27,8 @@ public class Health : MonoBehaviour
     [SerializeField] private int numberOfFlashes; // 閃爍次數
     private SpriteRenderer spriteRend; // 獲取Sprite Renderer
 
+    // 中毒效果
+    private Coroutine poisonCoroutine;
 
      
     private void Awake()
@@ -133,5 +135,39 @@ public class Health : MonoBehaviour
     public bool IsInvincible()
     {
         return isInvincible;
+    }
+
+    // 中毒效果
+    public void ApplyPoison(float damagePerSecond, float duration)
+    {
+        if (poisonCoroutine != null)
+            StopCoroutine(poisonCoroutine);
+        poisonCoroutine = StartCoroutine(PoisonCoroutine(damagePerSecond, duration));
+    }
+    private IEnumerator PoisonCoroutine(float damagePerSecond, float duration)
+    {
+        float timer = 0f;
+        StartCoroutine(PoisonFlash(duration));
+        while (timer < duration)
+        {
+            TakeDamage(damagePerSecond);
+            yield return new WaitForSeconds(1f);
+            timer += 1f;
+        }
+        poisonCoroutine = null;
+    }
+    // 中毒閃爍（綠色）
+    private IEnumerator PoisonFlash(float duration)
+    {
+        float timer = 0f;
+        while (timer < duration)
+        {
+            spriteRend.color = new Color(0.3f, 1f, 0.3f, 0.7f); // 綠色帶透明
+            yield return new WaitForSeconds(0.1f);
+            spriteRend.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+            timer += 0.2f;
+        }
+        spriteRend.color = Color.white;
     }
 }

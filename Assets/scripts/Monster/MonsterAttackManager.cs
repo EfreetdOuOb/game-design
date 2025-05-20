@@ -4,6 +4,20 @@ public class MonsterAttackManager : AttackManager
 {
     [Header("怪物攻擊設定")]
     public LayerMask playerLayer;  // 玩家層級遮罩
+    [Tooltip("攻擊方式")]
+    public enum AttackType { Melee, Ranged, Both }
+    public AttackType attackType = AttackType.Melee;  // 預設為近戰
+    
+    [Header("遠程攻擊設定")]
+    [Tooltip("遠程攻擊發射點")]
+    public Transform firePoint;  // 遠程攻擊發射點
+    [Tooltip("毒彈預製體")]
+    public GameObject poisonBulletPrefab;  // 毒彈預製體
+    [Tooltip("蛛絲預製體")]
+    public GameObject webBulletPrefab;  // 蛛絲預製體
+    [Tooltip("使用毒彈的機率 (0-1)")]
+    [Range(0f, 1f)]
+    public float poisonBulletChance = 0.5f;  // 使用毒彈的機率
     
     [Header("怪物傷害設定")]
     [SerializeField] private int additionalDamage = 0;    // 額外傷害（來自怪物等級、狀態等）
@@ -18,6 +32,7 @@ public class MonsterAttackManager : AttackManager
     private Monster monster;
     private bool attackAnimationPlaying = false;
     private string attackAnimationName = "attack"; // 儲存攻擊動畫名稱，便於檢查
+    private string attack2AnimationName = "attack2";
 
     private void Awake()
     {
@@ -28,11 +43,17 @@ public class MonsterAttackManager : AttackManager
         if (attackPoint == null)
         {
             Debug.LogWarning(gameObject.name + " 沒有設置攻擊點！將使用怪物中心點作為攻擊點。");
-            // 創建一個默認的攻擊點
             GameObject newAttackPoint = new GameObject("AttackPoint");
             newAttackPoint.transform.SetParent(transform);
-            newAttackPoint.transform.localPosition = Vector3.zero; // 默認在怪物中心
+            newAttackPoint.transform.localPosition = Vector3.zero;
             attackPoint = newAttackPoint.transform;
+        }
+
+        // 如果是遠程攻擊，確保發射點存在
+        if ((attackType == AttackType.Ranged || attackType == AttackType.Both) && firePoint == null)
+        {
+            Debug.LogWarning(gameObject.name + " 是遠程攻擊但沒有設置發射點！將使用攻擊點作為發射點。");
+            firePoint = attackPoint;
         }
     }
 
@@ -90,11 +111,11 @@ public class MonsterAttackManager : AttackManager
             float x = target.position.x - transform.position.x;
             if (x > 0)
             {
-                monster.spriteRend.flipX = false; // 假設精靈默認面向右側
+                monster.spriteRend.flipX = true; // 假設精靈默認面向左側
             }
             else
             {
-                monster.spriteRend.flipX = true; // 面向左側
+                monster.spriteRend.flipX = false; // 面向右側
             }
         }
         
@@ -122,39 +143,66 @@ public class MonsterAttackManager : AttackManager
         // 只有在攻擊狀態且未造成傷害時才進行判定
         if (!isAttacking || hasDamaged || currentTarget == null) return;
 
-        // 使用攻擊點而不是攻擊區域來判定
-        Vector2 attackPos = GetAttackPosition();
-        
-        // 檢測攻擊範圍內的玩家
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange, playerLayer);
-        
-        foreach (Collider2D hit in hits)
-        { 
-            // 獲取玩家生命值組件
-            Health playerHealth = hit.GetComponent<Health>();
+        bool hasAttacked = false;
+
+        // 根據攻擊類型決定攻擊方式
+        if (attackType == AttackType.Ranged || attackType == AttackType.Both)
+        {
+            // 遠程攻擊
+            if (firePoint != null)
+            {
+                Vector2 direction = (currentTarget.position - firePoint.position).normalized;
+                GameObject bulletPrefab = Random.value < poisonBulletChance ? poisonBulletPrefab : webBulletPrefab;
+                
+                if (bulletPrefab != null)
+                {
+                    GameObject projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+                    
+                    if (projectile.TryGetComponent<SpiderPoisonBullet>(out var poisonBullet))
+                    {
+                        poisonBullet.SetDirection(direction);
+                        hasAttacked = true;
+                    }
+                    else if (projectile.TryGetComponent<SpiderWebBullet>(out var webBullet))
+                    {
+                        webBullet.SetDirection(direction);
+                        hasAttacked = true;
+                    }
+                    
+                    Debug.Log($"{gameObject.name} 發射了 {(bulletPrefab == poisonBulletPrefab ? "毒彈" : "蛛絲")}");
+                }
+            }
+        }
+
+        // 如果是近戰攻擊或混合攻擊，且遠程攻擊未命中，則進行近戰判定
+        if ((attackType == AttackType.Melee || attackType == AttackType.Both) && !hasAttacked)
+        {
+            Vector2 attackPos = GetAttackPosition();
+            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange, playerLayer);
             
-            // 檢查玩家是否存在且不處於無敵狀態
-            if (playerHealth != null && !playerHealth.isInvincible)
-            {
-                // 計算最終傷害值
-                int finalDamage = GetAttackDamage();
+            foreach (Collider2D hit in hits)
+            { 
+                Health playerHealth = hit.GetComponent<Health>();
                 
-                // 對玩家造成傷害
-                playerHealth.TakeDamage(finalDamage);
-                
-                // 標記已造成傷害，防止一次攻擊多次判定
-                hasDamaged = true;
-                
-                Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
+                if (playerHealth != null && !playerHealth.isInvincible)
+                {
+                    int finalDamage = GetAttackDamage();
+                    playerHealth.TakeDamage(finalDamage);
+                    hasAttacked = true;
+                    Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
+                }
+                else if (playerHealth != null && playerHealth.isInvincible)
+                {
+                    Debug.Log($"{gameObject.name} 攻擊了無敵狀態的玩家，無效！");
+                    hasAttacked = true;
+                }
             }
-            else if (playerHealth != null && playerHealth.isInvincible)
-            {
-                // 玩家處於無敵狀態，攻擊無效
-                Debug.Log($"{gameObject.name} 攻擊了無敵狀態的玩家，無效！");
-                
-                // 標記已造成傷害，防止之後的無效判定
-                hasDamaged = true;
-            }
+        }
+
+        // 如果任何攻擊方式命中，標記已造成傷害
+        if (hasAttacked)
+        {
+            hasDamaged = true;
         }
     }
     
@@ -185,18 +233,23 @@ public class MonsterAttackManager : AttackManager
     // 在Unity編輯器中繪製攻擊範圍
     protected override void OnDrawGizmosSelected()
     {
-        // 使用基類的繪製功能
         base.OnDrawGizmosSelected();
         
-        // 額外繪製攻擊點
         Vector2 attackPos = Application.isPlaying ? GetAttackPosition() : (attackPoint != null ? attackPoint.position : transform.position);
         
-        // 繪製一個較小的實心球體表示攻擊點
-        Gizmos.color = new Color(1, 0, 0, 0.5f); // 半透明紅色
+        // 繪製攻擊點
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
         Gizmos.DrawSphere(attackPos, 0.1f);
         
         // 繪製攻擊範圍
-        Gizmos.color = new Color(1, 0, 0, 0.2f); // 更透明的紅色
+        Gizmos.color = new Color(1, 0, 0, 0.2f);
         Gizmos.DrawWireSphere(attackPos, attackRange);
+
+        // 如果是遠程攻擊，繪製發射點
+        if ((attackType == AttackType.Ranged || attackType == AttackType.Both) && firePoint != null)
+        {
+            Gizmos.color = new Color(0, 1, 0, 0.5f); // 綠色表示發射點
+            Gizmos.DrawSphere(firePoint.position, 0.1f);
+        }
     }
 } 

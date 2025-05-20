@@ -723,4 +723,211 @@ public class SkeletonDead : MonsterState
     {
         // 死亡狀態下不處理碰撞
     }
+}
+
+// 蜘蛛的閒置狀態
+public class SpiderIdle : MonsterState
+{
+    private float idleTimer = 0f;
+    private float nextStateTime = 3f;
+
+    public SpiderIdle(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("idle");
+        monster.Stop();
+        nextStateTime = Random.Range(2f, 5f);
+    }
+
+    public override void Update()
+    {
+        idleTimer += Time.deltaTime;
+        if (monster.IsPlayerInRange(monster.detectionRange))
+        {
+            monster.SetCurrentState(new SpiderChase(monster));
+        }
+        else if (idleTimer >= nextStateTime)
+        {
+            if (Random.value > 0.5f)
+            {
+                monster.SetCurrentState(new SpiderWander(monster));
+            }
+            else
+            {
+                idleTimer = 0f;
+                nextStateTime = Random.Range(2f, 5f);
+            }
+        }
+    }
+
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 蜘蛛的隨機移動狀態
+public class SpiderWander : MonsterState
+{
+    private float wanderTimer = 0f;
+    private float wanderDuration;
+    private Vector2 wanderDirection;
+
+    public SpiderWander(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("run");
+        wanderDuration = Random.Range(1f, 3f);
+        float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
+        wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        monster.Face(wanderDirection);
+    }
+
+    public override void Update()
+    {
+        wanderTimer += Time.deltaTime;
+        if (monster.IsPlayerInRange(monster.detectionRange))
+        {
+            monster.SetCurrentState(new SpiderChase(monster));
+        }
+        else if (wanderTimer >= wanderDuration)
+        {
+            monster.SetCurrentState(new SpiderIdle(monster));
+        }
+    }
+
+    public override void FixedUpdate()
+    {
+        monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
+    }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 蜘蛛的追蹤狀態
+public class SpiderChase : MonsterState
+{
+    public SpiderChase(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("run");
+    }
+
+    public override void Update()
+    {
+        if (monster.IsPlayerInAttackRange())
+        {
+            monster.SetCurrentState(new SpiderAttack(monster));
+        }
+        else if (!monster.IsPlayerInRange(monster.detectionRange))
+        {
+            monster.SetCurrentState(new SpiderIdle(monster));
+        }
+    }
+
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 蜘蛛的攻擊狀態
+public class SpiderAttack : MonsterState
+{
+    private bool hasAttacked = false;
+
+    public SpiderAttack(Monster _monster) : base(_monster)
+    {
+        // 隨機選擇攻擊方式（毒彈或蛛絲）
+        if (monster is Spider spider)
+        {
+            spider.Attack();
+        }
+        monster.Stop();
+    }
+
+    public override void Update()
+    {
+        if (!hasAttacked && monster.IsAnimationDone("attack"))
+        {
+            hasAttacked = true;
+            monster.attackManager?.StopAttacking();
+        }
+        if (hasAttacked && monster.CanAttack())
+        {
+            if (monster.IsPlayerInAttackRange())
+            {
+                hasAttacked = false;
+                if (monster is Spider spider)
+                {
+                    spider.Attack();
+                }
+            }
+            else if (monster.IsPlayerInDetectionRange())
+            {
+                monster.SetCurrentState(new SpiderChase(monster));
+            }
+            else
+            {
+                monster.SetCurrentState(new SpiderIdle(monster));
+            }
+        }
+    }
+
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 蜘蛛的受傷狀態
+public class SpiderHurt : MonsterState
+{
+    private float hurtTimer = 0f;
+    private float hurtDuration = 0.5f;
+
+    public SpiderHurt(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("hurt");
+        monster.Stop();
+    }
+
+    public override void Update()
+    {
+        hurtTimer += Time.deltaTime;
+        if (hurtTimer >= hurtDuration)
+        {
+            if (monster.IsPlayerInAttackRange())
+            {
+                monster.SetCurrentState(new SpiderAttack(monster));
+            }
+            else if (monster.IsPlayerInDetectionRange())
+            {
+                monster.SetCurrentState(new SpiderChase(monster));
+            }
+            else
+            {
+                monster.SetCurrentState(new SpiderIdle(monster));
+            }
+        }
+    }
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 蜘蛛的死亡狀態
+public class SpiderDead : MonsterState
+{
+    private bool deathProcessed = false;
+    public SpiderDead(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("dead");
+        monster.Stop();
+    }
+    public override void Update()
+    {
+        if (!deathProcessed && monster.IsAnimationDone("dead"))
+        {
+            deathProcessed = true;
+            monster.Die();
+        }
+    }
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
 } 

@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 4440557111286553709}
   - component: {fileID: 9083327969094844746}
   - component: {fileID: 3305674284067409498}
+  - component: {fileID: 5807379926829129320}
   - component: {fileID: 7043984811738020676}
   - component: {fileID: 5913761278106991370}
   - component: {fileID: 7743630097142904400}
   - component: {fileID: 5114633619608056276}
   - component: {fileID: 6826993055770043531}
   - component: {fileID: 8250130433447060753}
-  - component: {fileID: 5807379926829129320}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Enemy
@@ -120,6 +120,43 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!70 &5807379926829129320
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973499377916439614}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.0013094902, y: 0.09510207}
+  m_Size: {x: 0.23509388, y: 0.23905717}
+  m_Direction: 0
 --- !u!50 &7043984811738020676
 Rigidbody2D:
   serializedVersion: 5
@@ -182,7 +219,7 @@ MonoBehaviour:
   moveSpeed: 2
   detectionRange: 10.5
   attackRange: 1.2
-  startingHealth: 30
+  startingHealth: 50
   currentHealth: 0
   friction: 0
   dragRatio: 10
@@ -266,43 +303,6 @@ MonoBehaviour:
     dropPercentage: 100
   - prefab: {fileID: 638718362410294231, guid: 2a8882ab50fbaea48868ad0746e3bee6, type: 3}
     dropPercentage: 10
---- !u!70 &5807379926829129320
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973499377916439614}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.0013094902, y: 0.09510207}
-  m_Size: {x: 0.23509388, y: 0.23905717}
-  m_Direction: 0
 --- !u!1 &2121355306693362620
 GameObject:
   m_ObjectHideFlags: 0

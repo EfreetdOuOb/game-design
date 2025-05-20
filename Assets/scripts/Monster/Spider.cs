@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-public class Slime : Monster
+public class Spider : Monster
 { 
      
      
@@ -46,27 +46,42 @@ public class Slime : Monster
  
     }
     
+    // 覆寫面向方法
+    public override void Face(Vector2 direction)
+    {
+        if (spriteRend != null)
+        {
+            bool flipped = spriteRend.flipX;
+            if (direction.x < 0 && !flipped)
+            {
+                spriteRend.flipX = false; // 面向右
+            }
+            else if (direction.x > 0 && flipped)
+            {
+                spriteRend.flipX = true; // 面向左
+            }
+        }
+    }
     
-    
-    // 覆寫計算經驗值的方法，史萊姆是弱小怪物，給的經驗值較少
+    // 覆寫計算經驗值的方法
     protected override int CalculateExpValue()
     {
-        return 50; // 史萊姆給予50點經驗值
+        return 60; 
     }
     
     // 獲取各種狀態
     protected override MonsterState GetIdleState()
     {
-        return new SlimeIdle(this);
+        return new SpiderIdle(this);
     }
     
     protected override MonsterState GetHurtState()
     {
-        return new SlimeHurt(this);
+        return new SpiderHurt(this);
     }
     
     protected override MonsterState GetDeadState()
     {
-        return new SlimeDead(this);
+        return new SpiderDead(this);
     }
 } 

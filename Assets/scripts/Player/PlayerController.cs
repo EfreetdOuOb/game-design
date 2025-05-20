@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private BaseState currentState;
     public InputActions inputActions;
 
+    private Coroutine slowCoroutine;
+
     private void Awake()
     {
         Instance = this;
@@ -267,5 +269,20 @@ public class PlayerController : MonoBehaviour
     public bool IsDashing()
     {
         return isDashing;
+    }
+
+    public void ApplySlow(float slowRatio, float duration)
+    {
+        if (slowCoroutine != null)
+            StopCoroutine(slowCoroutine);
+        slowCoroutine = StartCoroutine(SlowCoroutine(slowRatio, duration));
+    }
+    private IEnumerator SlowCoroutine(float slowRatio, float duration)
+    {
+        float originalSpeed = moveSpeed;
+        moveSpeed *= slowRatio;
+        yield return new WaitForSeconds(duration);
+        moveSpeed = originalSpeed;
+        slowCoroutine = null;
     }
 }

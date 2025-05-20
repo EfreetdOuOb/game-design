@@ -339,15 +339,8 @@ public abstract class Monster : MonoBehaviour
     {
         if (spriteRend != null)
         {
-            bool flipped = spriteRend.flipX;
-            if (direction.x < 0 && !flipped)
-            {
-                spriteRend.flipX = true; // 面向左
-            }
-            else if (direction.x > 0 && flipped)
-            {
-                spriteRend.flipX = false; // 面向右
-            }
+            // 再次顛倒邏輯：往右走時 flipX = true，往左走時 flipX = false
+            spriteRend.flipX = direction.x > 0;
         }
     }
     
