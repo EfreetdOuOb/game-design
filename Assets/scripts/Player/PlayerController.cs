@@ -277,6 +277,17 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(slowCoroutine);
         slowCoroutine = StartCoroutine(SlowCoroutine(slowRatio, duration));
     }
+
+    public void ResetSpeed()
+    {
+        if (slowCoroutine != null)
+        {
+            StopCoroutine(slowCoroutine);
+            slowCoroutine = null;
+        }
+        moveSpeed = 5f; // 重置為基礎移動速度
+    }
+
     private IEnumerator SlowCoroutine(float slowRatio, float duration)
     {
         float originalSpeed = moveSpeed;

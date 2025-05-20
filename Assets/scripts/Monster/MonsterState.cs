@@ -270,22 +270,25 @@ public class SlimeHurt : MonsterState
         hurtTimer += Time.deltaTime;
         
         // 檢測受傷狀態是否結束
-        if (hurtTimer >= hurtDuration)
+        if (hurtTimer >= hurtDuration || monster.IsAnimationDone("hurt"))
         {
             // 檢測玩家位置並轉到適當狀態
-            if (monster.IsPlayerInAttackRange())
+            if (monster.IsPlayerInRange(monster.detectionRange))
             {
-                // 玩家在攻擊範圍內
-                monster.SetCurrentState(new SlimeAttack(monster));
-            }
-            else if (monster.IsPlayerInDetectionRange())
-            {
-                // 玩家在檢測範圍內但不在攻擊範圍內
-                monster.SetCurrentState(new SlimeChase(monster));
+                // 如果玩家在攻擊範圍內，轉換到攻擊狀態
+                if (monster.IsPlayerInAttackRange())
+                {
+                    monster.SetCurrentState(new SlimeAttack(monster));
+                }
+                // 如果玩家在追蹤範圍內但不在攻擊範圍內，轉換到追蹤狀態
+                else
+                {
+                    monster.SetCurrentState(new SlimeChase(monster));
+                }
             }
             else
             {
-                // 玩家不在檢測範圍內
+                // 如果玩家不在追蹤範圍內，回到閒置狀態
                 monster.SetCurrentState(new SlimeIdle(monster));
             }
         }
@@ -888,19 +891,29 @@ public class SpiderHurt : MonsterState
 
     public override void Update()
     {
+        // 更新受傷計時器
         hurtTimer += Time.deltaTime;
-        if (hurtTimer >= hurtDuration)
+
+        // 如果受傷時間結束或受傷動畫播放完畢
+        if (hurtTimer >= hurtDuration || monster.IsAnimationDone("hurt"))
         {
-            if (monster.IsPlayerInAttackRange())
+            // 檢查是否還有玩家在追蹤範圍內
+            if (monster.IsPlayerInRange(monster.detectionRange))
             {
-                monster.SetCurrentState(new SpiderAttack(monster));
-            }
-            else if (monster.IsPlayerInDetectionRange())
-            {
-                monster.SetCurrentState(new SpiderChase(monster));
+                // 如果玩家在攻擊範圍內，轉換到攻擊狀態
+                if (monster.IsPlayerInAttackRange())
+                {
+                    monster.SetCurrentState(new SpiderAttack(monster));
+                }
+                // 如果玩家在追蹤範圍內但不在攻擊範圍內，轉換到追蹤狀態
+                else
+                {
+                    monster.SetCurrentState(new SpiderChase(monster));
+                }
             }
             else
             {
+                // 如果玩家不在追蹤範圍內，回到閒置狀態
                 monster.SetCurrentState(new SpiderIdle(monster));
             }
         }

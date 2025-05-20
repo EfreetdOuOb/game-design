@@ -4,6 +4,8 @@ using UnityEngine;
 using Pathfinding;
 public class Spider : Monster
 { 
+    public enum AttackType { Poison, Web }
+    private AttackType lastAttackType;
      
      
     
@@ -27,7 +29,7 @@ public class Spider : Monster
         if (gm != null && gm.isPaused)
             return;
         base.Update();
-        if (currentState is SlimeChase)
+        if (currentState is SpiderChase)
         {
             Vector2 direction = MoveTowardsPlayer();
              
@@ -83,5 +85,25 @@ public class Spider : Monster
     protected override MonsterState GetDeadState()
     {
         return new SpiderDead(this);
+    }
+
+    public override void Attack()
+    {
+        if (!canAttack) return;
+
+        if (attackManager != null && target != null)
+        {
+            // 隨機決定攻擊方式
+            lastAttackType = Random.value < 0.5f ? AttackType.Poison : AttackType.Web;
+            string animName = lastAttackType == AttackType.Poison ? "attack" : "attack2";
+
+            // 手動播放對應動畫
+            PlayAnimation(animName);
+
+            // 啟動攻擊
+            attackManager.StartAttacking(target);
+
+            Debug.Log($"{gameObject.name} 開始{lastAttackType}攻擊，播放{animName}動畫");
+        }
     }
 } 

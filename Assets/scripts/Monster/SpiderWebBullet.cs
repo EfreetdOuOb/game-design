@@ -1,10 +1,14 @@
 using UnityEngine;
+using System.Collections;
 
 public class SpiderWebBullet : MonoBehaviour
 {
     public float speed = 8f;
     public float lifeTime = 5f;
     private Vector2 direction;
+    private static float currentSlowAmount = 1f; // 當前減速倍率
+    private static float baseSlowAmount = 0.85f; // 基礎減速倍率
+    private static float slowDuration = 3f; // 減速持續時間
 
     public void SetDirection(Vector2 dir) { direction = dir.normalized; SetRotation(-dir); }
 
@@ -19,7 +23,18 @@ public class SpiderWebBullet : MonoBehaviour
             var controller = other.GetComponent<PlayerController>();
             if (controller != null)
             {
-                controller.ApplySlow(0.85f, 3f); // 速度降為85%，持續3秒
+                // 如果當前減速效果還在，先取消之前的減速
+                if (currentSlowAmount < 1f)
+                {
+                    controller.ResetSpeed();
+                }
+                
+                // 應用新的減速效果
+                currentSlowAmount = baseSlowAmount;
+                controller.ApplySlow(currentSlowAmount, slowDuration);
+                
+                // 設置定時器，在減速結束時重置速度
+                StartCoroutine(ResetSlowAfterDelay(controller));
             }
             Destroy(gameObject);
         }
@@ -27,6 +42,13 @@ public class SpiderWebBullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private IEnumerator ResetSlowAfterDelay(PlayerController controller)
+    {
+        yield return new WaitForSeconds(slowDuration);
+        currentSlowAmount = 1f;
+        controller.ResetSpeed();
     }
 
     private void SetRotation(Vector2 dir)
