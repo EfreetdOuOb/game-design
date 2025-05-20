@@ -269,7 +269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _closeY
-      value: 42.5
+      value: 44.5
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _doorType
@@ -1536,7 +1536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _closeY
-      value: 42.5
+      value: 44.5
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _doorType
@@ -4593,6 +4593,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1907522047}
     m_Modifications:
+    - target: {fileID: 6299931626395454419, guid: 38ca2b2a122986e4ba2447d828fb4630, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.98
+      objectReference: {fileID: 0}
     - target: {fileID: 8588048769020256036, guid: 38ca2b2a122986e4ba2447d828fb4630, type: 3}
       propertyPath: m_Name
       value: door3_H
@@ -4603,7 +4607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8845943045618235201, guid: 38ca2b2a122986e4ba2447d828fb4630, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.25
+      value: 20.46
       objectReference: {fileID: 0}
     - target: {fileID: 8845943045618235201, guid: 38ca2b2a122986e4ba2447d828fb4630, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4778,7 +4782,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _closeY
-      value: 2.44
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _doorType
@@ -36761,7 +36765,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8845943045618235201, guid: 38ca2b2a122986e4ba2447d828fb4630, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.540001
+      value: 8.58
       objectReference: {fileID: 0}
     - target: {fileID: 8845943045618235201, guid: 38ca2b2a122986e4ba2447d828fb4630, type: 3}
       propertyPath: m_LocalPosition.z
@@ -37016,11 +37020,11 @@ PrefabInstance:
       objectReference: {fileID: 243934200}
     - target: {fileID: 4460784852035801014, guid: 40728ea3a44a0424caa4db59939bc815, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2640803
+      value: 1.8740803
       objectReference: {fileID: 0}
     - target: {fileID: 4460784852035801014, guid: 40728ea3a44a0424caa4db59939bc815, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5119575
+      value: -0.98195755
       objectReference: {fileID: 0}
     - target: {fileID: 6224283279068804047, guid: 40728ea3a44a0424caa4db59939bc815, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37068,11 +37072,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7204486547828797219, guid: 40728ea3a44a0424caa4db59939bc815, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2640803
+      value: 1.8740803
       objectReference: {fileID: 0}
     - target: {fileID: 7204486547828797219, guid: 40728ea3a44a0424caa4db59939bc815, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5119575
+      value: -0.98195755
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -37177,10 +37181,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1231781707}
-    - target: {fileID: 2898064885980852639, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: BackToMenu
-      objectReference: {fileID: 0}
     - target: {fileID: 3789129010076101620, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -37197,17 +37197,13 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1231781707}
-    - target: {fileID: 4505414651337226732, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RestartGame
-      objectReference: {fileID: 0}
     - target: {fileID: 5417078015946388153, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.0428936
+      value: -0.21
       objectReference: {fileID: 0}
     - target: {fileID: 5417078015946388153, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.0129025
+      value: -3.22
       objectReference: {fileID: 0}
     - target: {fileID: 5417078015946388153, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -37253,10 +37249,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1231781707}
-    - target: {fileID: 6302566605914871848, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: BackToMenu
-      objectReference: {fileID: 0}
     - target: {fileID: 6402747727682499266, guid: 1ac024835fc57524eb2e2c95a318f57e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -37411,7 +37403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _closeY
-      value: 2.44
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7766615063280462075, guid: 0548749b83601864fb7cd97abc65310d, type: 3}
       propertyPath: _doorType
@@ -37497,11 +37489,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 640673333343977057, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.86
+      value: 2.47
       objectReference: {fileID: 0}
     - target: {fileID: 640673333343977057, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.53
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 640673333343977057, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: m_LocalPosition.z

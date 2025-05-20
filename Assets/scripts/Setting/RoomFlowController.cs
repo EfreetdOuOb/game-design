@@ -48,9 +48,7 @@ public class RoomFlowController : MonoBehaviour
         }
         else
         {
-            // 新房間，關閉所有門
-            CloseAllDoors();
-            // 關閉當前房間的門
+            // 新房間，關閉當前房間的門
             CloseCurrentRoomDoors();
         }
     }
@@ -64,9 +62,17 @@ public class RoomFlowController : MonoBehaviour
                 if (door != null)
                 {
                     var doorComp = door.GetComponent<Door>();
-                    if (doorComp != null) doorComp.Close();
+                    if (doorComp != null)
+                    {
+                        Debug.Log($"關閉門：{door.name}");
+                        doorComp.Close();
+                    }
                 }
             }
+        }
+        else
+        {
+            Debug.LogWarning($"RoomFlowController {gameObject.name} 的 currentRoomDoors 為空");
         }
     }
 
@@ -172,6 +178,9 @@ public class RoomFlowController : MonoBehaviour
         if (battleTipPanel != null) battleTipPanel.SetActive(true);
         yield return new WaitForSeconds(battleTipDuration);
         if (battleTipPanel != null) battleTipPanel.SetActive(false);
+
+        // 4.5 關閉所有門
+        CloseCurrentRoomDoors();
 
         // 5. 開始戰鬥
         currentStep = RoomStep.StartBattle;
