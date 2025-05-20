@@ -7,7 +7,7 @@ public class Box : MonoBehaviour
     private Animator animator;
     private BoxState currentState;
     public TouchArea touchArea; // 使用 public 這樣可以在 Inspector 中設置
-    public bool IsOpened { get; private set; } = false;
+    public bool IsOpened { get;  set; } = false;
     
     [Header("Item Info")]
     public string itemName = "";
