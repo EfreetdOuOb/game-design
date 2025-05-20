@@ -40,6 +40,13 @@ public class EnemySpawner : MonoBehaviour
                 int spawnIndex = Random.Range(0, spawnPoints.Length);
                 Enemy enemy = Instantiate(_currentWave.enemy, spawnPoints[spawnIndex].position, Quaternion.identity);
                 enemy.target = this.enemy.transform;
+                
+                // 確保新生成的怪物使用正確的時間縮放
+                if (enemy.GetComponent<Animator>() != null)
+                {
+                    enemy.GetComponent<Animator>().updateMode = AnimatorUpdateMode.Normal;
+                }
+                
                 yield return new WaitForSeconds(_currentWave.timeBetweenSpawn);
             }
             

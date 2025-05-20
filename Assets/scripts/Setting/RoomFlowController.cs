@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class RoomFlowController : MonoBehaviour
 {
@@ -29,14 +30,103 @@ public class RoomFlowController : MonoBehaviour
     public EnemySpawner enemySpawner;
     public float itemTipDuration = 2f;
     public float battleTipDuration = 2f;
-    public GameObject door; // 對應大門
+    public GameObject[] exitDoors; // 離開房間的門
+    public GameObject[] entranceDoors; // 可以進入的房間的門
+    public GameObject[] currentRoomDoors; // 當前房間的門
     public GameObject roomCompletePanel; // 房間完成UI
 
     private bool hasStarted = false;
+    private bool isCompleted = false;
+    private static HashSet<string> completedRooms = new HashSet<string>(); // 追蹤已完成的房間
+
+    private void Start()
+    {
+        // 如果房間已經完成過，直接打開所有門
+        if (completedRooms.Contains(gameObject.name))
+        {
+            OpenAllDoors();
+        }
+        else
+        {
+            // 新房間，關閉所有門
+            CloseAllDoors();
+            // 關閉當前房間的門
+            CloseCurrentRoomDoors();
+        }
+    }
+
+    private void CloseCurrentRoomDoors()
+    {
+        if (currentRoomDoors != null)
+        {
+            foreach (var door in currentRoomDoors)
+            {
+                if (door != null)
+                {
+                    var doorComp = door.GetComponent<Door>();
+                    if (doorComp != null) doorComp.Close();
+                }
+            }
+        }
+    }
+
+    private void OpenAllDoors()
+    {
+        if (exitDoors != null)
+        {
+            foreach (var door in exitDoors)
+            {
+                if (door != null)
+                {
+                    var doorComp = door.GetComponent<Door>();
+                    if (doorComp != null) doorComp.Open();
+                }
+            }
+        }
+
+        if (entranceDoors != null)
+        {
+            foreach (var door in entranceDoors)
+            {
+                if (door != null)
+                {
+                    var doorComp = door.GetComponent<Door>();
+                    if (doorComp != null) doorComp.Open();
+                }
+            }
+        }
+    }
+
+    private void CloseAllDoors()
+    {
+        if (exitDoors != null)
+        {
+            foreach (var door in exitDoors)
+            {
+                if (door != null)
+                {
+                    var doorComp = door.GetComponent<Door>();
+                    if (doorComp != null) doorComp.Close();
+                }
+            }
+        }
+
+        if (entranceDoors != null)
+        {
+            foreach (var door in entranceDoors)
+            {
+                if (door != null)
+                {
+                    var doorComp = door.GetComponent<Door>();
+                    if (doorComp != null) doorComp.Close();
+                }
+            }
+        }
+    }
 
     public void StartRoomFlow()
     {
-        if (hasStarted) return;
+        if (hasStarted || isCompleted) return;
         hasStarted = true;
         Debug.Log($"玩家進入房間：{gameObject.name}");
         StartCoroutine(RoomFlow());
@@ -44,6 +134,12 @@ public class RoomFlowController : MonoBehaviour
 
     private IEnumerator RoomFlow()
     {
+        // 如果房間已經完成過，直接返回
+        if (completedRooms.Contains(gameObject.name))
+        {
+            yield break;
+        }
+
         // 1. 等待玩家開啟寶箱（如果有寶箱）
         currentStep = RoomStep.WaitForBoxOpen;
         if (box != null)
@@ -99,14 +195,12 @@ public class RoomFlowController : MonoBehaviour
 
         // 8. 房間完成
         currentStep = RoomStep.RoomComplete;
-        if (door != null)
-        {
-            var doorComp = door.GetComponent<Door>();
-            if (doorComp != null)
-            {
-                doorComp.Open();
-            }
-        }
+        isCompleted = true;
+        completedRooms.Add(gameObject.name);
+        
+        // 打開所有門
+        OpenAllDoors();
+
         if (roomCompletePanel != null) roomCompletePanel.SetActive(true);
         UIManager.Instance?.ShowRoomCompleteMenu();
         yield return new WaitForSeconds(1.5f);
