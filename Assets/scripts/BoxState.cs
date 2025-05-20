@@ -64,9 +64,7 @@ public class Opening : BoxState
     {
         if (box.IsAnimationDone("open"))
         {
-            box.IsOpened = true;
-            Debug.Log("開箱動畫播放完畢，銷毀箱子");
-            Object.Destroy(box.gameObject);
+            box.IsOpened = true; 
         }
     }
 

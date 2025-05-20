@@ -143,12 +143,6 @@ public class RoomFlowController : MonoBehaviour
 
     private IEnumerator RoomFlow()
     {
-        // 如果房間已經完成過，直接返回
-        if (completedRooms.Contains(gameObject.name))
-        {
-            yield break;
-        }
-
         // 1. 等待玩家開啟寶箱（如果有寶箱）
         currentStep = RoomStep.WaitForBoxOpen;
         string acquiredItemName = "";
@@ -160,10 +154,9 @@ public class RoomFlowController : MonoBehaviour
             yield return new WaitUntil(() => {
                 var boxComp = box != null ? box.GetComponent<Box>() : null;
                 bool opened = boxComp == null || boxComp.IsOpened == true;
-                // 如果寶箱打開了，並且是第一次從這個寶箱獲取物品資料
-                if (opened && boxComp != null && acquiredItemName == "")
+                if (opened && boxComp != null)
                 {
-                    // 從寶箱腳本獲取物品資料
+                    // 每次都重新取得資訊
                     acquiredItemName = boxComp.itemName;
                     acquiredItemSprite = boxComp.itemImage;
                     acquiredItemDescription = boxComp.itemDescription;
@@ -180,34 +173,35 @@ public class RoomFlowController : MonoBehaviour
             ItemTipPanel tipPanel = itemTipPanel.GetComponent<ItemTipPanel>();
             if (tipPanel != null)
             {
-                // 將從寶箱獲取的物品資料傳遞給 ItemTipPanel
-                tipPanel.ShowItemInfo(acquiredItemName, acquiredItemSprite, acquiredItemDescription);
+                yield return StartCoroutine(tipPanel.ShowItemInfoCoroutine(acquiredItemName, acquiredItemSprite, acquiredItemDescription));
             }
             else
             {
                 Debug.LogError("ItemTipPanel GameObject 上沒有 ItemTipPanel 腳本！");
                 itemTipPanel.SetActive(true);
-            }
-
-            // 等待玩家按下空白鍵或滑鼠左鍵
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
-            
-            // 隱藏面板
-            if (tipPanel != null)
-            {
-                tipPanel.HidePanel();
-            }
-            else
-            {
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
                 itemTipPanel.SetActive(false);
             }
+        }
+        // 顯示完畢後延遲銷毀箱子
+        if (box != null)
+        {
+            Destroy(box);
         }
 
         // 3. 戰鬥前的對話（可選）
         currentStep = RoomStep.ShowDialogueBeforeBattle;
         if (dialoguePanel != null && dialogueBeforeBattle != null && dialogueBeforeBattle.Length > 0)
         {
-            yield return StartCoroutine(dialoguePanel.ShowDialogue(dialogueBeforeBattle));
+            // 處理對話文本中的換行符號，將 '\n' 替換為 \n
+            string[] processedDialogue = new string[dialogueBeforeBattle.Length];
+            for (int i = 0; i < dialogueBeforeBattle.Length; i++)
+            {
+                // 如果您在 Inspector 中輸入的是實際換行，這裡可能不需要替換 '\\n'
+                // 但為了兼容性，這裡保留替換邏輯，確保 '\n' 被識別為換行
+                processedDialogue[i] = dialogueBeforeBattle[i].Replace("\\n", "\n");
+            }
+            yield return StartCoroutine(dialoguePanel.ShowDialogue(processedDialogue));
         }
 
         // 4. 顯示戰鬥提示
@@ -236,7 +230,15 @@ public class RoomFlowController : MonoBehaviour
         currentStep = RoomStep.ShowDialogueAfterBattle;
         if (dialoguePanel != null && dialogueAfterBattle != null && dialogueAfterBattle.Length > 0)
         {
-            yield return StartCoroutine(dialoguePanel.ShowDialogue(dialogueAfterBattle));
+            // 處理對話文本中的換行符號，將 '\n' 替換為 \n
+            string[] processedDialogue = new string[dialogueAfterBattle.Length];
+            for (int i = 0; i < dialogueAfterBattle.Length; i++)
+            {
+                // 如果您在 Inspector 中輸入的是實際換行，這裡可能不需要替換 '\\n'
+                // 但為了兼容性，這裡保留替換邏輯，確保 '\n' 被識別為換行
+                processedDialogue[i] = dialogueAfterBattle[i].Replace("\\n", "\n");
+            }
+            yield return StartCoroutine(dialoguePanel.ShowDialogue(processedDialogue));
         }
 
         // 8. 房間完成

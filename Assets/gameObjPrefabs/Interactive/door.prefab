@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!61 &6849731939378381440
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -123,17 +123,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -4.9853024}
+  m_Offset: {x: 0, y: -2.8920622}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 1}
+    pivot: {x: 0.50000024, y: 0.7811414}
     oldSize: {x: 2, y: 10}
     newSize: {x: 2, y: 10}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2, y: 9.836547}
+  m_Size: {x: 2, y: 9.813136}
   m_EdgeRadius: 0
 --- !u!1 &6196896464382792825
 GameObject:
@@ -161,7 +161,7 @@ Transform:
   m_GameObject: {fileID: 6196896464382792825}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -281,3 +281,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7214817460aba784f99d32b6bf6bd786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _doorCollider: {fileID: 7758479747291329513}
+  _doorType: 0
+  _openDuration: 0.5
+  _closeDuration: 0.5
+  _openY: 2
+  _closeY: 4
+  _animator: {fileID: 0}
