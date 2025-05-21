@@ -35,19 +35,25 @@ public class EnemySpawner : MonoBehaviour
         if (_currentWaveIndex - 1 < waves.Length)
         {
             _currentWave = waves[_currentWaveIndex - 1];
-            for (int i = 0; i < _currentWave.count; i++)
+            
+            // 處理當前波次中的每個敵人元素
+            foreach (WaveElement element in _currentWave.elements)
             {
-                int spawnIndex = Random.Range(0, spawnPoints.Length);
-                Enemy enemy = Instantiate(_currentWave.enemy, spawnPoints[spawnIndex].position, Quaternion.identity);
-                enemy.target = this.enemy.transform;
-                
-                // 確保新生成的怪物使用正確的時間縮放
-                if (enemy.GetComponent<Animator>() != null)
+                // 生成指定數量的特定敵人類型
+                for (int i = 0; i < element.count; i++)
                 {
-                    enemy.GetComponent<Animator>().updateMode = AnimatorUpdateMode.Normal;
+                    int spawnIndex = Random.Range(0, spawnPoints.Length);
+                    Enemy spawnedEnemy = Instantiate(element.enemy, spawnPoints[spawnIndex].position, Quaternion.identity);
+                    spawnedEnemy.target = this.enemy.transform;
+                    
+                    // 確保新生成的怪物使用正確的時間縮放
+                    if (spawnedEnemy.GetComponent<Animator>() != null)
+                    {
+                        spawnedEnemy.GetComponent<Animator>().updateMode = AnimatorUpdateMode.Normal;
+                    }
+                    
+                    yield return new WaitForSeconds(element.timeBetweenSpawn);
                 }
-                
-                yield return new WaitForSeconds(_currentWave.timeBetweenSpawn);
             }
             
             // 检查是否还有下一波敌人需要生成

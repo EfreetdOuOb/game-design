@@ -245,11 +245,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.53
+      value: 2.6
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.77
+      value: -0.97
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.z
@@ -471,7 +471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   currentExp: 0
-  expToNextLevel: 100
+  expToNextLevel: 250
   expMultiplier: 1.2
   expSlider: {fileID: 0}
   levelText: {fileID: 0}

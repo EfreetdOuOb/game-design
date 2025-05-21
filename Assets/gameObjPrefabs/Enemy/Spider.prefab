@@ -372,7 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  detectionRange: 10
+  detectionRange: 11
   attackRange: 7
   startingHealth: 15
   currentHealth: 0

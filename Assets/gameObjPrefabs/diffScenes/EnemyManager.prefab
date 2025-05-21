@@ -179,10 +179,11 @@ MonoBehaviour:
   - {fileID: 4128887195156390959}
   enemy: {fileID: 0}
   waves:
-  - enemy: {fileID: 5913761278106991370, guid: 381a5622b33c05a4fb71034693408663, type: 3}
-    count: 10
-    timeBetweenSpawn: 2
-  - enemy: {fileID: 7245309935861123333, guid: b0b6ccf5b108e1c46b9ce81facd9e2db, type: 3}
-    count: 5
-    timeBetweenSpawn: 2
+  - elements:
+    - enemy: {fileID: 5913761278106991370, guid: 381a5622b33c05a4fb71034693408663, type: 3}
+      count: 5
+      timeBetweenSpawn: 2
+    - enemy: {fileID: 7245309935861123333, guid: b0b6ccf5b108e1c46b9ce81facd9e2db, type: 3}
+      count: 3
+      timeBetweenSpawn: 3
   _allWavesCompleted: 0
