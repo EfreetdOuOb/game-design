@@ -32,12 +32,18 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine slowCoroutine;
 
+    [SerializeField]public int currentShieldCount = EnergyShield.Instance.currentShieldCount; // 當前護盾數量
+    [SerializeField]public bool energyShieldAvailable = true; // 假設這是用來檢查護盾是否可用的變數
+
+    private EnergyShield energyShield;
+
     private void Awake()
     {
         Instance = this;
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         inputActions = new InputActions();
+        energyShield = GetComponent<EnergyShield>();
     }
     private void Start() 
     {
@@ -72,6 +78,26 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     { 
+        // 檢查子彈是否屬於 EnemyBullets 層
+        if (collision.gameObject.layer == LayerMask.NameToLayer("EnemyBullets"))
+        {
+            // 檢查是否有護盾可用
+            if (energyShield != null && energyShield.currentShieldCount > 0)
+            {
+                // 擋住子彈
+                Destroy(collision.gameObject); // 銷毀子彈
+                energyShield.currentShieldCount--; // 從 EnergyShield 中扣除護盾
+                
+                // 更新護盾視覺效果
+                energyShield.UpdateShieldVisuals(); 
+                
+                Debug.Log("擋住了一個子彈，剩餘護盾：" + energyShield.currentShieldCount);
+            }
+            else
+            {
+                Debug.Log("沒有護盾可用，子彈未被擋住");
+            }
+        }
         currentState.OnTriggerEnter2D(collision);
     }
     private void OnTriggerStay2D(Collider2D collision) 
@@ -295,5 +321,11 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(duration);
         moveSpeed = originalSpeed;
         slowCoroutine = null;
+    }
+
+    private void UpdateShieldVisuals()
+    {
+        // 更新護盾的視覺效果邏輯
+        // 這裡可以根據當前護盾數量更新顯示的護盾效果
     }
 }

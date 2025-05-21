@@ -5,10 +5,12 @@ using UnityEngine.Events;
 
 public class EnergyShield : MonoBehaviour
 {
+    public static EnergyShield Instance {get; set;}
+
     [Header("護盾設置")]
-    [SerializeField] private int maxShieldCount = 3; // 最大護盾數量
-    [SerializeField] private int currentShieldCount; // 當前護盾數量
-    [SerializeField] private int killsRequiredForCharge = 5; // 充能所需擊殺數
+    [SerializeField] public int maxShieldCount = 3; // 最大護盾數量
+    [SerializeField] public int currentShieldCount; // 當前護盾數量
+    [SerializeField] public int killsRequiredForCharge = 5; // 充能所需擊殺數
     
     [Header("視覺效果")]
     [SerializeField] private GameObject shieldEffectPrefab; // 護盾視覺效果預製體
@@ -31,9 +33,18 @@ public class EnergyShield : MonoBehaviour
     {
         playerHealth = GetComponent<Health>();
         Debug.Log("EnergyShield Awake: 已獲取playerHealth組件");
+        if(Instance == null)
+        {
+            Instance = this;
+        }else if(Instance != null)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);//加載新場景時候告訴unity不要銷毀該物件
     }
     
-    private void OnEnable()
+    public void OnEnable()
     {
         Debug.Log("【能量護盾】OnEnable開始執行");
         
@@ -111,7 +122,7 @@ public class EnergyShield : MonoBehaviour
         // 例如護盾旋轉、脈衝等
     }
     
-    private void OnDisable()
+    public void OnDisable()
     {
         // 取消訂閱GameManager的敵人擊殺事件
         if (GameManager.Instance != null && GameManager.Instance.OnEnemyKilled != null)
@@ -207,7 +218,7 @@ public class EnergyShield : MonoBehaviour
     }
     
     // 更新護盾視覺效果
-    private void UpdateShieldVisuals()
+    public void UpdateShieldVisuals()
     {
         // 首先清除現有特效
         foreach (GameObject effect in shieldEffects)
@@ -246,6 +257,9 @@ public class EnergyShield : MonoBehaviour
                 shieldEffects.Add(effect);
             }
         }
+        
+        // 通知 UI 更新護盾數量
+        OnShieldCountChanged?.Invoke(currentShieldCount, maxShieldCount);
     }
     
     // 播放護盾激活特效
@@ -324,20 +338,22 @@ public class EnergyShield : MonoBehaviour
     }
     
     // 清除周圍的投射物
-    private void ClearProjectiles()
+    public void ClearProjectiles()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 5f); // 5米範圍內
         
         foreach (Collider2D collider in colliders)
         {
             // 檢查是否是投射物 - 只處理敵人的遠程攻擊
-            if (collider.CompareTag("EnemyProjectile"))
+            // 同時支持Tag和Layer兩種檢測方式
+            if (collider.CompareTag("EnemyProjectile") || collider.gameObject.layer == LayerMask.NameToLayer("EnemyBullets"))
             {
                 // 播放消除特效
                 PlayProjectileDestroyEffect(collider.transform.position);
                 
                 // 銷毀投射物
                 Destroy(collider.gameObject);
+                Debug.Log("能量護盾摧毀了一個敵方投射物");
             }
         }
     }

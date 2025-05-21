@@ -41,14 +41,14 @@ public class EnemySpawner : MonoBehaviour
             {
                 // 生成指定數量的特定敵人類型
                 for (int i = 0; i < element.count; i++)
-                {
-                    int spawnIndex = Random.Range(0, spawnPoints.Length);
+            {
+                int spawnIndex = Random.Range(0, spawnPoints.Length);
                     Enemy spawnedEnemy = Instantiate(element.enemy, spawnPoints[spawnIndex].position, Quaternion.identity);
                     spawnedEnemy.playerTarget = this.enemy.transform;
-                    
-                    // 確保新生成的怪物使用正確的時間縮放
+                
+                // 確保新生成的怪物使用正確的時間縮放
                     if (spawnedEnemy.GetComponent<Animator>() != null)
-                    {
+                {
                         spawnedEnemy.GetComponent<Animator>().updateMode = AnimatorUpdateMode.Normal;
                     }
                     

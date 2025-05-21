@@ -37432,6 +37432,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ecbe0f2421bc04469c77b6a2930cd97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6894217504608792258 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+  m_PrefabInstance: {fileID: 9105056963956244957}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77bfe346ebf40be428429c270cfd0923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7621233658144503376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37714,6 +37725,62 @@ PrefabInstance:
       propertyPath: 'cardSlots.Array.data[2]'
       value: 
       objectReference: {fileID: 611193345}
+    - target: {fileID: 970298112385688211, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: cardConfigs.Array.data[3].maxValue
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 970298112385688211, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: cardConfigs.Array.data[3].minValue
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: maxShieldCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: shieldEffectPrefab
+      value: 
+      objectReference: {fileID: 611966956924397181, guid: 6f8e96b22579dbf499884f1729d75020, type: 3}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnShieldActivated.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnKillCountChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnShieldCountChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnShieldActivated.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6894217504608792258}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnKillCountChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6894217504608792258}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnShieldActivated.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnShieldCountChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6894217504608792258}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnKillCountChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: OnShieldCountChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6249826241983634996, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8939927470067311882, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: equipmentPanel
       value: 

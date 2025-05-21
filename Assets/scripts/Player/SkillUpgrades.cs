@@ -34,6 +34,7 @@ public class SkillUpgrades : MonoBehaviour
     
     // 可用升級次數
     private int availableUpgrades = 0;
+    private bool isRefreshing = false; // 用於檢查是否正在刷新卡片
 
     private void Awake()
     {
@@ -87,7 +88,7 @@ public class SkillUpgrades : MonoBehaviour
     private void Update()
     {
         // 按Y鍵開關升級面板 - 只有在有可用升級次數時才打開
-        if (Input.GetKeyDown(KeyCode.Y) && availableUpgrades > 0)
+        if (Input.GetKeyDown(KeyCode.Y) && availableUpgrades > 0 && !isPanelOpen)
         {
             OpenUpgradePanel();
         }
@@ -136,8 +137,9 @@ public class SkillUpgrades : MonoBehaviour
             return;
         }
         
-        isPanelOpen = true;
-        
+        isPanelOpen = true; // 設置面板為開啟狀態
+        isRefreshing = true; // 禁用刷新
+
         if (upgradePanel != null)
         {
             upgradePanel.SetActive(true);
@@ -156,8 +158,9 @@ public class SkillUpgrades : MonoBehaviour
     // 關閉升級面板
     public void CloseUpgradePanel()
     {
-        isPanelOpen = false;
-        
+        isPanelOpen = false; // 設置面板為關閉狀態
+        isRefreshing = false; // 恢復刷新
+
         if (upgradePanel != null)
         {
             upgradePanel.SetActive(false);
@@ -205,7 +208,7 @@ public class SkillUpgrades : MonoBehaviour
             
             // 更新可用升級次數顯示（如果面板打開）
             if (isPanelOpen)
-            {
+    {
                 UpdateAvailableUpgradesText();
             }
             
@@ -358,13 +361,13 @@ public class SkillUpgrades : MonoBehaviour
             if (availableUpgrades > 0)
             {
                 GenerateCardContents();
-            }
+        }
             else
             {
                 // 沒有可用升級次數，關閉面板
                 CloseUpgradePanel();
-            }
-        }
+    }
+}
     }
 
     // 更新技能格顯示
