@@ -4,8 +4,8 @@ using UnityEditor;
 using UnityEngine; 
 public class Enemy : MonoBehaviour
 {
-    public float moveSpeed = 1f;
-    public Transform target;
+    public float enemyMoveSpeed = 1f; // 重命名moveSpeed為enemyMoveSpeed
+    public Transform playerTarget; // 重命名target為playerTarget
     public float startingHealth = 30f; // 初始生命值
     public float currentHealth; // 當前生命值
     public AttackManager attackManager;
@@ -21,10 +21,10 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         currentHealth = startingHealth; // 初始化當前生命值
-        gameManager = FindFirstObjectByType<GameManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
         spriteRend = GetComponent<SpriteRenderer>();
         attackManager = GetComponent<AttackManager>();
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTarget = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void Update()
@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
         Face(direction); // 更新方向
 
         // 檢查是否在攻擊範圍
-        if (target != null && Vector2.Distance(target.position, transform.position) <= attackManager.attackRange)
+        if (playerTarget != null && Vector2.Distance(playerTarget.position, transform.position) <= attackManager.attackRange)
         {
             AttackPlayer();
         }
@@ -42,13 +42,13 @@ public class Enemy : MonoBehaviour
     public Vector2 MoveTowardsPlayer()
     {
         Vector2 direction = Vector2.zero; // 初始化方向
-        if (target != null)
+        if (playerTarget != null)
         {
-            direction = (target.position - transform.position).normalized;
+            direction = (playerTarget.position - transform.position).normalized;
             // 只有在距離超過範圍時才會移動
-            if (Vector2.Distance(target.position, transform.position) > attackManager.attackRange)
+            if (Vector2.Distance(playerTarget.position, transform.position) > attackManager.attackRange)
             {
-                transform.Translate(direction * moveSpeed * Time.deltaTime);
+                transform.Translate(direction * enemyMoveSpeed * Time.deltaTime);
             }
         }
         return direction; // 返回方向
@@ -67,12 +67,12 @@ public class Enemy : MonoBehaviour
         }
         else if (currentHealth <= 0)
         {
-            Die();
+            EnemyDie(); // 重命名Die()方法為EnemyDie()
         }
     }
 
     // 敵人死亡
-    private void Die()
+    private void EnemyDie() // 重命名Die()方法為EnemyDie()
     {
         Debug.Log("敵人死亡！");
         if (gameManager != null)

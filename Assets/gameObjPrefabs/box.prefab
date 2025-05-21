@@ -283,6 +283,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   touchArea: {fileID: 596394230586216361}
+  itemName: "\u5145\u80FD\u8B77\u76FE"
+  itemImage: {fileID: -6865277242639195812, guid: 39ce47c0ce725e0409601982d7575864, type: 3}
+  itemDescription: "\u7522\u751F\u4E00\u500B\u8B77\u7F69\u65BC\u73A9\u5BB6\u5468\u570D\uFF0C\u88AB\u653B\u64CA\u6642\u6703\u6D88\u9664\u5468\u906D\u6295\u5C04\u7269\u4E26\u514D\u75AB\u8A72\u6B21\u50B7\u5BB3\uFF0C\u88AB\u653B\u64CA\u5F8C\u9700\u8981\u5145\u80FD\u624D\u80FD\u518D\u6B21\u4F7F\u7528\uFF0C\u6700\u591A\u758A\u52A0\u4E09\u5C64"
+  equipmentDropChance: 1
+  equipmentIcons:
+  - {fileID: -6865277242639195812, guid: 39ce47c0ce725e0409601982d7575864, type: 3}
 --- !u!61 &9075346319695636573
 BoxCollider2D:
   m_ObjectHideFlags: 0

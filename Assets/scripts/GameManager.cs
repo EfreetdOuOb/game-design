@@ -5,6 +5,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,13 +18,16 @@ public class GameManager : MonoBehaviour
     public bool isInCombat = false; // 戰鬥狀態標誌
     public bool isPaused = false;
     
+    [Header("戰鬥相關事件")]
+    public UnityEvent OnEnemyKilled; // 擊殺敵人事件
+    
     private float checkInterval = 1f; // 檢查間隔
     private float timer = 0f;
     private int coinCount;
 
     private void Awake()
     {
-        uiManager = FindFirstObjectByType<UIManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
         playerController = GetComponent<PlayerController>();
         Time.timeScale = 1;
         StartCoroutine(CheckEnemiesRoutine());
@@ -42,8 +46,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // 每次進入新場景都重新抓 UIManager、PlayerController
-        uiManager = FindFirstObjectByType<UIManager>();
-        playerController = FindFirstObjectByType<PlayerController>();
+        uiManager = FindAnyObjectByType<UIManager>();
+        playerController = FindAnyObjectByType<PlayerController>();
         Time.timeScale = 1;
         StartCoroutine(CheckEnemiesRoutine());
     }
@@ -54,6 +58,17 @@ public class GameManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Escape))
         { 
+            // 檢查是否有其他選單開啟
+            bool hasOtherMenuOpen = CheckOtherMenusOpen();
+            
+            // 如果有其他選單開啟，則不處理ESC
+            if (hasOtherMenuOpen)
+            {
+                // 不執行暫停/恢復邏輯
+                return;
+            }
+            
+            // 只有在沒有其他選單開啟時才執行暫停/恢復邏輯
             if (isPaused == false)
             { 
                 PauseGame();
@@ -71,6 +86,31 @@ public class GameManager : MonoBehaviour
             CheckCombatStatus();
             timer = 0f;
         }
+    }
+
+    // 檢查是否有其他選單開啟
+    private bool CheckOtherMenusOpen()
+    {
+        // 檢查各種可能的選單
+        
+        // 查找玩家的SkillUpgrades組件
+        SkillUpgrades skillUpgrades = FindAnyObjectByType<SkillUpgrades>();
+        if (skillUpgrades != null && skillUpgrades.IsAnyPanelOpen())
+        {
+            return true;
+        }
+        
+        // 查找玩家的Equipment組件
+        Equipment equipment = FindAnyObjectByType<Equipment>();
+        if (equipment != null && equipment.IsEquipmentPanelOpen())
+        {
+            return true;
+        }
+        
+        // 如果需要檢查其他類型的選單，可以在這裡添加
+        
+        // 如果沒有找到開啟的選單，返回false
+        return false;
     }
 
     //增加金幣
@@ -108,7 +148,7 @@ public class GameManager : MonoBehaviour
         }
         
         // 檢查玩家是否死亡
-        var player = FindFirstObjectByType<PlayerController>();
+        var player = FindAnyObjectByType<PlayerController>();
         if (player != null)
         {
             Health playerHealth = player.GetComponent<Health>();
@@ -215,6 +255,14 @@ public class GameManager : MonoBehaviour
     public void BackToMenu()//返回
     {
         SceneManager.LoadScene("MainMenu");
+    }
+    
+    // 敵人被擊殺
+    public void EnemyKilled(Enemy enemy)
+    {
+        // 觸發敵人擊殺事件，用於通知其他系統（如能量護盾）
+        OnEnemyKilled?.Invoke();
+        Debug.Log("敵人被擊殺，已觸發OnEnemyKilled事件");
     }
 }
 

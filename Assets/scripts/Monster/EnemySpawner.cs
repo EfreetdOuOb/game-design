@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     int spawnIndex = Random.Range(0, spawnPoints.Length);
                     Enemy spawnedEnemy = Instantiate(element.enemy, spawnPoints[spawnIndex].position, Quaternion.identity);
-                    spawnedEnemy.target = this.enemy.transform;
+                    spawnedEnemy.playerTarget = this.enemy.transform;
                     
                     // 確保新生成的怪物使用正確的時間縮放
                     if (spawnedEnemy.GetComponent<Animator>() != null)

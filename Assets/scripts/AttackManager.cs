@@ -11,8 +11,11 @@ public abstract class AttackManager : MonoBehaviour
     protected bool hasDamaged = false;
     protected Transform currentTarget;
     
-
-
+    // 獲取基礎攻擊傷害值的公開方法
+    public int GetBaseAttackDamage()
+    {
+        return baseAttackDamage;
+    }
 
     // 開始攻擊
     public virtual void StartAttacking(Transform target)

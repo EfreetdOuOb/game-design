@@ -53,18 +53,26 @@ public class Unopened : BoxState
 
 public class Opening : BoxState
 {
+    private bool hasOpened = false;
+
     public Opening(Box _box) : base(_box)
     { 
         //播放開箱動畫  
         box.PlayAnimation("open");
-        Debug.Log("播放開箱動畫");
+        Debug.Log("【箱子】播放開箱動畫");
     }
 
     public override void Update()
     {
-        if (box.IsAnimationDone("open"))
+        if (box.IsAnimationDone("open") && !hasOpened)
         {
-            box.IsOpened = true; 
+            // 調用Box的OpenBox方法，實際生成裝備
+            box.OpenBox();
+            hasOpened = true;
+            Debug.Log("【箱子】箱子開啟動畫完成，已呼叫OpenBox生成裝備");
+            
+            // 延遲一點時間後再切換狀態，確保其他操作完成
+            // 這裡不立即設置IsOpened，因為OpenBox方法中會設置
         }
     }
 

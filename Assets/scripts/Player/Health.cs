@@ -5,6 +5,13 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
+// 移除前向聲明，直接引用真正的EnergyShield類
+// 移除以避免衝突:
+// public class EnergyShield : MonoBehaviour 
+// {
+//     public bool TriggerShield() { return false; }
+// }
+
 public class Health : MonoBehaviour
 {
     
@@ -30,6 +37,11 @@ public class Health : MonoBehaviour
     // 中毒效果
     private Coroutine poisonCoroutine;
 
+    // 玩家屬性系統的引用
+    private PlayerStats playerStats;
+    
+    // 能量護盾系統的引用
+    private EnergyShield energyShield;
      
     private void Awake()
     {
@@ -38,7 +50,8 @@ public class Health : MonoBehaviour
         OnHealthUpdate?.Invoke(maxHealth,currentHealth);//初始化
         anim = GetComponent<Animator>();
         spriteRend = GetComponent<SpriteRenderer>();
-        
+        playerStats = GetComponent<PlayerStats>();
+        energyShield = GetComponent<EnergyShield>();
     }
      
     void Update()
@@ -52,13 +65,43 @@ public class Health : MonoBehaviour
     }
 
     // 玩家受傷
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, bool ignoreDefense = false, bool isRangedAttack = false)
     {
         if (isDead || isInvincible) return; // 死亡或無敵時不處理傷害
+        
+        // 檢查護盾是否可激活
+        bool shieldActive = false;
+        if (energyShield != null)
+        {
+            // 將是否為遠程攻擊的信息傳遞給護盾
+            shieldActive = energyShield.TriggerShield(isRangedAttack);
+        }
+
+        if (shieldActive)
+        {
+            // 護盾已激活，免疫此次傷害
+            Debug.Log("護盾激活，免疫傷害!");
+            return;
+        }
+
+        // 如果有屬性系統，應用防禦力計算（除非指定忽略防禦）
+        float finalDamage = damage;
+        if (playerStats != null && gameObject.CompareTag("Player") && !ignoreDefense)
+        {
+            finalDamage = playerStats.CalculateDamageTaken(damage);
+        }
 
         // 減少生命值
-        currentHealth -= damage;
-        Debug.Log($"玩家受到 {damage} 點傷害，當前剩餘生命值: {currentHealth}/{maxHealth}");
+        currentHealth -= finalDamage;
+        
+        if (ignoreDefense)
+        {
+            Debug.Log($"玩家受到 {finalDamage} 點傷害(無視防禦)，當前剩餘生命值: {currentHealth}/{maxHealth}");
+        }
+        else
+        {
+            Debug.Log($"玩家受到 {finalDamage} 點傷害，當前剩餘生命值: {currentHealth}/{maxHealth}");
+        }
 
         if (currentHealth > 0)
         { 
@@ -68,8 +111,10 @@ public class Health : MonoBehaviour
         {
             Die();
         } 
-        //顯示受傷害數值
-        GameManager.Instance.ShowText("-" + damage, transform.position, new Color(1f, 0f, 0f, 1f)); // 更亮的紅色
+        
+        //顯示受傷害數值，所有傷害都顯示為紅色
+        Color damageColor = new Color(1f, 0f, 0f, 1f);
+        UnityEngine.Object.FindAnyObjectByType<global::GameManager>().ShowText("-" + finalDamage.ToString("F1"), transform.position, damageColor);
 
         OnHealthUpdate?.Invoke(maxHealth,currentHealth);//更新玩家血量UI
     }
@@ -150,7 +195,9 @@ public class Health : MonoBehaviour
         StartCoroutine(PoisonFlash(duration));
         while (timer < duration)
         {
-            TakeDamage(damagePerSecond);
+            // 使用 TakeDamage 方法，但標記為忽略防禦
+            TakeDamage(damagePerSecond, true);
+            
             yield return new WaitForSeconds(1f);
             timer += 1f;
         }
@@ -169,5 +216,28 @@ public class Health : MonoBehaviour
             timer += 0.2f;
         }
         spriteRend.color = Color.white;
+    }
+
+    // 增加最大生命值（用於升級和裝備）
+    public void IncreaseMaxHealth(float amount)
+    {
+        // 保存原來的當前生命值和最大生命值的比例
+        float healthPercent = currentHealth / maxHealth;
+        
+        // 增加最大生命值
+        maxHealth += amount;
+        
+        // 根據同樣的比例恢復當前生命值
+        currentHealth = maxHealth * healthPercent;
+        
+        // 如果角色因此升級獲得生命值提升，完全恢復生命值
+        if (amount > 0)
+        {
+            currentHealth = maxHealth;
+        }
+        
+        // 更新UI
+        OnHealthUpdate?.Invoke(maxHealth, currentHealth);
+        Debug.Log($"最大生命值增加了 {amount}，當前生命值: {currentHealth}/{maxHealth}");
     }
 }

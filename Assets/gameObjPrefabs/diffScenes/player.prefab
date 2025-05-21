@@ -317,6 +317,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       insertIndex: -1
       addedObject: {fileID: 376925239201359515}
+    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8939927470067311882}
+    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 76199200627183819}
+    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1868151110384685451}
+    - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 970298112385688211}
   m_SourcePrefab: {fileID: -8435245712485981826, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
 --- !u!1 &363062652295960068 stripped
 GameObject:
@@ -457,6 +469,7 @@ MonoBehaviour:
     m_Bits: 2048
   additionalDamage: 0
   damageMultiplier: 1
+  critDamageMultiplier: 1.5
 --- !u!114 &376925239201359515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,7 +484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   currentExp: 0
-  expToNextLevel: 250
+  expToNextLevel: 190
   expMultiplier: 1.2
   expSlider: {fileID: 0}
   levelText: {fileID: 0}
@@ -505,6 +518,185 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 376925239201359515}
+        m_TargetAssemblyTypeName: PlayerExperience, Assembly-CSharp
+        m_MethodName: UIUpdateExpText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8939927470067311882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363062652295960068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517970015fbfc79439b1c1438c2c1328, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipmentPanel: {fileID: 0}
+  equippedItemImage: {fileID: 0}
+  statsText: {fileID: 0}
+  slotsContainer: {fileID: 0}
+  itemSlots: []
+  emptySlotPrefab: {fileID: 0}
+  maxSlots: 8
+  availableEquipment:
+  - itemName: "\u5145\u80FD\u8B77\u76FE"
+    description: "\u7522\u751F\u4E00\u500B\u8B77\u7F69\u65BC\u73A9\u5BB6\u5468\u570D\uFF0C\u88AB\u653B\u64CA\u6642\u6703\u6D88\u9664\u5468\u906D\u6295\u5C04\u7269\u4E26\u514D\u75AB\u8A72\u6B21\u50B7\u5BB3\uFF0C\u88AB\u653B\u64CA\u5F8C\u9700\u8981\u5145\u80FD\u624D\u80FD\u518D\u6B21\u4F7F\u7528\uFF0C\u6700\u591A\u758A\u52A0\u4E09\u5C64\u3002"
+    icon: {fileID: -6865277242639195812, guid: 39ce47c0ce725e0409601982d7575864, type: 3}
+    attackBonus: 0
+    defenseBonus: 0
+    critRateBonus: 0
+    moveSpeedBonus: 0
+    isEnergyShield: 1
+  currentEquipment:
+    itemName: 
+    description: 
+    icon: {fileID: 0}
+    attackBonus: 0
+    defenseBonus: 0
+    critRateBonus: 0
+    moveSpeedBonus: 0
+    isEnergyShield: 0
+  defaultEnergyShield:
+    itemName: 
+    description: 
+    icon: {fileID: 0}
+    attackBonus: 0
+    defenseBonus: 0
+    critRateBonus: 0
+    moveSpeedBonus: 0
+    isEnergyShield: 0
+  OnEquipmentChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &76199200627183819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363062652295960068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d814928a003a1bd43b6498735d2f4353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackPower:
+    baseValue: 0
+    equipBonus: 0
+    upgradeBonus: 0
+  defense:
+    baseValue: 0
+    equipBonus: 0
+    upgradeBonus: 0
+  critRate:
+    baseValue: 0
+    equipBonus: 0
+    upgradeBonus: 0
+  moveSpeed:
+    baseValue: 0
+    equipBonus: 0
+    upgradeBonus: 0
+  maxHealth:
+    baseValue: 0
+    equipBonus: 0
+    upgradeBonus: 0
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  critRateText: {fileID: 0}
+  moveSpeedText: {fileID: 0}
+  maxHealthText: {fileID: 0}
+  OnStatsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1868151110384685451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363062652295960068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77bfe346ebf40be428429c270cfd0923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxShieldCount: 3
+  currentShieldCount: 0
+  killsRequiredForCharge: 5
+  shieldEffectPrefab: {fileID: 611966956924397181, guid: 6f8e96b22579dbf499884f1729d75020, type: 3}
+  shieldColor: {r: 0, g: 0.8, b: 1, a: 0.5}
+  shieldActivateSound: shield_activate
+  shieldRechargeSound: shield_recharge
+  OnShieldCountChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnKillCountChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnShieldActivated:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &970298112385688211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363062652295960068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61001e3a4f2e98c4d8331830e7a6336d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradePanel: {fileID: 0}
+  cardContainer: {fileID: 369204062467742550, guid: b3d36a7dbce22744a906ac09952add67, type: 3}
+  cardSlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  skillSlotContainer: {fileID: 0}
+  skillSlotPrefab: {fileID: 2284138672602411548, guid: 06e79d39c528db94198f6f682ff03d11, type: 3}
+  maxSkillSlots: 10
+  closeButton: {fileID: 0}
+  statsPanel: {fileID: 0}
+  availableUpgradesText: {fileID: 0}
+  cardConfigs:
+  - cardName: "\u8840\u91CF\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: 55f0fbd21e1930c4da676df875f33521, type: 3}
+    statType: 4
+    descriptionFormat: "\u589E\u52A0\u8840\u91CF\u4E0A\u9650"
+    minValue: 5
+    maxValue: 10
+  - cardName: "\u653B\u64CA\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: 97c6f5b7c1e32084db31250d9319d0f0, type: 3}
+    statType: 0
+    descriptionFormat: "\u589E\u52A0\u653B\u64CA\u529B"
+    minValue: 2
+    maxValue: 5
+  - cardName: "\u9632\u79A6\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: 7decfa01ba89f6c49baff4886d32a07e, type: 3}
+    statType: 1
+    descriptionFormat: "\u589E\u52A0\u9632\u79A6\u529B"
+    minValue: 2
+    maxValue: 5
+  - cardName: "\u901F\u5EA6\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: af07e00b188ccb8428c40264ef791c7f, type: 3}
+    statType: 3
+    descriptionFormat: "\u589E\u52A0\u79FB\u52D5\u901F\u5EA6"
+    minValue: 0.01
+    maxValue: 0.03
+  cardsPerUpgrade: 3
 --- !u!4 &640673333343977057 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
