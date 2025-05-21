@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UICoinCountText : MonoBehaviour
 {
     private static Text coinCountText;
+    private static int coinCount; // 新增金幣數量變數
 
     private void Awake()
     {
@@ -15,6 +16,13 @@ public class UICoinCountText : MonoBehaviour
 
     public static void UpdateText(int amount)
     {
-        coinCountText.text = amount.ToString();
+        coinCount = amount; // 更新金幣數量
+        coinCountText.text = coinCount.ToString();
+    }
+
+    // 新增獲取金幣數量的方法
+    public static int GetCoinCount()
+    {
+        return coinCount;
     }
 }

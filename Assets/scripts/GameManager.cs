@@ -258,7 +258,7 @@ public class GameManager : MonoBehaviour
     }
     
     // 敵人被擊殺
-    public void EnemyKilled(Enemy enemy)
+    public void EnemyKilled(Monster monster)
     {
         // 觸發敵人擊殺事件，用於通知其他系統（如能量護盾）
         OnEnemyKilled?.Invoke();

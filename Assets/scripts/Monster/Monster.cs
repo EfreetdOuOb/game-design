@@ -75,6 +75,8 @@ public abstract class Monster : MonoBehaviour
     protected bool isBeingKnockedBack = false; // 是否正在被擊退
     protected ParticleSystem currentDustEffect; // 當前的灰塵特效
     
+     
+    
     protected virtual void Awake()
     {
         seeker = GetComponent<Seeker>();
@@ -83,7 +85,7 @@ public abstract class Monster : MonoBehaviour
         spriteRend = GetComponentInChildren<SpriteRenderer>();
         attackManager = GetComponent<AttackManager>();
         pickUpSpawner = GetComponent<PickUpSpawner>();
-        
+         
         // 設置剛體屬性，防止被玩家撞開
         if (rb2d != null)
         {
@@ -95,6 +97,8 @@ public abstract class Monster : MonoBehaviour
         
         // 在Awake中初始化當前血量，確保怪物一開始就有正確的血量
         currentHealth = startingHealth;
+        
+        
     }
     
     protected virtual void Start()
@@ -502,11 +506,15 @@ public abstract class Monster : MonoBehaviour
         // 給予玩家經驗值而不是分數
         if (gameManager != null)
         {
-            // 根據怪物的不同可以給予不同的經驗值
             int expValue = CalculateExpValue();
             gameManager.PlayerGainedExp(expValue);
         }
-        pickUpSpawner.DropItems();//掉落道具
+        
+        // 觸發敵人擊殺事件
+        gameManager.EnemyKilled(this);
+
+        pickUpSpawner.DropItems(); // 掉落道具
+        
         // 立即銷毀物件
         Destroy(gameObject);
     }

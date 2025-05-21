@@ -25,7 +25,7 @@ public class EnergyShield : MonoBehaviour
     public UnityEvent<int, int> OnKillCountChanged; // 擊殺計數變化事件(當前, 需要)
     public UnityEvent OnShieldActivated; // 護盾激活事件
     
-    private int currentKillCount; // 當前擊殺計數
+    public int currentKillCount; // 當前擊殺計數
     private List<GameObject> shieldEffects = new List<GameObject>(); // 護盾特效對象列表
     private Health playerHealth; // 玩家生命值引用
     
@@ -145,7 +145,7 @@ public class EnergyShield : MonoBehaviour
     }
     
     // 當敵人被擊殺時調用
-    private void OnEnemyKilled()
+    public void OnEnemyKilled()
     {
         currentKillCount++;
         Debug.Log("擊殺敵人，計數：" + currentKillCount);
@@ -155,15 +155,10 @@ public class EnergyShield : MonoBehaviour
         {
             if (currentShieldCount < maxShieldCount)
             {
-                currentShieldCount++;
-                currentKillCount = 0; // 重置擊殺計數
-                
                 // 更新護盾視覺效果
+                currentShieldCount++;
                 UpdateShieldVisuals();
-                
-                // 通知UI
                 NotifyUIChanges();
-                
                 Debug.Log("護盾充能完成，當前護盾：" + currentShieldCount);
                 
                 // 顯示充能完成提示
@@ -177,6 +172,7 @@ public class EnergyShield : MonoBehaviour
                 currentKillCount = 0; // 重置擊殺計數
                 Debug.Log("護盾已滿，無需充能");
             }
+            currentKillCount = 0;
         }
     }
     
@@ -237,7 +233,7 @@ public class EnergyShield : MonoBehaviour
             {
                 // 計算每個護盾的大小和位置偏移
                 // 將護盾尺寸設置為僅比玩家稍大一些
-                float baseScale = 0.2f; // 更小的基礎尺寸 (玩家大小的1.2倍)
+                float baseScale = 0.1f; // 更小的基礎尺寸 (玩家大小的1.1倍)
                 float increment = 0.03f; // 更小的增量
                 float scale = baseScale + (i * increment);
                 

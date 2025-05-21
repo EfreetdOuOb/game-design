@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine slowCoroutine;
 
-    [SerializeField]public int currentShieldCount = EnergyShield.Instance.currentShieldCount; // 當前護盾數量
+     
     [SerializeField]public bool energyShieldAvailable = true; // 假設這是用來檢查護盾是否可用的變數
 
     private EnergyShield energyShield;

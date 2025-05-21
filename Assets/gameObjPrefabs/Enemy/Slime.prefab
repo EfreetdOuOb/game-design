@@ -196,8 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc00fa969e5fde4ea9e47baa83564f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  target: {fileID: 3311840310541996238, guid: 90cb54343bc6ea84aaae9d0528846826, type: 3}
+  enemyMoveSpeed: 1
+  playerTarget: {fileID: 0}
   startingHealth: 30
   currentHealth: 0
   attackManager: {fileID: 0}
@@ -237,6 +237,7 @@ MonoBehaviour:
   dustSpawnThreshold: 0.5
   detectionArea: {fileID: 3623133280127710391}
   attackArea: {fileID: 8462421745252998230}
+  energyShield: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
 --- !u!114 &5114633619608056276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +256,11 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
+  attackType: 0
+  firePoint: {fileID: 0}
+  poisonBulletPrefab: {fileID: 0}
+  webBulletPrefab: {fileID: 0}
+  poisonBulletChance: 0.5
   additionalDamage: 0
   damageMultiplier: 1
   attackDamageFrame: 0.5
