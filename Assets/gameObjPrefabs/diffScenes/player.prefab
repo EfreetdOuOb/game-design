@@ -449,7 +449,6 @@ MonoBehaviour:
   dashCooldown: 1.5
   dashEffectPrefab: {fileID: 5837031498886096114, guid: 8a7548516be5f864fbb785c1f61c2b69, type: 3}
   inputDirection: {x: 0, y: 0}
-  currentShieldCount: 3
   energyShieldAvailable: 1
 --- !u!114 &8196235526500979758
 MonoBehaviour:
@@ -649,6 +648,7 @@ MonoBehaviour:
   OnShieldActivated:
     m_PersistentCalls:
       m_Calls: []
+  currentKillCount: 0
 --- !u!114 &970298112385688211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,27 +677,51 @@ MonoBehaviour:
   - cardName: "\u8840\u91CF\u985E\u578B"
     cardIcon: {fileID: 21300000, guid: 55f0fbd21e1930c4da676df875f33521, type: 3}
     statType: 4
-    descriptionFormat: "\u589E\u52A0\u8840\u91CF\u4E0A\u9650"
-    minValue: 5
-    maxValue: 10
+    descriptionFormat: "\u589E\u52A015\u9EDE\u8840\u91CF\u4E0A\u9650"
+    minValue: 15
+    maxValue: 15
   - cardName: "\u653B\u64CA\u985E\u578B"
     cardIcon: {fileID: 21300000, guid: 97c6f5b7c1e32084db31250d9319d0f0, type: 3}
     statType: 0
-    descriptionFormat: "\u589E\u52A0\u653B\u64CA\u529B"
+    descriptionFormat: "\u589E\u52A02\u9EDE\u653B\u64CA\u529B"
     minValue: 2
-    maxValue: 5
+    maxValue: 2
   - cardName: "\u9632\u79A6\u985E\u578B"
     cardIcon: {fileID: 21300000, guid: 7decfa01ba89f6c49baff4886d32a07e, type: 3}
     statType: 1
-    descriptionFormat: "\u589E\u52A0\u9632\u79A6\u529B"
+    descriptionFormat: "\u589E\u52A02\u9EDE\u9632\u79A6\u529B"
     minValue: 2
-    maxValue: 5
+    maxValue: 2
   - cardName: "\u901F\u5EA6\u985E\u578B"
     cardIcon: {fileID: 21300000, guid: af07e00b188ccb8428c40264ef791c7f, type: 3}
     statType: 3
-    descriptionFormat: "\u589E\u52A0\u79FB\u52D5\u901F\u5EA6"
+    descriptionFormat: "\u589E\u52A010%\u79FB\u52D5\u901F\u5EA6"
     minValue: 0.1
-    maxValue: 0.3
+    maxValue: 0.1
+  - cardName: "\u901F\u5EA6\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: b6e3c585de577ca4c89cd4475be2f445, type: 3}
+    statType: 3
+    descriptionFormat: "\u589E\u52A025%\u79FB\u52D5\u901F\u5EA6"
+    minValue: 0.25
+    maxValue: 0.25
+  - cardName: "\u8840\u91CF\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: 11ea533c2f504094295cebce5b877922, type: 3}
+    statType: 4
+    descriptionFormat: "\u589E\u52A030\u9EDE\u8840\u91CF\u4E0A\u9650"
+    minValue: 30
+    maxValue: 30
+  - cardName: "\u653B\u64CA\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: f15f51e1d69a27a4db2810f724f2a984, type: 3}
+    statType: 0
+    descriptionFormat: "\u589E\u52A05\u9EDE\u653B\u64CA\u529B"
+    minValue: 5
+    maxValue: 5
+  - cardName: "\u9632\u79A6\u985E\u578B"
+    cardIcon: {fileID: 21300000, guid: ff9da5b2ee69ee54086327d31f705c59, type: 3}
+    statType: 1
+    descriptionFormat: "\u589E\u52A05\u9EDE\u9632\u79A6\u529B"
+    minValue: 5
+    maxValue: 5
   cardsPerUpgrade: 3
 --- !u!4 &640673333343977057 stripped
 Transform:

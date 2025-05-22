@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class EnergyShield : MonoBehaviour
 {
-    public static EnergyShield Instance {get; set;}
+     
 
     [Header("護盾設置")]
     [SerializeField] public int maxShieldCount = 3; // 最大護盾數量
@@ -33,15 +33,7 @@ public class EnergyShield : MonoBehaviour
     {
         playerHealth = GetComponent<Health>();
         Debug.Log("EnergyShield Awake: 已獲取playerHealth組件");
-        if(Instance == null)
-        {
-            Instance = this;
-        }else if(Instance != null)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);//加載新場景時候告訴unity不要銷毀該物件
+         
     }
     
     public void OnEnable()
