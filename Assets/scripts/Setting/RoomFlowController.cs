@@ -35,7 +35,9 @@ public class RoomFlowController : MonoBehaviour
     public GameObject[] exitDoors; // 離開房間的門
     public GameObject[] entranceDoors; // 可以進入的房間的門
     public GameObject[] currentRoomDoors; // 當前房間的門
-    public GameObject roomCompletePanel; // 房間完成UI
+    public GameObject roomCompletePanel; // 房間完成UI 
+    [Header("最後房間入口")]
+    public GameObject finalRoomEntrance; // 最後的房間入口
 
     private bool hasStarted = false;
     private bool isCompleted = false;
@@ -253,6 +255,14 @@ public class RoomFlowController : MonoBehaviour
         UIManager.Instance?.ShowRoomCompleteMenu();
         yield return new WaitForSeconds(1.5f);
         if (roomCompletePanel != null) roomCompletePanel.SetActive(false);
+
+        // 檢查是否是最後的房間
+        if (finalRoomEntrance != null && gameObject.name == finalRoomEntrance.name)
+        {
+            // 在這裡可以添加生成傳送門的邏輯
+            Debug.Log("這是最後的房間，生成傳送門。");
+            // 生成傳送門的代碼可以在這裡添加
+        }
 
         // 9. 過場/切換房間
         currentStep = RoomStep.Transition;
