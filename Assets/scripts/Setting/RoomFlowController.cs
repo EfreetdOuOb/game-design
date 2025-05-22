@@ -38,6 +38,9 @@ public class RoomFlowController : MonoBehaviour
     public GameObject roomCompletePanel; // 房間完成UI 
     [Header("最後房間入口")]
     public GameObject finalRoomEntrance; // 最後的房間入口
+    [Header("傳送門位置")]
+    public Transform portalSpawnPoint; // 傳送門生成的位置
+    public GameObject portal; // 可選的傳送門
 
     private bool hasStarted = false;
     private bool isCompleted = false;
@@ -256,12 +259,12 @@ public class RoomFlowController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         if (roomCompletePanel != null) roomCompletePanel.SetActive(false);
 
-        // 檢查是否是最後的房間
-        if (finalRoomEntrance != null && gameObject.name == finalRoomEntrance.name)
+        // 生成傳送門
+        if (portal != null && portalSpawnPoint != null)
         {
-            // 在這裡可以添加生成傳送門的邏輯
-            Debug.Log("這是最後的房間，生成傳送門。");
-            // 生成傳送門的代碼可以在這裡添加
+            GameObject spawnedPortal = Instantiate(portal, portalSpawnPoint.position, portalSpawnPoint.rotation);
+            spawnedPortal.SetActive(true); // 顯示傳送門
+            Debug.Log("生成傳送門。");
         }
 
         // 9. 過場/切換房間

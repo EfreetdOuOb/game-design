@@ -373,6 +373,7 @@ Transform:
   m_Children:
   - {fileID: 1806129295}
   - {fileID: 481143}
+  - {fileID: 1494339457}
   m_Father: {fileID: 1862216172}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &131634863
@@ -405,6 +406,8 @@ MonoBehaviour:
   - {fileID: 477316077}
   roomCompletePanel: {fileID: 2118292787}
   finalRoomEntrance: {fileID: 481142}
+  portalSpawnPoint: {fileID: 1494339457}
+  portal: {fileID: 8602100088859003358, guid: be409b4278059c043a0e2223d65c8c2c, type: 3}
 --- !u!1 &162822066
 GameObject:
   m_ObjectHideFlags: 0
@@ -1660,6 +1663,8 @@ MonoBehaviour:
   - {fileID: 229405386}
   roomCompletePanel: {fileID: 2118292787}
   finalRoomEntrance: {fileID: 0}
+  portalSpawnPoint: {fileID: 0}
+  portal: {fileID: 0}
 --- !u!1 &1144977495
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,6 +1763,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7494655eafa2142419755d2d03a7f863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1494339456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1494339457}
+  m_Layer: 0
+  m_Name: TPdoorPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1494339457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494339456}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -44.35, y: 18.74, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 131634862}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1564611497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9203,6 +9239,8 @@ MonoBehaviour:
   - {fileID: 2037261321}
   roomCompletePanel: {fileID: 2118292787}
   finalRoomEntrance: {fileID: 0}
+  portalSpawnPoint: {fileID: 0}
+  portal: {fileID: 0}
 --- !u!1 &1907522046
 GameObject:
   m_ObjectHideFlags: 0
@@ -37250,10 +37288,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: room1
       objectReference: {fileID: 0}
+    - target: {fileID: 4656612559843819901, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 4656612559843819901, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.03
+      objectReference: {fileID: 0}
     - target: {fileID: 5247141825460522389, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: enemy
       value: 
       objectReference: {fileID: 6894217504608792256}
+    - target: {fileID: 6980634173727810936, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980634173727810936, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -8.84
+      objectReference: {fileID: 0}
     - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: box
       value: 
@@ -37286,6 +37340,22 @@ PrefabInstance:
       propertyPath: 'currentRoomDoors.Array.data[0]'
       value: 
       objectReference: {fileID: 1686395058}
+    - target: {fileID: 7974372947267022046, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 7974372947267022046, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686621163938122381, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 8686621163938122381, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -9.97
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
