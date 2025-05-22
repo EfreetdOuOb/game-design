@@ -218,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   detectionRange: 10.5
-  attackRange: 1.2
+  attackRange: 1.3
   startingHealth: 50
   currentHealth: 0
   friction: 0
@@ -237,7 +237,6 @@ MonoBehaviour:
   dustSpawnThreshold: 0.5
   detectionArea: {fileID: 3623133280127710391}
   attackArea: {fileID: 8462421745252998230}
-  energyShield: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
 --- !u!114 &5114633619608056276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2031cbf8956c04cb62b0a2ac4cc2a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRange: 1.2
+  attackRange: 1.3
   baseAttackDamage: 40
   attackPoint: {fileID: 9014704779946595880}
   playerLayer:
