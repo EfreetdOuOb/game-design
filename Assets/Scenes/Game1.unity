@@ -536,6 +536,18 @@ PrefabInstance:
       propertyPath: waves.Array.data[1].timeBetweenSpawn
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[0].count
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[1].count
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[0].timeBetweenSpawn
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2387439005032975322, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -52.94
@@ -697,6 +709,18 @@ PrefabInstance:
     - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
       propertyPath: waves.Array.data[1].count
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[0].count
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[1].count
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[0].timeBetweenSpawn
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2387439005032975322, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5034,6 +5058,18 @@ PrefabInstance:
       objectReference: {fileID: 6894217504608792256}
     - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
       propertyPath: waves.Array.data[1].count
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[1].count
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[0].timeBetweenSpawn
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 653098204970345271, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[1].timeBetweenSpawn
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2387439005032975322, guid: dfd266965fdcd3740bf62a4a7723896d, type: 3}
@@ -37306,6 +37342,14 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 6894217504608792256}
+    - target: {fileID: 5247141825460522389, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[0].timeBetweenSpawn
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247141825460522389, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: waves.Array.data[0].elements.Array.data[1].timeBetweenSpawn
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6980634173727810936, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.34
@@ -38038,6 +38082,10 @@ PrefabInstance:
       propertyPath: 'cardSlots.Array.data[2]'
       value: 
       objectReference: {fileID: 611193345}
+    - target: {fileID: 5935563584618057422, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
+      propertyPath: shootCooldown
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8939927470067311882, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: equipmentPanel
       value: 
