@@ -37340,6 +37340,50 @@ PrefabInstance:
       propertyPath: 'currentRoomDoors.Array.data[0]'
       value: 
       objectReference: {fileID: 1686395058}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: dialogueAfterBattle.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: dialogueBeforeBattle.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueAfterBattle.Array.data[1]'
+      value: "\u64CA\u6557\u6575\u4EBA\u6703\u7372\u5F97\u7D93\u9A57\u503C\uFF0C\u4E0B\u65B9\u7684\u7D93\u9A57\u689D\u6EFF\u4E86\u5C31\u6703\u5347\u7D1A"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueAfterBattle.Array.data[2]'
+      value: "\u4F60\u7684\u7B49\u7D1A\u63D0\u5347\u5F8C\u53EF\u4EE5\u4F7F\u7528\"Y\"\u4F86\u5347\u7D1A\u4F60\u7684\u89D2\u8272"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueAfterBattle.Array.data[3]'
+      value: "\u9078\u64C7\u4E00\u9805\u80FD\u529B\u52A0\u5F37\u81EA\u8EAB\u5427"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueAfterBattle.Array.data[4]'
+      value: "\u7E7C\u7E8C\u524D\u9032\u5427..."
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueBeforeBattle.Array.data[3]'
+      value: "\u7B49\u7B49\u5C07\u6703\u662F\u4F60\u7684\u7B2C\u4E00\u5834\u6230\u9B25\uFF0C\u5148\u544A\u8A34\u4F60\u4E00\u4E9B\u60C5\u5831\u5427"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueBeforeBattle.Array.data[4]'
+      value: "\u602A\u7269\u5206\u70BA\u8FD1\u6230\u548C\u9060\u7A0B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueBeforeBattle.Array.data[5]'
+      value: "\u8FD1\u6230\u7684\u602A\u7269\u6703\u7DCA\u8FFD\u4F60\u4E0D\u653E"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueBeforeBattle.Array.data[6]'
+      value: "\u9060\u7A0B\u7684\u602A\u7269\u6703\u4EE5\u6295\u5C04\u7269\u5C0D\u4F60\u9032\u884C\u5E72\u64FE"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueBeforeBattle.Array.data[7]'
+      value: "\u6CE8\u610F\uFF01\u6709\u4E9B\u602A\u7269\u7684\u653B\u64CA\u6703\u9644\u5E36\u4E00\u4E9B\u7684\u7279\u6B8A\u6548\u679C"
+      objectReference: {fileID: 0}
     - target: {fileID: 7974372947267022046, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.44
