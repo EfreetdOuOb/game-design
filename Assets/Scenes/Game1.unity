@@ -38086,10 +38086,6 @@ PrefabInstance:
       propertyPath: 'cardSlots.Array.data[2]'
       value: 
       objectReference: {fileID: 611193345}
-    - target: {fileID: 5935563584618057422, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
-      propertyPath: shootCooldown
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8939927470067311882, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
       propertyPath: equipmentPanel
       value: 

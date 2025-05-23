@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrowPrefab: {fileID: 491795749801496402, guid: bd3f8a91e4b88c547a1a67e9226a2d5d, type: 3}
-  shootCooldown: 0.5
+  shootCooldown: 0.6
   detectionRadius: 20
 --- !u!1 &6884418421524031167
 GameObject:
@@ -245,11 +245,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.6
+      value: 3.05
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.97
+      value: -1.36
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}
       propertyPath: m_LocalPosition.z
