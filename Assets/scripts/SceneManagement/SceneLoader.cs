@@ -29,7 +29,7 @@ public class SceneLoader : MonoBehaviour
         // 保存所有持久化資料
 
         //淡出當前場景
-
+        yield return StartCoroutine(ScreenFader.Instance.FadeSceneOut());
         //加載所有持久化資料
         yield return SceneManager.LoadSceneAsync(newSceneName);
         //獲取目標場景過度的位置
@@ -37,6 +37,6 @@ public class SceneLoader : MonoBehaviour
         //設置進入遊戲物件的位置
 
         //淡入新場景
-
+        yield return StartCoroutine(ScreenFader.Instance.FadeSceneIn());
     }
 }
