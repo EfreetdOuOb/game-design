@@ -23,7 +23,8 @@ public class GameManager : MonoBehaviour
     
     private float checkInterval = 1f; // 檢查間隔
     private float timer = 0f;
-    private int coinCount;
+    public int coinCount{get; private set;}
+    public float PlayerCurrentHealth{ get; set; }
 
     private void Awake()
     {
@@ -113,18 +114,14 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    //增加金幣
-    public void AddCoins(int value)
+    public void ChangeCoins(int amount)
     {
-        coinCount += value;
-        UICoinCountText.UpdateText(coinCount);//更新金幣文字UI
-    }
-
-    //減少金幣
-    public void RemoveCoins(int value)
-    {
-        coinCount -= value;
-        UICoinCountText.UpdateText(coinCount);//更新金幣文字UI
+        coinCount += amount;
+        if(coinCount < 0)
+        {
+            coinCount = 0;
+        }
+        UICoinCountText.UpdateText(coinCount);//更新金幣UI文本
     }
 
     //提示數值
@@ -264,5 +261,12 @@ public class GameManager : MonoBehaviour
         OnEnemyKilled?.Invoke();
         Debug.Log("敵人被擊殺，已觸發OnEnemyKilled事件");
     }
+
+    //保存數據
+    public void SaveData()
+    {
+        PlayerCurrentHealth = PlayerController.Instance.GetComponent<Health>().currentHealth;
+    }
+    //載入數據
 }
 

@@ -87,7 +87,7 @@ public class PickUpItem : MonoBehaviour
     private void HandleCoinPickUp()
     {
         //增加玩家的金幣數量
-        GameManager.Instance.AddCoins(value);
+        GameManager.Instance.ChangeCoins(value);
 
         //顯示拾取金幣數值
         GameManager.Instance.ShowText("+" + value, transform.position, new Color(1f, 1f, 0f, 1f)); // 更亮的黃色

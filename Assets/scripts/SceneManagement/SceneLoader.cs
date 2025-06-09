@@ -27,16 +27,33 @@ public class SceneLoader : MonoBehaviour
     public IEnumerator TransitionCoroutine(string newSceneName)
     {
         // 保存所有持久化資料
+        GameManager.Instance.SaveData();
 
         //淡出當前場景
         yield return StartCoroutine(ScreenFader.Instance.FadeSceneOut());
-        //加載所有持久化資料
+
+        //異步加載新場景
         yield return SceneManager.LoadSceneAsync(newSceneName);
+
+        //加載所有持久化資料
+        GameManager.Instance.LoadData();
+
         //獲取目標場景過度的位置
+        SceneEntrance entrance = FindFirstObjectByType<SceneEntrance>();
 
         //設置進入遊戲物件的位置
+        SetEnteringPosition(entrance);
 
         //淡入新場景
         yield return StartCoroutine(ScreenFader.Instance.FadeSceneIn());
+
+    }
+
+    private void SetEnteringPosition(SceneEntrance entrance)
+    {
+        if(entrance == null)
+            return;
+        Transform entanceTransform = entrance.transform; 
+        PlayerController.Instance.transform.position = entanceTransform.position;
     }
 }
