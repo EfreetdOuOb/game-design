@@ -34,7 +34,7 @@ public class HideSpike : MonoBehaviour
         if(other.gameObject.CompareTag("Player") && other.GetType().ToString() == "UnityEngine.CapsuleCollider2D")
         {
             playerInRange = true;
-            spikeTimer = spikeInterval; // 立即觸發一次
+            
             StartCoroutine(SpikeAttack());
         }
      }
