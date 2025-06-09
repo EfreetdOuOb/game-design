@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private float timer = 0f;
     public int coinCount{get; private set;}
     public float PlayerCurrentHealth{ get; set; }
+    public float PlayerCurrentMaxHealth{ get; set; }
 
     [Header("玩家進度數據")]
     public int playerLevel { get; private set; }
@@ -305,13 +306,15 @@ public class GameManager : MonoBehaviour
     {
         var player = PlayerController.Instance;
         var stats = player.GetComponent<PlayerStats>();
+        var exp = player.GetComponent<PlayerExperience>();
         var health = player.GetComponent<Health>();
         var equipment = player.GetComponent<Equipment>();
         
         PlayerCurrentHealth = health.currentHealth;
-        playerLevel = stats.playerLevel;
-        playerExp = stats.currentExp;
-        playerMaxExp = stats.maxExp;
+        PlayerCurrentMaxHealth = health.maxHealth;
+        playerLevel = exp.currentLevel;
+        playerExp = exp.currentExp;
+        playerMaxExp = exp.maxExp;
         playerStats[StatType.AttackPower] = stats.attackPower.Value;
         playerStats[StatType.Defense] = stats.defense.Value;
         playerStats[StatType.CritRate] = stats.critRate.Value;
@@ -346,7 +349,7 @@ public class GameManager : MonoBehaviour
         var equipment = player.GetComponent<Equipment>();
         
         // 同步最大生命值
-        health.maxHealth = playerStats[StatType.MaxHealth];
+        health.maxHealth = PlayerCurrentMaxHealth;
         // 同步當前生命值
         health.currentHealth = PlayerCurrentHealth;
         health.OnHealthUpdate?.Invoke(health.maxHealth, health.currentHealth);
@@ -369,6 +372,7 @@ public class GameManager : MonoBehaviour
             skillUpgrades.LoadUnlockedSkills(unlockedSkills);
             
         UICoinCountText.UpdateText(coinCount);
+        
     }
 }
 

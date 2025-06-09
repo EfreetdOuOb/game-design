@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Start() 
     {
-         
+        
         SetCurrentState(new Idle(this));
     }
 

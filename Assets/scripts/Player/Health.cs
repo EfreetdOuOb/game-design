@@ -18,7 +18,7 @@ public class Health : MonoBehaviour
 
     [Header("血量")]
     [SerializeField] public float maxHealth; // 初始生命值，並可以在Inspector中調整
-    [SerializeField] public float currentHealth { get;  set; } // 儲存當前生命值 
+    [SerializeField] public float currentHealth;  // 儲存當前生命值 
 
     [Header("UI")]
     public UnityEvent<float ,float> OnHealthUpdate;
