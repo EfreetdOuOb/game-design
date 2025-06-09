@@ -32,7 +32,7 @@ public class PickUpItem : MonoBehaviour
 
     private void Awake()
     {
-        health = FindFirstObjectByType<Health>();
+        health = FindAnyObjectByType<Health>();
     }
 
     private void Start()

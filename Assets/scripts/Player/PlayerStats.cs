@@ -26,6 +26,11 @@ public class PlayerStats : MonoBehaviour
     public Stat moveSpeed;      // 移動速度
     public Stat maxHealth;      // 最大生命值
 
+    [Header("等級系統")]
+    public int playerLevel = 1;     // 玩家等級
+    public float currentExp = 0;    // 當前經驗值
+    public float maxExp = 100;      // 升級所需經驗值
+
     [Header("UI引用")]
     public Text attackText;     // 攻擊力顯示
     public Text defenseText;    // 防禦力顯示
@@ -35,6 +40,7 @@ public class PlayerStats : MonoBehaviour
 
     [Header("事件")]
     public UnityEvent OnStatsChanged;
+    public UnityEvent<int, float, float> OnExpChanged; // 等級, 當前經驗, 最大經驗
 
     private PlayerController playerController;
     private Health playerHealth;
@@ -220,6 +226,67 @@ public class PlayerStats : MonoBehaviour
     public float GetCurrentAttackPower()
     {
         return attackPower.Value;
+    }
+
+    // 設置等級
+    public void SetLevel(int level)
+    {
+        playerLevel = level;
+        OnStatsChanged?.Invoke();
+    }
+
+    // 設置經驗值
+    public void SetExp(float exp, float maxExp)
+    {
+        currentExp = exp;
+        this.maxExp = maxExp;
+        OnExpChanged?.Invoke(playerLevel, currentExp, maxExp);
+    }
+
+    // 增加經驗值
+    public void AddExp(float exp)
+    {
+        currentExp += exp;
+        while (currentExp >= maxExp)
+        {
+            LevelUp();
+        }
+        OnExpChanged?.Invoke(playerLevel, currentExp, maxExp);
+    }
+
+    // 升級
+    private void LevelUp()
+    {
+        playerLevel++;
+        currentExp -= maxExp;
+        maxExp *= 1.2f; // 每次升級所需經驗值增加20%
+
+        // 升級獎勵
+        AddUpgradeBonus(StatType.AttackPower, 2);
+        AddUpgradeBonus(StatType.Defense, 1);
+        AddUpgradeBonus(StatType.MaxHealth, 10);
+
+        OnStatsChanged?.Invoke();
+        OnExpChanged?.Invoke(playerLevel, currentExp, maxExp);
+    }
+
+    // 設置所有屬性
+    public void SetAllStats(int level, float exp, float maxExp, Dictionary<StatType, float> stats)
+    {
+        playerLevel = level;
+        currentExp = exp;
+        this.maxExp = maxExp;
+        if (stats != null)
+        {
+            if (stats.ContainsKey(StatType.AttackPower)) attackPower.baseValue = stats[StatType.AttackPower];
+            if (stats.ContainsKey(StatType.Defense)) defense.baseValue = stats[StatType.Defense];
+            if (stats.ContainsKey(StatType.CritRate)) critRate.baseValue = stats[StatType.CritRate];
+            if (stats.ContainsKey(StatType.MoveSpeed)) moveSpeed.baseValue = stats[StatType.MoveSpeed];
+            if (stats.ContainsKey(StatType.MaxHealth)) maxHealth.baseValue = stats[StatType.MaxHealth];
+        }
+        ApplyStats();
+        OnStatsChanged?.Invoke();
+        OnExpChanged?.Invoke(playerLevel, currentExp, this.maxExp);
     }
 }
 

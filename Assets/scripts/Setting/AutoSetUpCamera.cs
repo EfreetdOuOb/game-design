@@ -11,7 +11,7 @@ public class AutoSetUpCamera : MonoBehaviour
     {
         CinemachineVirtualCamera camera = GetComponent<CinemachineVirtualCamera>();
 
-        playerController = FindFirstObjectByType<PlayerController>();
+        playerController = FindAnyObjectByType<PlayerController>();
 
         if(playerController!= null)
         {

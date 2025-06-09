@@ -27,7 +27,7 @@ public class PlayerExperience : MonoBehaviour
 
     private void Start()
     {
-        uiManager = FindFirstObjectByType<UIManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
         UpdateExpUI();
     }
 
@@ -125,5 +125,13 @@ public class PlayerExperience : MonoBehaviour
         {
             levelText.text = "Lv." + currentLevel;
         }
+    }
+
+    public void SetExpAndLevel(int level, float exp, float maxExp)
+    {
+        currentLevel = level;
+        currentExp = exp;
+        expToNextLevel = maxExp;
+        UpdateExpUI();
     }
 } 

@@ -29,30 +29,38 @@ public class SceneLoader : MonoBehaviour
         // 保存所有持久化資料
         GameManager.Instance.SaveData();
 
-        //淡出當前場景
+        // 確保淡出效果一定會執行
         yield return StartCoroutine(ScreenFader.Instance.FadeSceneOut());
 
         //異步加載新場景
         yield return SceneManager.LoadSceneAsync(newSceneName);
 
+        // 等待 PlayerController 和 SceneEntrance 都已經生成
+        yield return new WaitUntil(() => 
+            PlayerController.Instance != null && 
+            FindAnyObjectByType<SceneEntrance>() != null
+        );
+
         //加載所有持久化資料
         GameManager.Instance.LoadData();
 
         //獲取目標場景過度的位置
-        SceneEntrance entrance = FindFirstObjectByType<SceneEntrance>();
+        SceneEntrance entrance = FindAnyObjectByType<SceneEntrance>();
 
         //設置進入遊戲物件的位置
         SetEnteringPosition(entrance);
 
         //淡入新場景
         yield return StartCoroutine(ScreenFader.Instance.FadeSceneIn());
-
+        // 新增：切換結束後重置 Fader 狀態
+        ScreenFader.Instance.ResetFader();
     }
 
     private void SetEnteringPosition(SceneEntrance entrance)
     {
         if(entrance == null)
             return;
+            
         Transform entanceTransform = entrance.transform; 
         PlayerController.Instance.transform.position = entanceTransform.position;
     }

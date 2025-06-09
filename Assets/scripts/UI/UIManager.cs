@@ -46,8 +46,8 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
-        enemySpawner = FindFirstObjectByType<EnemySpawner>();
+        gameManager = FindAnyObjectByType<GameManager>();
+        enemySpawner = FindAnyObjectByType<EnemySpawner>();
         score = 0;
         playerExp = 0;
         UpdateScoreText();
@@ -185,7 +185,7 @@ public class UIManager : MonoBehaviour
         UpdateExpText();
         
         // 如果有玩家經驗系統組件，則傳遞經驗值
-        PlayerExperience playerExpSystem = FindFirstObjectByType<PlayerExperience>();
+        PlayerExperience playerExpSystem = FindAnyObjectByType<PlayerExperience>();
         if (playerExpSystem != null)
         {
             playerExpSystem.GainExperience(amount);

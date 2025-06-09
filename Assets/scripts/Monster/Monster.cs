@@ -104,7 +104,7 @@ public abstract class Monster : MonoBehaviour
     protected virtual void Start()
     {
         // 初始化其他組件
-        gameManager = FindFirstObjectByType<GameManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
         target = GameObject.FindGameObjectWithTag("Player")?.transform;
         
         // 設置初始狀態為閒置
@@ -114,7 +114,7 @@ public abstract class Monster : MonoBehaviour
     protected virtual void Update()
     {
         //檢查遊戲是否暫停
-        var gm = FindFirstObjectByType<GameManager>();
+        var gm = FindAnyObjectByType<GameManager>();
         if (gm != null && gm.isPaused)
             return;
             

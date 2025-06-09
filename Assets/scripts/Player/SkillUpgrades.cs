@@ -4,6 +4,21 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
+using System.Linq; // 添加這行以使用 ElementAt
+
+[System.Serializable]
+public class Skill
+{
+    public string skillId;
+    public string skillName;
+    public string description;
+    public int maxLevel;
+    public int currentLevel;
+    public Sprite icon;
+    public List<int> upgradeCosts;
+    public UnityEvent<int> OnLevelUp;
+}
 
 public class SkillUpgrades : MonoBehaviour
 {
@@ -28,8 +43,14 @@ public class SkillUpgrades : MonoBehaviour
     [Tooltip("每次升級時顯示的卡片數量")]
     [SerializeField] private int cardsPerUpgrade = 3;
 
+    [Header("技能設置")]
+    public List<Skill> skills = new List<Skill>();
+    private HashSet<string> unlockedSkills = new HashSet<string>();
+
+    [Header("事件")]
+    public UnityEvent OnSkillsChanged;
+
     private bool isPanelOpen = false;
-    private List<UpgradeSkill> unlockedSkills = new List<UpgradeSkill>();
     private PlayerStats playerStats;
     
     // 可用升級次數
@@ -39,6 +60,7 @@ public class SkillUpgrades : MonoBehaviour
     private void Awake()
     {
         playerStats = GameObject.FindWithTag("Player").GetComponent<PlayerStats>();
+        SyncSkillsFromCardConfigs(); // 自動同步
         
         // 初始化技能格
         InitializeSkillSlots();
@@ -208,7 +230,7 @@ public class SkillUpgrades : MonoBehaviour
             
             // 更新可用升級次數顯示（如果面板打開）
             if (isPanelOpen)
-    {
+            {
                 UpdateAvailableUpgradesText();
             }
             
@@ -344,7 +366,7 @@ public class SkillUpgrades : MonoBehaviour
             playerStats.AddUpgradeBonus(card.Skill.statType, card.Skill.amount);
             
             // 添加技能到已解鎖列表
-            unlockedSkills.Add(card.Skill);
+            unlockedSkills.Add(card.Skill.skillName);
             
             // 更新技能格顯示
             UpdateSkillSlots();
@@ -361,46 +383,42 @@ public class SkillUpgrades : MonoBehaviour
             if (availableUpgrades > 0)
             {
                 GenerateCardContents();
-        }
+            }
             else
             {
                 // 沒有可用升級次數，關閉面板
                 CloseUpgradePanel();
-    }
-}
+            }
+        }
     }
 
     // 更新技能格顯示
     private void UpdateSkillSlots()
     {
         if (skillSlotContainer == null) return;
-        
-        // 更新已解鎖技能的顯示
         for (int i = 0; i < maxSkillSlots; i++)
         {
             Transform slotTransform = skillSlotContainer.GetChild(i);
             if (slotTransform == null) continue;
-            
             Image skillIcon = slotTransform.GetComponentInChildren<Image>();
             if (skillIcon == null) continue;
-            
-            // 設置技能圖標
             if (i < unlockedSkills.Count)
             {
-                skillIcon.sprite = unlockedSkills[i].icon;
-                skillIcon.color = Color.white;
-                
-                // 添加工具提示 - 使用GetComponents查找組件，避免直接引用類型
-                var components = slotTransform.GetComponents<MonoBehaviour>();
-                foreach (var comp in components)
+                string skillId = unlockedSkills.ElementAt(i);
+                var skill = skills.Find(s => s.skillId == skillId);
+                if (skill != null)
                 {
-                    // 檢查組件是否為TooltipTrigger
-                    if (comp.GetType().Name == "TooltipTrigger")
+                    skillIcon.sprite = skill.icon;
+                    skillIcon.color = Color.white;
+                    var components = slotTransform.GetComponents<MonoBehaviour>();
+                    foreach (var comp in components)
                     {
-                        // 使用反射設置屬性
-                        comp.GetType().GetField("header").SetValue(comp, unlockedSkills[i].skillName);
-                        comp.GetType().GetField("content").SetValue(comp, unlockedSkills[i].description);
-                        break;
+                        if (comp.GetType().Name == "TooltipTrigger")
+                        {
+                            comp.GetType().GetField("header").SetValue(comp, skill.skillName);
+                            comp.GetType().GetField("content").SetValue(comp, skill.description);
+                            break;
+                        }
                     }
                 }
             }
@@ -429,6 +447,149 @@ public class SkillUpgrades : MonoBehaviour
         
         // 所有面板都未開啟
         return false;
+    }
+
+    private void Start()
+    {
+        // 初始化已解鎖技能列表
+        foreach (var skill in skills)
+        {
+            if (skill.currentLevel > 0)
+            {
+                unlockedSkills.Add(skill.skillId);
+            }
+        }
+    }
+
+    // 獲取已解鎖的技能列表
+    public List<string> GetUnlockedSkills()
+    {
+        return new List<string>(unlockedSkills);
+    }
+
+    // 載入已解鎖的技能
+    public void LoadUnlockedSkills(List<string> skills)
+    {
+        unlockedSkills = new HashSet<string>(skills);
+        OnSkillsChanged?.Invoke();
+    }
+
+    // 升級技能
+    public bool UpgradeSkill(string skillId)
+    {
+        var skill = skills.Find(s => s.skillId == skillId);
+        if (skill == null || skill.currentLevel >= skill.maxLevel)
+            return false;
+
+        skill.currentLevel++;
+        unlockedSkills.Add(skillId);
+        skill.OnLevelUp?.Invoke(skill.currentLevel);
+        OnSkillsChanged?.Invoke();
+        return true;
+    }
+
+    // 檢查技能是否已解鎖
+    public bool IsSkillUnlocked(string skillId)
+    {
+        return unlockedSkills.Contains(skillId);
+    }
+
+    // 獲取技能等級
+    public int GetSkillLevel(string skillId)
+    {
+        var skill = skills.Find(s => s.skillId == skillId);
+        return skill?.currentLevel ?? 0;
+    }
+
+    // 獲取已解鎖的技能和其效果
+    public Dictionary<string, float> GetSkillEffects()
+    {
+        var effects = new Dictionary<string, float>();
+        foreach (var skillId in unlockedSkills)
+        {
+            var skill = skills.Find(s => s.skillId == skillId);
+            if (skill != null)
+            {
+                // 根據技能等級計算效果值
+                float effect = CalculateSkillEffect(skill);
+                effects[skillId] = effect;
+            }
+        }
+        return effects;
+    }
+
+    // 載入技能效果
+    public void LoadSkillEffects(Dictionary<string, float> effects)
+    {
+        foreach (var effect in effects)
+        {
+            var skill = skills.Find(s => s.skillId == effect.Key);
+            if (skill != null)
+            {
+                // 應用技能效果
+                ApplySkillEffect(skill, effect.Value);
+            }
+        }
+    }
+
+    // 計算技能效果值
+    private float CalculateSkillEffect(Skill skill)
+    {
+        // 這裡根據技能類型和等級計算具體效果
+        // 例如：攻擊力提升、防禦力提升等
+        return skill.currentLevel * 2f; // 示例：每級增加2點效果
+    }
+
+    // 應用技能效果
+    private void ApplySkillEffect(Skill skill, float effect)
+    {
+        // 獲取 PlayerStats 組件
+        var playerStats = GetComponent<PlayerStats>();
+        if (playerStats != null)
+        {
+            // 根據技能類型應用效果
+            switch (skill.skillId)
+            {
+                case "attack_boost":
+                    playerStats.AddUpgradeBonus(StatType.AttackPower, effect);
+                    break;
+                case "defense_boost":
+                    playerStats.AddUpgradeBonus(StatType.Defense, effect);
+                    break;
+                // 添加其他技能效果...
+            }
+        }
+    }
+
+    // 修改 GetUnlockedSkills 方法，同時返回技能效果
+    public (List<string> skills, Dictionary<string, float> effects) GetUnlockedSkillsWithEffects()
+    {
+        return (new List<string>(unlockedSkills), GetSkillEffects());
+    }
+
+    // 修改 LoadUnlockedSkills 方法，同時載入技能效果
+    public void LoadUnlockedSkillsWithEffects(List<string> skills, Dictionary<string, float> effects)
+    {
+        unlockedSkills = new HashSet<string>(skills);
+        LoadSkillEffects(effects);
+        OnSkillsChanged?.Invoke();
+    }
+
+    // 自動從 cardConfigs 生成 skills 列表
+    private void SyncSkillsFromCardConfigs()
+    {
+        skills.Clear();
+        if (cardConfigs == null) return;
+        foreach (var config in cardConfigs)
+        {
+            skills.Add(new Skill {
+                skillId = config.cardName, // 用 cardName 當作唯一ID
+                skillName = config.cardName,
+                description = config.descriptionFormat,
+                icon = config.cardIcon,
+                // maxLevel 欄位省略，因 cardConfigs 沒有
+            });
+        }
     }
 }
 

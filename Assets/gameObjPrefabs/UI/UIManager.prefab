@@ -368,10 +368,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RestartGame
       objectReference: {fileID: 0}
+    - target: {fileID: 2584054589706004272, guid: e8e48c62370bde94fb770f9410f55541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4142648692485751160, guid: c74d886e10b41c44193040617a091b80, type: 3}
     - target: {fileID: 5017885875392338617, guid: e8e48c62370bde94fb770f9410f55541, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: BackToMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 5344967760284010228, guid: e8e48c62370bde94fb770f9410f55541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4142648692485751160, guid: c74d886e10b41c44193040617a091b80, type: 3}
     - target: {fileID: 5344967760284010228, guid: e8e48c62370bde94fb770f9410f55541, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: BackToMenu
@@ -979,9 +987,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7561094871121650503, guid: 057d2044b5caeff448a084f63ede337f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4142648692485751160, guid: c74d886e10b41c44193040617a091b80, type: 3}
+    - target: {fileID: 7561094871121650503, guid: 057d2044b5caeff448a084f63ede337f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RestartGame
       objectReference: {fileID: 0}
+    - target: {fileID: 8854078647794615099, guid: 057d2044b5caeff448a084f63ede337f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4142648692485751160, guid: c74d886e10b41c44193040617a091b80, type: 3}
     - target: {fileID: 8854078647794615099, guid: 057d2044b5caeff448a084f63ede337f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: BackToMenu

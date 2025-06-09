@@ -25,7 +25,7 @@ public class Spider : Monster
     protected override void Update()
     {
         // 檢查遊戲是否暫停
-        var gm = FindFirstObjectByType<GameManager>();
+        var gm = FindAnyObjectByType<GameManager>();
         if (gm != null && gm.isPaused)
             return;
         base.Update();

@@ -39,10 +39,10 @@ public class LevelFlowController : MonoBehaviour
 
     private void InitReferences()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
-        uiManager = FindFirstObjectByType<UIManager>();
-        enemySpawner = FindFirstObjectByType<EnemySpawner>();
-        playerController = FindFirstObjectByType<PlayerController>();
+        gameManager = FindAnyObjectByType<GameManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
+        enemySpawner = FindAnyObjectByType<EnemySpawner>();
+        playerController = FindAnyObjectByType<PlayerController>();
     }
 
     private void Update()

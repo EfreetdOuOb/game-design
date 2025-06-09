@@ -577,6 +577,7 @@ MonoBehaviour:
     critRateBonus: 0
     moveSpeedBonus: 0
     isEnergyShield: 0
+  equipmentSlots: []
   OnEquipmentChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -612,12 +613,18 @@ MonoBehaviour:
     baseValue: 0
     equipBonus: 0
     upgradeBonus: 0
+  playerLevel: 1
+  currentExp: 0
+  maxExp: 100
   attackText: {fileID: 0}
   defenseText: {fileID: 0}
   critRateText: {fileID: 0}
   moveSpeedText: {fileID: 0}
   maxHealthText: {fileID: 0}
   OnStatsChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExpChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1868151110384685451
@@ -723,6 +730,10 @@ MonoBehaviour:
     minValue: 5
     maxValue: 5
   cardsPerUpgrade: 3
+  skills: []
+  OnSkillsChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &640673333343977057 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: 3093cc3a83bb7664baa202d671bd9172, type: 3}

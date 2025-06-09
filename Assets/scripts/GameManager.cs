@@ -26,22 +26,50 @@ public class GameManager : MonoBehaviour
     public int coinCount{get; private set;}
     public float PlayerCurrentHealth{ get; set; }
 
+    [Header("玩家進度數據")]
+    public int playerLevel { get; private set; }
+    public float playerExp { get; private set; }
+    public float playerMaxExp { get; private set; }
+    public Dictionary<StatType, float> playerStats { get; private set; }
+    public List<string> unlockedSkills { get; private set; }
+    public Dictionary<string, float> skillEffects { get; private set; }  // 新增：保存技能效果
+    public Dictionary<string, int> equippedItems { get; private set; }
+
     private void Awake()
     {
-        uiManager = FindAnyObjectByType<UIManager>();
-        playerController = GetComponent<PlayerController>();
-        Time.timeScale = 1;
-        StartCoroutine(CheckEnemiesRoutine());
-
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
-        }else if(Instance != null)
+            DontDestroyOnLoad(gameObject);
+            playerStats = new Dictionary<StatType, float>();
+            unlockedSkills = new List<string>();
+            skillEffects = new Dictionary<string, float>();
+            equippedItems = new Dictionary<string, int>();
+            if (SceneManager.GetActiveScene().name == "MainMenu")
+                InitializePlayerData();
+        }
+        else if (Instance != this)
         {
             Destroy(gameObject);
+            return; // 關鍵：馬上 return，避免執行 Start/Update
         }
 
-        DontDestroyOnLoad(gameObject);//加載新場景時候告訴unity不要銷毀該物件
+        uiManager = FindAnyObjectByType<UIManager>();
+        playerController = FindAnyObjectByType<PlayerController>();
+        Time.timeScale = 1;
+        StartCoroutine(CheckEnemiesRoutine());
+    }
+
+    private void InitializePlayerData()
+    {
+        playerLevel = 1;
+        playerExp = 0;
+        playerMaxExp = 100;
+        playerStats[StatType.AttackPower] = 10;
+        playerStats[StatType.Defense] = 5;
+        playerStats[StatType.CritRate] = 0.05f;
+        playerStats[StatType.MoveSpeed] = 5;
+        playerStats[StatType.MaxHealth] = 100;
     }
 
     void Start()
@@ -201,19 +229,24 @@ public class GameManager : MonoBehaviour
     }
     
     public void EndGame()
-    { 
-        isInCombat = false; // 遊戲結束時關閉戰鬥狀態
-        uiManager.ShowGameOverMenu(); 
-        Time.timeScale = 0; 
+    {
+        isInCombat = false;
+        if (uiManager == null)
+            uiManager = FindAnyObjectByType<UIManager>();
+        if (uiManager != null && uiManager.gameOverMenu != null)
+            uiManager.ShowGameOverMenu();
+        Time.timeScale = 0;
     }
 
     public void PauseGame()
-    { 
+    {
         Time.timeScale = 0;
-        uiManager.ShowGamePauseMenu();
+        if (uiManager == null)
+            uiManager = FindAnyObjectByType<UIManager>();
+        if (uiManager != null && uiManager.gamePauseMenu != null)
+            uiManager.ShowGamePauseMenu();
         isPaused = true;
-        isInCombat = false; // 遊戲暫停時關閉戰鬥狀態
-        
+        isInCombat = false;
     }
 
     // 原來的加分方法，現在同時增加經驗值
@@ -234,18 +267,23 @@ public class GameManager : MonoBehaviour
     
     public void RestartGame()
     {
-        // 載入當前場景以重新開始 
+        Time.timeScale = 1; // 確保重新開始時遊戲是正常狀態
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
     public void ResumeGame()
-    { 
+    {
         Time.timeScale = 1;
-        uiManager.gameOverMenu.SetActive(false);
-        uiManager.gamePauseMenu.SetActive(false);
+        if (uiManager == null)
+            uiManager = FindAnyObjectByType<UIManager>();
+        if (uiManager != null)
+        {
+            if (uiManager.gameOverMenu != null)
+                uiManager.gameOverMenu.SetActive(false);
+            if (uiManager.gamePauseMenu != null)
+                uiManager.gamePauseMenu.SetActive(false);
+        }
         isPaused = false;
-        
-        // 恢復時重新檢查戰鬥狀態
         CheckCombatStatus();
     }
 
@@ -265,8 +303,72 @@ public class GameManager : MonoBehaviour
     //保存數據
     public void SaveData()
     {
-        PlayerCurrentHealth = PlayerController.Instance.GetComponent<Health>().currentHealth;
+        var player = PlayerController.Instance;
+        var stats = player.GetComponent<PlayerStats>();
+        var health = player.GetComponent<Health>();
+        var equipment = player.GetComponent<Equipment>();
+        
+        PlayerCurrentHealth = health.currentHealth;
+        playerLevel = stats.playerLevel;
+        playerExp = stats.currentExp;
+        playerMaxExp = stats.maxExp;
+        playerStats[StatType.AttackPower] = stats.attackPower.Value;
+        playerStats[StatType.Defense] = stats.defense.Value;
+        playerStats[StatType.CritRate] = stats.critRate.Value;
+        playerStats[StatType.MoveSpeed] = stats.moveSpeed.Value;
+        playerStats[StatType.MaxHealth] = stats.maxHealth.Value;
+        
+        // 保存裝備數據
+        if (equipment != null)
+        {
+            var currentEquipment = equipment.GetCurrentEquipment();
+            if (currentEquipment != null)
+            {
+                equippedItems.Clear();
+                equippedItems[currentEquipment.itemName] = 1; // 使用裝備名稱作為鍵
+                Debug.Log($"【GameManager】保存當前裝備：{currentEquipment.itemName}");
+            }
+        }
+        
+        // 技能
+        var skillUpgrades = player.GetComponent<SkillUpgrades>();
+        if (skillUpgrades != null)
+            unlockedSkills = skillUpgrades.GetUnlockedSkills();
     }
+
     //載入數據
+    public void LoadData()
+    {
+        var player = PlayerController.Instance;
+        var stats = player.GetComponent<PlayerStats>();
+        var health = player.GetComponent<Health>();
+        var expSystem = player.GetComponent<PlayerExperience>();
+        var equipment = player.GetComponent<Equipment>();
+        
+        // 同步最大生命值
+        health.maxHealth = playerStats[StatType.MaxHealth];
+        // 同步當前生命值
+        health.currentHealth = PlayerCurrentHealth;
+        health.OnHealthUpdate?.Invoke(health.maxHealth, health.currentHealth);
+        // 同步屬性
+        stats.SetAllStats(playerLevel, playerExp, playerMaxExp, playerStats);
+        // 同步經驗與等級
+        if (expSystem != null)
+            expSystem.SetExpAndLevel(playerLevel, playerExp, playerMaxExp);
+            
+        // 載入裝備
+        if (equipment != null)
+        {
+            equipment.LoadEquippedItems(equippedItems);
+            Debug.Log($"【GameManager】載入裝備數據，裝備數量：{equippedItems.Count}");
+        }
+        
+        // 技能
+        var skillUpgrades = player.GetComponent<SkillUpgrades>();
+        if (skillUpgrades != null)
+            skillUpgrades.LoadUnlockedSkills(unlockedSkills);
+            
+        UICoinCountText.UpdateText(coinCount);
+    }
 }
 

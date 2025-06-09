@@ -170,7 +170,7 @@ public class Dead : BaseState
         if (!gameEnded && playerController.IsAnimationDone("dead"))
         {
             // 通知GameManager遊戲結束
-            GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
+            GameManager gameManager = Object.FindAnyObjectByType<GameManager>();
             if (gameManager != null)
             {
                 gameManager.EndGame();

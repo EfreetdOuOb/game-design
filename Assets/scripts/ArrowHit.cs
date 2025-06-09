@@ -14,7 +14,7 @@ public class ArrowHit : MonoBehaviour
 
     void Start()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
         Transform playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
         
         if (playerTransform != null)

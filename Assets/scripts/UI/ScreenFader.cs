@@ -41,4 +41,14 @@ public class ScreenFader : MonoBehaviour
      {
         yield return canvasGroup.DOFade(finalAlpha, fadeDuration).WaitForCompletion();
      }
+
+     // 新增：重置 Fader 狀態（可在場景切換後呼叫）
+     public void ResetFader()
+     {
+        if (faderCanvasGroup != null)
+        {
+            faderCanvasGroup.alpha = 0f;
+            faderCanvasGroup.gameObject.SetActive(false);
+        }
+     }
 }

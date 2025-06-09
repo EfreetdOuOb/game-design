@@ -39,6 +39,9 @@ public class EquipmentItem
 [System.Serializable]
 public class EquipmentSlot
 {
+    public string slotId;
+    public string itemId;
+    public int level;
     public Image slotImage;           // 槽位的圖像組件
     public Button slotButton;         // 槽位的按鈕組件
     public EquipmentItem item;        // 槽位中的裝備
@@ -66,6 +69,10 @@ public class Equipment : MonoBehaviour
     
     [Header("預設裝備")]
     [SerializeField] private EquipmentItem defaultEnergyShield;
+    
+    [Header("裝備設置")]
+    public List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot>();
+    private Dictionary<string, EquipmentSlot> equippedItems = new Dictionary<string, EquipmentSlot>();
     
     // 玩家屬性引用
     private PlayerStats playerStats;
@@ -194,8 +201,14 @@ public class Equipment : MonoBehaviour
         // 更新裝備槽位顯示
         UpdateEquipmentSlots();
         
-        // 移除自動裝備護盾的代碼，使玩家一開始沒有裝備
-        // 玩家需要從寶箱獲取裝備
+        // 初始化裝備字典
+        foreach (var slot in equipmentSlots)
+        {
+            if (!string.IsNullOrEmpty(slot.itemId))
+            {
+                equippedItems[slot.slotId] = slot;
+            }
+        }
     }
     
     private void Update()
@@ -542,5 +555,133 @@ public class Equipment : MonoBehaviour
         UpdateEnergyShieldComponent();
         
         Debug.Log($"【裝備系統】強制更新UI，當前裝備：{(currentEquipment != null ? currentEquipment.itemName : "無")}");
+    }
+
+    // 獲取已裝備的物品
+    public Dictionary<string, int> GetEquippedItems()
+    {
+        var result = new Dictionary<string, int>();
+        foreach (var item in equippedItems)
+        {
+            result[item.Key] = item.Value.level;
+        }
+        return result;
+    }
+
+    // 載入已裝備的物品
+    public void LoadEquippedItems(Dictionary<string, int> items)
+    {
+        equippedItems.Clear();
+        foreach (var item in items)
+        {
+            var equipmentItem = availableEquipment.Find(e => e.itemName == item.Key);
+
+            // 如果找不到，針對充能護盾自動補全
+            if (equipmentItem == null)
+            {
+                if (item.Key == "充能護盾")
+                {
+                    equipmentItem = new EquipmentItem
+                    {
+                        itemName = "充能護盾",
+                        description = "產生一個護罩於玩家周圍，被攻擊時會消除周遭投射物並免疫該次傷害，被攻擊後需要充能才能再次使用，最多疊加三層。",
+                        isEnergyShield = true,
+                        defenseBonus = 2f,
+                        // 你可以根據實際情況補上 icon
+                    };
+                    availableEquipment.Add(equipmentItem);
+                    Debug.Log("【裝備系統】自動補全充能護盾到 availableEquipment");
+                }
+                else
+                {
+                    // 其他裝備可依需求補全
+                    equipmentItem = new EquipmentItem { itemName = item.Key };
+                    availableEquipment.Add(equipmentItem);
+                }
+            }
+
+            EquipItem(equipmentItem);
+            Debug.Log($"【裝備系統】已重新裝備物品：{equipmentItem.itemName}");
+        }
+
+        UpdateEquipmentUI();
+        UpdateEquipmentSlots();
+        OnEquipmentChanged?.Invoke();
+    }
+
+    // 裝備物品
+    public bool EquipItem(string slotId, string itemId, int level)
+    {
+        var slot = equipmentSlots.Find(s => s.slotId == slotId);
+        if (slot == null)
+            return false;
+
+        // 卸下當前裝備
+        if (equippedItems.ContainsKey(slotId))
+        {
+            UnequipItem(slotId);
+        }
+
+        // 裝備新物品
+        slot.itemId = itemId;
+        slot.level = level;
+        equippedItems[slotId] = slot;
+
+        // 更新玩家屬性
+        UpdatePlayerStats();
+
+        OnEquipmentChanged?.Invoke();
+        return true;
+    }
+
+    // 卸下裝備
+    public void UnequipItem(string slotId)
+    {
+        if (equippedItems.ContainsKey(slotId))
+        {
+            var slot = equippedItems[slotId];
+            slot.itemId = null;
+            slot.level = 0;
+            equippedItems.Remove(slotId);
+
+            // 更新玩家屬性
+            UpdatePlayerStats();
+
+            OnEquipmentChanged?.Invoke();
+        }
+    }
+
+    // 更新玩家屬性
+    private void UpdatePlayerStats()
+    {
+        if (playerStats == null)
+            return;
+
+        float attackBonus = 0;
+        float defenseBonus = 0;
+        float critRateBonus = 0;
+        float moveSpeedBonus = 0;
+        float maxHealthBonus = 0;
+
+        // 計算所有裝備的加成
+        foreach (var item in equippedItems.Values)
+        {
+            // 這裡可以根據物品ID和等級計算具體加成
+            // 這是一個示例計算方式
+            attackBonus += item.level * 2;
+            defenseBonus += item.level;
+            critRateBonus += item.level * 0.01f;
+            moveSpeedBonus += item.level * 0.5f;
+            maxHealthBonus += item.level * 5;
+        }
+
+        // 更新玩家屬性
+        playerStats.UpdateEquipmentBonus(
+            attackBonus,
+            defenseBonus,
+            critRateBonus,
+            moveSpeedBonus,
+            maxHealthBonus
+        );
     }
 } 
