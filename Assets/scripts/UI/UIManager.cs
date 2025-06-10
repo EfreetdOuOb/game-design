@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     public Slider dodgeCdSlider;//閃避冷卻條
     public Slider expSlider; // 經驗值條
     public Text levelText; // 等級文本
+    public Text remainingEnemiesText; // 剩餘敵人數量文本
 
     
     
@@ -63,6 +64,10 @@ public class UIManager : MonoBehaviour
         {
             ShowRoomCompleteMenu();
         }
+        
+        // 更新剩餘敵人數量
+        int remainingEnemies = GameObject.FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length;
+        UpdateRemainingEnemies(remainingEnemies);
     }
 
     //血量條UI
@@ -230,5 +235,14 @@ public class UIManager : MonoBehaviour
         // 使用 WaitForSecondsRealtime 確保即使遊戲暫停也會計時
         yield return new WaitForSecondsRealtime(delay);
         roomCompleteMenu.SetActive(false);
+    }
+
+    // 更新剩餘敵人數量
+    public void UpdateRemainingEnemies(int count)
+    {
+        if (remainingEnemiesText != null)
+        {
+            remainingEnemiesText.text = "剩餘敵人: " + count.ToString();
+        }
     }
 }
