@@ -139,4 +139,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickUpType: 1
-  value: 80
+  value: 50
+  trowHeight: 1
+  trowDuration: 1
+  pickUpDistance: 3
+  moveSpeed: 5

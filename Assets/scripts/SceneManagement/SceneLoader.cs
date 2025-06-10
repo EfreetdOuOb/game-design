@@ -35,11 +35,7 @@ public class SceneLoader : MonoBehaviour
         //異步加載新場景
         yield return SceneManager.LoadSceneAsync(newSceneName);
 
-        // 等待 PlayerController 和 SceneEntrance 都已經生成
-        yield return new WaitUntil(() => 
-            PlayerController.Instance != null && 
-            FindAnyObjectByType<SceneEntrance>() != null
-        );
+         
 
         //加載所有持久化資料
         GameManager.Instance.LoadData();
@@ -52,8 +48,7 @@ public class SceneLoader : MonoBehaviour
 
         //淡入新場景
         yield return StartCoroutine(ScreenFader.Instance.FadeSceneIn());
-        // 新增：切換結束後重置 Fader 狀態
-        ScreenFader.Instance.ResetFader();
+        
     }
 
     private void SetEnteringPosition(SceneEntrance entrance)
