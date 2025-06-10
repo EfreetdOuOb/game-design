@@ -44,14 +44,19 @@ public class PlayerStats : MonoBehaviour
 
     private PlayerController playerController;
     private Health playerHealth;
-    private PlayerAttackManager playerAttackManager; // 添加玩家攻擊管理器引用
+    private PlayerAttackManager playerAttackManager;
 
     private void Awake()
     {
         Instance = this;
         playerController = GetComponent<PlayerController>();
         playerHealth = GetComponent<Health>();
-        playerAttackManager = GetComponent<PlayerAttackManager>(); // 獲取玩家攻擊管理器
+        playerAttackManager = GetComponent<PlayerAttackManager>();
+
+        if (playerAttackManager == null)
+        {
+            Debug.LogError("PlayerStats: 無法找到 PlayerAttackManager 組件！");
+        }
 
         // 初始化屬性
         InitializeStats();
@@ -67,22 +72,32 @@ public class PlayerStats : MonoBehaviour
         
         // 應用移動速度到玩家控制器
         ApplyMoveSpeed();
+
+        // 確保有 PlayerAttackManager 引用
+        if (playerAttackManager == null)
+        {
+            playerAttackManager = GetComponent<PlayerAttackManager>();
+        }
+
+        // 從 PlayerAttackManager 同步基礎攻擊力
+        SyncAttackPowerFromManager();
     }
 
     // 初始化屬性
     private void InitializeStats()
     {
-        // 從PlayerAttackManager獲取基礎攻擊力
-        if (playerAttackManager != null)
+        // 從 PlayerAttackManager 獲取基礎攻擊力
+        var attackManager = GetComponent<PlayerAttackManager>();
+        if (attackManager != null)
         {
-            attackPower.baseValue = playerAttackManager.GetBaseAttackDamage();
-            Debug.Log($"從PlayerAttackManager獲取基礎攻擊力: {attackPower.baseValue}");
+            attackPower.baseValue = attackManager.GetBaseAttackDamage();
+            Debug.Log($"從 PlayerAttackManager 獲取基礎攻擊力: {attackPower.baseValue}");
         }
         else
         {
-            // 如果沒有找到PlayerAttackManager，使用預設值
+            // 如果沒有找到 PlayerAttackManager，使用預設值
             attackPower.baseValue = 10f;
-            Debug.LogWarning("無法找到PlayerAttackManager，使用預設攻擊力: 10");
+            Debug.LogWarning("無法找到 PlayerAttackManager，使用預設攻擊力: 10");
         }
         
         defense.baseValue = 5f;
@@ -270,6 +285,31 @@ public class PlayerStats : MonoBehaviour
         OnExpChanged?.Invoke(playerLevel, currentExp, maxExp);
     }
 
+    // 同步攻擊力到 PlayerAttackManager
+    public void SyncAttackPowerToManager()
+    {
+        if (playerAttackManager != null)
+        {
+            playerAttackManager.SetBaseAttackDamage(Mathf.RoundToInt(attackPower.baseValue));
+            Debug.Log($"同步攻擊力到 PlayerAttackManager: {attackPower.baseValue}");
+        }
+    }
+
+    // 從 PlayerAttackManager 同步攻擊力
+    public void SyncAttackPowerFromManager()
+    {
+        if (playerAttackManager != null)
+        {
+            attackPower.baseValue = playerAttackManager.GetBaseAttackDamage();
+            Debug.Log($"從 PlayerAttackManager 同步攻擊力: {attackPower.baseValue}");
+            ApplyStats();
+        }
+        else
+        {
+            Debug.LogError("PlayerStats: 無法同步攻擊力，PlayerAttackManager 為空！");
+        }
+    }
+
     // 設置所有屬性
     public void SetAllStats(int level, float exp, float maxExp, Dictionary<StatType, float> stats)
     {
@@ -278,7 +318,11 @@ public class PlayerStats : MonoBehaviour
         this.maxExp = maxExp;
         if (stats != null)
         {
-            if (stats.ContainsKey(StatType.AttackPower)) attackPower.baseValue = stats[StatType.AttackPower];
+            if (stats.ContainsKey(StatType.AttackPower)) 
+            {
+                attackPower.baseValue = stats[StatType.AttackPower];
+                SyncAttackPowerToManager(); // 同步到 PlayerAttackManager
+            }
             if (stats.ContainsKey(StatType.Defense)) defense.baseValue = stats[StatType.Defense];
             if (stats.ContainsKey(StatType.CritRate)) critRate.baseValue = stats[StatType.CritRate];
             if (stats.ContainsKey(StatType.MoveSpeed)) moveSpeed.baseValue = stats[StatType.MoveSpeed];

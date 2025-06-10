@@ -14,12 +14,21 @@ public class PlayerAttackManager : AttackManager
     
     private void Awake()
     {
+        // 確保在 Awake 中獲取引用
         playerStats = GetComponent<PlayerStats>();
+        if (playerStats == null)
+        {
+            Debug.LogError("PlayerAttackManager: 無法找到 PlayerStats 組件！");
+        }
     }
     
     private void Start()
     {
         // 在啟動時同步基礎攻擊力到PlayerStats
+        if (playerStats == null)
+        {
+            playerStats = GetComponent<PlayerStats>();
+        }
         SyncAttackPowerToStats();
     }
     
@@ -30,6 +39,10 @@ public class PlayerAttackManager : AttackManager
         {
             playerStats.UpdateAttackFromManager(baseAttackDamage);
             Debug.Log($"基礎攻擊力已同步到PlayerStats: {baseAttackDamage}");
+        }
+        else
+        {
+            Debug.LogError("PlayerAttackManager: 無法同步攻擊力，PlayerStats 為空！");
         }
     }
     
@@ -48,18 +61,15 @@ public class PlayerAttackManager : AttackManager
     {
         int baseDamage;
         
-        // 使用PlayerStats中的攻擊力值（包含了所有加成）
+        // 直接使用 PlayerStats 中的攻擊力值
         if (playerStats != null)
         {
-            // 基礎傷害使用PlayerStats中的攻擊力值
             baseDamage = Mathf.RoundToInt(playerStats.GetCurrentAttackPower());
-            // 添加額外傷害
-            baseDamage += additionalDamage;
         }
         else
         {
-            // 如果無法獲取PlayerStats，退回到原始計算方式
-            baseDamage = baseAttackDamage + additionalDamage;
+            // 如果無法獲取 PlayerStats，退回到原始計算方式
+            baseDamage = baseAttackDamage;
         }
         
         // 應用傷害倍率
@@ -118,5 +128,16 @@ public class PlayerAttackManager : AttackManager
     public void AddDamageMultiplier(float multiplier)
     {
         damageMultiplier *= multiplier;
+    }
+
+    // 設置基礎攻擊力
+    public void SetBaseAttackDamage(int damage)
+    {
+        baseAttackDamage = damage;
+        // 同步到 PlayerStats
+        if (playerStats != null)
+        {
+            playerStats.SyncAttackPowerFromManager();
+        }
     }
 } 

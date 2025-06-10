@@ -315,6 +315,8 @@ public class GameManager : MonoBehaviour
         playerLevel = exp.currentLevel;
         playerExp = exp.currentExp;
         playerMaxExp = exp.maxExp;
+        
+        // 直接從 PlayerStats 獲取所有屬性
         playerStats[StatType.AttackPower] = stats.attackPower.Value;
         playerStats[StatType.Defense] = stats.defense.Value;
         playerStats[StatType.CritRate] = stats.critRate.Value;
@@ -353,8 +355,10 @@ public class GameManager : MonoBehaviour
         // 同步當前生命值
         health.currentHealth = PlayerCurrentHealth;
         health.OnHealthUpdate?.Invoke(health.maxHealth, health.currentHealth);
-        // 同步屬性
+        
+        // 同步所有屬性到 PlayerStats
         stats.SetAllStats(playerLevel, playerExp, playerMaxExp, playerStats);
+        
         // 同步經驗與等級
         if (expSystem != null)
             expSystem.SetExpAndLevel(playerLevel, playerExp, playerMaxExp);
@@ -372,7 +376,6 @@ public class GameManager : MonoBehaviour
             skillUpgrades.LoadUnlockedSkills(unlockedSkills);
             
         UICoinCountText.UpdateText(coinCount);
-        
     }
 }
 
