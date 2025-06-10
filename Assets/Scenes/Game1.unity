@@ -521,6 +521,10 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: 5aa1504df3628e845934315b79a0f28f, type: 3}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5
       objectReference: {fileID: 0}
@@ -1323,6 +1327,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -30
       objectReference: {fileID: 0}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: 26858bb5b94685f429895385ebf7de89, type: 3}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5
@@ -4466,6 +4474,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: e2b361491b4295f4fb6c11645ea4ff24, type: 3}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5
       objectReference: {fileID: 0}
@@ -4660,6 +4672,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: b1c6824ad9fce7a41b713f9949d07959, type: 3}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5
@@ -5062,6 +5078,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -150
       objectReference: {fileID: 0}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: 1e557261d2f3d5741be399b35034545a, type: 3}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5
@@ -5532,6 +5552,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: 5aa1504df3628e845934315b79a0f28f, type: 3}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5
@@ -41264,6 +41288,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: 1b4a797a03a47f54bb401e8441589687, type: 3}
     - target: {fileID: 8409692161865478007, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: m_Name
       value: BigSpike (9)
@@ -41579,6 +41607,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
+      propertyPath: hideSpikeBox
+      value: 
+      objectReference: {fileID: 2726326750151720037, guid: 1b4a797a03a47f54bb401e8441589687, type: 3}
     - target: {fileID: 8013324899020482775, guid: 5d2cc0e30b494904998b2377ee86dc13, type: 3}
       propertyPath: spikeInterval
       value: 5

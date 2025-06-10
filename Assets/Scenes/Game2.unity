@@ -316,11 +316,15 @@ PrefabInstance:
       objectReference: {fileID: 2082616773}
     - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: dialogueAfterBattle.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: dialogueBeforeBattle.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360015515093129238, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
+      propertyPath: 'dialogueAfterBattle.Array.data[0]'
+      value: "\u606D\u559C\uFF0C\u4F60\u5DF2\u5B8C\u6210\u4E86\u9AD4\u9A57\u95DC\u5361"
       objectReference: {fileID: 0}
     - target: {fileID: 7888771663936199058, guid: 9c2f299ac6d744f49be405e8839e430b, type: 3}
       propertyPath: m_Size.x

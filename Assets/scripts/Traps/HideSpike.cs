@@ -52,6 +52,6 @@ public class HideSpike : MonoBehaviour
      {
         yield return new WaitForSeconds(time);
         anim.SetTrigger("Attack");
-        Instantiate(hideSpikeBox, transform.position, Quaternion.identity);
+        Instantiate(hideSpikeBox, transform.position, hideSpikeBox.transform.rotation);
      }
 }
