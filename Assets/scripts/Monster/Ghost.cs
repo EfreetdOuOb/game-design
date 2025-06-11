@@ -32,7 +32,7 @@ public class Ghost : Monster
     }
     protected override int CalculateExpValue()
     {
-        return 60; 
+        return 120; 
     }
 
     // 覆寫 GetDeadState() 讓它在自爆後進入死亡狀態
