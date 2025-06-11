@@ -18,7 +18,21 @@ public class Skull : Monster
 
     protected override void Update()
     {
+        // 檢查遊戲是否暫停
+        var gm = FindAnyObjectByType<GameManager>();
+        if (gm != null && gm.isPaused)
+            return;
         base.Update();
+        if (currentState is SkullChase)
+        {
+            Vector2 direction = MoveTowardsPlayer();
+             
+            if (direction != Vector2.zero)
+            {
+                Face(direction);
+                transform.Translate(direction * moveSpeed * Time.deltaTime);//裡面使用deltaTime而不是fixedDeltaTime，fixedDeltaTime會根據幀數改變怪物速度
+            }
+        }
     }
 
     protected override MonsterState GetIdleState()

@@ -492,24 +492,23 @@ public class SkullChase : MonsterState
 
     public override void Update()
     {
+        // 檢測玩家是否在攻擊範圍內
         if (monster.IsPlayerInAttackRange())
         {
-            monster.SetCurrentState(new SkullAttack(monster));
+            // 轉換到攻擊狀態
+            monster.SetCurrentState(new SkullAttack(monster)); 
         }
+        // 檢測玩家是否超出追蹤範圍
         else if (!monster.IsPlayerInRange(monster.detectionRange))
         {
-            monster.SetCurrentState(new SkullIdle(monster));
+            // 回到閒置狀態
+            monster.SetCurrentState(new SkullIdle(monster)); 
         }
     }
 
     public override void FixedUpdate()
     {
-        Vector2 direction = monster.MoveTowardsPlayer();
-        if (direction != Vector2.zero)
-        {
-            monster.Face(direction);
-            monster.transform.Translate(direction * monster.moveSpeed * Time.deltaTime);
-        }
+        
     }
 
     public override void OnTriggerEnter2D(Collider2D collision) { }
@@ -741,12 +740,7 @@ public class GhostChase : MonsterState
 
     public override void FixedUpdate()
     {
-        Vector2 direction = monster.MoveTowardsPlayer();
-        if (direction != Vector2.zero)
-        {
-            monster.Face(direction);
-            monster.transform.Translate(direction * monster.moveSpeed * Time.deltaTime);
-        }
+        
     }
 
     public override void OnTriggerEnter2D(Collider2D collision) { }

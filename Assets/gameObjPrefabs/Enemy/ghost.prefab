@@ -277,7 +277,7 @@ MonoBehaviour:
   dustSpawnThreshold: 0.5
   detectionArea: {fileID: 5220081147378462697}
   attackArea: {fileID: 413359383566405413}
-  attackDamage: 50
+  attackDamage: 25
   explodeDelay: 0.5
   explosionRadius: 3
 --- !u!114 &7284664639355697394
@@ -293,7 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 6
-  baseAttackDamage: 60
+  baseAttackDamage: 25
   attackPoint: {fileID: 2724729707849148659}
   playerLayer:
     serializedVersion: 2
