@@ -46,19 +46,38 @@ public class GameManager : MonoBehaviour
             unlockedSkills = new List<string>();
             skillEffects = new Dictionary<string, float>();
             equippedItems = new Dictionary<string, int>();
-            if (SceneManager.GetActiveScene().name == "MainMenu")
-                InitializePlayerData();
+
+            // 訂閱場景載入事件，這樣每次新場景載入時都會呼叫 OnSceneLoaded
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
+            // 保持遊戲時間為正常，並啟動檢查敵人協程
+            Time.timeScale = 1; 
+            StartCoroutine(CheckEnemiesRoutine()); 
         }
         else if (Instance != this)
         {
             Destroy(gameObject);
-            return; // 關鍵：馬上 return，避免執行 Start/Update
+            return; // 銷毀重複的實例並返回
         }
+    }
 
+    // 當有新場景載入完成時會呼叫此方法
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 重新獲取對場景特有物件的引用
         uiManager = FindAnyObjectByType<UIManager>();
         playerController = FindAnyObjectByType<PlayerController>();
+
+        // 確保遊戲在場景載入後是正常時間和非暫停狀態
         Time.timeScale = 1;
-        StartCoroutine(CheckEnemiesRoutine());
+        isPaused = false; 
+        CheckCombatStatus(); // 重新檢查戰鬥狀態
+    }
+
+    // 當 GameManager 物件被銷毀時取消訂閱事件，防止記憶體洩漏
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void InitializePlayerData()
@@ -71,15 +90,7 @@ public class GameManager : MonoBehaviour
         playerStats[StatType.CritRate] = 0.05f;
         playerStats[StatType.MoveSpeed] = 5;
         playerStats[StatType.MaxHealth] = 100;
-    }
-
-    void Start()
-    {
-        // 每次進入新場景都重新抓 UIManager、PlayerController
-        uiManager = FindAnyObjectByType<UIManager>();
-        playerController = FindAnyObjectByType<PlayerController>();
-        Time.timeScale = 1;
-        StartCoroutine(CheckEnemiesRoutine());
+        Debug.Log("玩家數據已初始化為新遊戲狀態。");
     }
 
     void Update()
@@ -269,7 +280,9 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1; // 確保重新開始時遊戲是正常狀態
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // 載入你的主要遊戲場景，而不是重載當前場景
+        SceneManager.LoadScene("Game1"); // 假設 Game1 是你的第一個遊戲關卡場景
+        InitializePlayerData(); // 重新開始遊戲時，重置玩家數據
     }
     
     public void ResumeGame()
@@ -288,9 +301,10 @@ public class GameManager : MonoBehaviour
         CheckCombatStatus();
     }
 
-    public void BackToMenu()//返回
+    public void BackToMenu()//返回主選單
     {
         SceneManager.LoadScene("MainMenu");
+        InitializePlayerData(); // 返回主選單時，重置玩家數據以便下次新遊戲
     }
     
     // 敵人被擊殺

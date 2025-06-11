@@ -34,7 +34,7 @@ public class ArrowHit : MonoBehaviour
     void Update()
     {
         // 檢查是否處於戰鬥狀態
-        if (gameManager != null && gameManager.isInCombat)
+        if (gameManager.isInCombat)
         {
             // 更新射擊冷卻時間
             shootTimer -= Time.deltaTime;
