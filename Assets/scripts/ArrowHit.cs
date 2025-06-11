@@ -12,39 +12,50 @@ public class ArrowHit : MonoBehaviour
     private Health playerHealth;
     private int objLayerNumber; // 用於存儲 "obj" 圖層的編號
 
-    void Start()
+    void Awake() // 將 gameManager 的獲取放在 Awake，確保更早
     {
-        gameManager = FindAnyObjectByType<GameManager>();
-        Transform playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-        
-        if (playerTransform != null)
-        {
-            playerController = playerTransform.GetComponent<PlayerController>();
-            playerHealth = playerTransform.GetComponent<Health>();
-        }
-        else
-        {
-            Debug.LogError("無法找到玩家物件！");
-        }
-        
         // 獲取 "obj" 圖層的編號
         objLayerNumber = LayerMask.NameToLayer("obj");
     }
- 
+
+    void OnEnable() // 在啟用時獲取 PlayerController 和 Health
+    {
+        // 確保在物件啟用時獲取 GameManager 和 PlayerController 的引用
+        gameManager = FindAnyObjectByType<GameManager>();
+
+        // 使用 PlayerController.Instance 更可靠，前提是 PlayerController 是單例
+        if (PlayerController.Instance != null)
+        {
+            playerController = PlayerController.Instance;
+            playerHealth = playerController.GetComponent<Health>();
+        }
+        else
+        {
+            // 如果 PlayerController 不是單例，則繼續使用 FindAnyObjectByType
+            Transform playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            if (playerTransform != null)
+            {
+                playerController = playerTransform.GetComponent<PlayerController>();
+                playerHealth = playerTransform.GetComponent<Health>();
+            }
+            else
+            {
+                Debug.LogError("ArrowHit: 無法找到玩家物件或 PlayerController！");
+            }
+        }
+    }
+
     void Update()
     {
-        // 檢查是否處於戰鬥狀態
-        if (gameManager.isInCombat)
+        // 戰鬥狀態的檢查已移除，現在只檢查冷卻時間和玩家狀態
+        // 更新射擊冷卻時間
+        shootTimer -= Time.deltaTime;
+        
+        // 如果冷卻時間已過，且玩家仍然存活，嘗試發射箭矢
+        if (shootTimer <= 0 && playerController != null && playerHealth != null && playerHealth.currentHealth > 0)
         {
-            // 更新射擊冷卻時間
-            shootTimer -= Time.deltaTime;
-            
-            // 如果冷卻時間已過，且玩家仍然存活，嘗試發射箭矢
-            if (shootTimer <= 0 && playerController != null && playerHealth != null && playerHealth.currentHealth > 0)
-            {
-                Shoot();
-                shootTimer = shootCooldown; // 重置射擊冷卻時間
-            }
+            Shoot();
+            shootTimer = shootCooldown; // 重置射擊冷卻時間
         }
     }
 
