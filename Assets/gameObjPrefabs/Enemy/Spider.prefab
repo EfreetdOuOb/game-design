@@ -392,7 +392,6 @@ MonoBehaviour:
   dustSpawnThreshold: 0.5
   detectionArea: {fileID: 1967322846267037831}
   attackArea: {fileID: 7901204467835217348}
-  energyShield: {fileID: 1868151110384685451, guid: e7bff4ade2244414587bc237cea52abd, type: 3}
 --- !u!114 &8067921435388204768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,7 +462,7 @@ MonoBehaviour:
   - prefab: {fileID: 2908834547270901770, guid: ab51f2210a8ea8e49bc8cbd2ca544d83, type: 3}
     dropPercentage: 100
   - prefab: {fileID: 638718362410294231, guid: 2a8882ab50fbaea48868ad0746e3bee6, type: 3}
-    dropPercentage: 10
+    dropPercentage: 5
 --- !u!114 &7245309935861123333
 MonoBehaviour:
   m_ObjectHideFlags: 0

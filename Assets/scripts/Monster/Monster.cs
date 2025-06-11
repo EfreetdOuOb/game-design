@@ -527,19 +527,19 @@ public abstract class Monster : MonoBehaviour
     }
     
     // 檢查是否可以復活（默認為false，子類可以覆寫）
-    protected virtual bool CanRevive()
+    public virtual bool CanRevive()
     {
         return false;
     }
     
     // 復活邏輯（子類需要覆寫）
-    protected virtual void OnRevive()
+    public virtual void OnRevive()
     {
         // 默認不執行任何操作
     }
     
     // 在編輯器中繪製範圍
-    protected virtual void OnDrawGizmosSelected()
+    public virtual void OnDrawGizmosSelected()
     {
         if (detectionArea != null)
         {
