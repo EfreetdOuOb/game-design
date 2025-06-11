@@ -48,20 +48,7 @@ public class SlimeIdle : MonsterState
             // 轉換到追蹤狀態
             monster.SetCurrentState(new SlimeChase(monster)); 
         }
-        // 隨機移動
-        else if (idleTimer >= nextStateTime)
-        {
-            if (Random.value > 0.5f) // 50% 機率移動或保持閒置
-            {
-                monster.SetCurrentState(new SlimeWander(monster)); 
-            }
-            else
-            {
-                // 重置計時器，繼續閒置
-                idleTimer = 0f;
-                nextStateTime = Random.Range(2f, 5f);
-            }
-        }
+        
     }
     
     public override void FixedUpdate()
@@ -80,66 +67,7 @@ public class SlimeIdle : MonsterState
     }
 }
 
-// 史萊姆的隨機移動狀態
-public class SlimeWander : MonsterState
-{
-    private float wanderTimer = 0f;
-    private float wanderDuration;
-    private Vector2 wanderDirection;
-    
-    public SlimeWander(Monster _monster) : base(_monster)
-    {
-        // 播放移動動畫
-        monster.PlayAnimation("run");
-        
-        // 隨機設置移動時間
-        wanderDuration = Random.Range(1f, 3f);
-        
-        // 隨機選擇方向
-        float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
-        wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        
-        // 設置面向
-        monster.Face(wanderDirection);
-    }
-    
-    public override void Update()
-    { 
-        
-        // 更新移動計時器
-        wanderTimer += Time.deltaTime;
-        
-        // 檢測玩家是否在追蹤範圍內
-        if (monster.IsPlayerInRange(monster.detectionRange))
-        {
-            // 轉換到追蹤狀態
-            monster.SetCurrentState(new SlimeChase(monster)); 
-        }
-        // 移動時間結束
-        else if (wanderTimer >= wanderDuration)
-        {
-            // 回到閒置狀態
-            monster.SetCurrentState(new SlimeIdle(monster)); 
-        }
-    }
-    
-    public override void FixedUpdate()
-    { 
-        
-        // 在隨機方向上移動
-        monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
-    }
-    
-    public override void OnTriggerEnter2D(Collider2D collision)
-    {
-        // 不再處理碰撞造成的玩家傷害
-    }
-    
-    public override void OnTriggerStay2D(Collider2D collision)
-    {
-        // 不再處理碰撞造成的玩家傷害
-    }
-}
+
 
 // 史萊姆的追蹤狀態
 public class SlimeChase : MonsterState
@@ -370,18 +298,7 @@ public class SpiderIdle : MonsterState
         {
             monster.SetCurrentState(new SpiderChase(monster));
         }
-        else if (idleTimer >= nextStateTime)
-        {
-            if (Random.value > 0.5f)
-            {
-                monster.SetCurrentState(new SpiderWander(monster));
-            }
-            else
-            {
-                idleTimer = 0f;
-                nextStateTime = Random.Range(2f, 5f);
-            }
-        }
+        
     }
 
     public override void FixedUpdate() { }
@@ -389,42 +306,7 @@ public class SpiderIdle : MonsterState
     public override void OnTriggerStay2D(Collider2D collision) { }
 }
 
-// 蜘蛛的隨機移動狀態
-public class SpiderWander : MonsterState
-{
-    private float wanderTimer = 0f;
-    private float wanderDuration;
-    private Vector2 wanderDirection;
 
-    public SpiderWander(Monster _monster) : base(_monster)
-    {
-        monster.PlayAnimation("run");
-        wanderDuration = Random.Range(1f, 3f);
-        float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
-        wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        monster.Face(wanderDirection);
-    }
-
-    public override void Update()
-    {
-        wanderTimer += Time.deltaTime;
-        if (monster.IsPlayerInRange(monster.detectionRange))
-        {
-            monster.SetCurrentState(new SpiderChase(monster));
-        }
-        else if (wanderTimer >= wanderDuration)
-        {
-            monster.SetCurrentState(new SpiderIdle(monster));
-        }
-    }
-
-    public override void FixedUpdate()
-    {
-        monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
-    }
-    public override void OnTriggerEnter2D(Collider2D collision) { }
-    public override void OnTriggerStay2D(Collider2D collision) { }
-}
 
 // 蜘蛛的追蹤狀態
 public class SpiderChase : MonsterState
@@ -588,18 +470,7 @@ public class SkullIdle : MonsterState
         {
             monster.SetCurrentState(new SkullChase(monster));
         }
-        else if (idleTimer >= nextStateTime)
-        {
-            if (Random.value > 0.5f)
-            {
-                monster.SetCurrentState(new SkullWander(monster));
-            }
-            else
-            {
-                idleTimer = 0f;
-                nextStateTime = Random.Range(2f, 5f);
-            }
-        }
+        
     }
 
     public override void FixedUpdate() { }
@@ -609,45 +480,7 @@ public class SkullIdle : MonsterState
     public override void OnTriggerStay2D(Collider2D collision) { }
 }
 
-// 骷髏的隨機移動狀態
-public class SkullWander : MonsterState
-{
-    private float wanderTimer = 0f;
-    private float wanderDuration;
-    private Vector2 wanderDirection;
 
-    public SkullWander(Monster _monster) : base(_monster)
-    {
-        monster.PlayAnimation("run");
-        wanderDuration = Random.Range(1f, 3f);
-        float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
-        wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        monster.Face(wanderDirection);
-    }
-
-    public override void Update()
-    {
-        wanderTimer += Time.deltaTime;
-
-        if (monster.IsPlayerInRange(monster.detectionRange))
-        {
-            monster.SetCurrentState(new SkullChase(monster));
-        }
-        else if (wanderTimer >= wanderDuration)
-        {
-            monster.SetCurrentState(new SkullIdle(monster));
-        }
-    }
-
-    public override void FixedUpdate()
-    {
-        monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
-    }
-
-    public override void OnTriggerEnter2D(Collider2D collision) { }
-
-    public override void OnTriggerStay2D(Collider2D collision) { }
-}
 
 // 骷髏的追蹤狀態
 public class SkullChase : MonsterState
@@ -876,18 +709,7 @@ public class GhostIdle : MonsterState
         {
             monster.SetCurrentState(new GhostChase(monster));
         }
-        else if (idleTimer >= nextStateTime)
-        {
-            if (Random.value > 0.5f)
-            {
-                monster.SetCurrentState(new GhostWander(monster));
-            }
-            else
-            {
-                idleTimer = 0f;
-                nextStateTime = Random.Range(2f, 5f);
-            }
-        }
+        
     }
 
     public override void FixedUpdate() { }
@@ -895,44 +717,7 @@ public class GhostIdle : MonsterState
     public override void OnTriggerStay2D(Collider2D collision) { }
 }
 
-// 鬼魂的隨機移動狀態
-public class GhostWander : MonsterState
-{
-    private float wanderTimer = 0f;
-    private float wanderDuration;
-    private Vector2 wanderDirection;
 
-    public GhostWander(Monster _monster) : base(_monster)
-    {
-        monster.PlayAnimation("run");
-        wanderDuration = Random.Range(1f, 3f);
-        float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
-        wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        monster.Face(wanderDirection);
-    }
-
-    public override void Update()
-    {
-        wanderTimer += Time.deltaTime;
-
-        if (monster.IsPlayerInRange(monster.detectionRange))
-        {
-            monster.SetCurrentState(new GhostChase(monster));
-        }
-        else if (wanderTimer >= wanderDuration)
-        {
-            monster.SetCurrentState(new GhostIdle(monster));
-        }
-    }
-
-    public override void FixedUpdate()
-    {
-        monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
-    }
-
-    public override void OnTriggerEnter2D(Collider2D collision) { }
-    public override void OnTriggerStay2D(Collider2D collision) { }
-}
 
 // 鬼魂的追蹤狀態
 public class GhostChase : MonsterState
