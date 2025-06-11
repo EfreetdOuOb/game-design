@@ -383,7 +383,7 @@ MonoBehaviour:
   poisonBulletChance: 0.5
   additionalDamage: 0
   damageMultiplier: 1
-  attackDamageFrame: 0.75
+  attackDamageFrame: 1
 --- !u!114 &3088624031956210762
 MonoBehaviour:
   m_ObjectHideFlags: 0
