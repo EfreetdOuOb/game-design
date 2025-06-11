@@ -5,7 +5,7 @@ public class MonsterAttackManager : AttackManager
     [Header("怪物攻擊設定")]
     public LayerMask playerLayer;  // 玩家層級遮罩
     [Tooltip("攻擊方式")]
-    public enum AttackType { Melee, Ranged, Both }
+    public enum AttackType { Melee, Ranged, Both, Explosion }
     public AttackType attackType = AttackType.Melee;  // 預設為近戰
     
     [Header("遠程攻擊設定")]
@@ -126,10 +126,13 @@ public class MonsterAttackManager : AttackManager
         // 強制設置動畫的當前時間為0，確保從頭開始播放
         if (animator != null)
         {
-            animator.Play(attackAnimationName, 0, 0f);
+            string animToPlay = attackAnimationName; // 預設為 "attack"
+            if (attackType == AttackType.Explosion)
+            {
+                animToPlay = "dead"; // 如果是自爆類型，播放 "dead" 動畫
+            }
+            animator.Play(animToPlay, 0, 0f);
         }
-        
-        // 注意：動畫播放已經移到Monster.Attack()方法中
     }
 
     public override void StopAttacking()
@@ -144,8 +147,25 @@ public class MonsterAttackManager : AttackManager
         if (!isAttacking || hasDamaged || currentTarget == null) return;
 
         bool hasAttacked = false;
+        float currentAttackRadius = 0f;
+        Vector2 attackPos = GetAttackPosition();
 
-        // 根據攻擊類型決定攻擊方式
+        // 在方法開始時就嘗試將 monster 轉換為 Ghost，即使不是 Ghost，也會是 null
+        Ghost ghostInstance = monster as Ghost;
+
+        // 根據攻擊類型決定攻擊範圍和位置
+        if (attackType == AttackType.Explosion && ghostInstance != null)
+        {
+            currentAttackRadius = monster.attackRange; // 修改這裡，使用 monster.attackRange
+            // 確保自爆攻擊點是怪物中心
+            attackPos = monster.transform.position; 
+        }
+        else // Melee or Both
+        {
+            currentAttackRadius = monster.attackRange; 
+        }
+        
+        // 如果是遠程攻擊或混合攻擊，且遠程攻擊未命中，則進行近戰判定
         if (attackType == AttackType.Ranged || attackType == AttackType.Both)
         {
             // 遠程攻擊
@@ -174,11 +194,10 @@ public class MonsterAttackManager : AttackManager
             }
         }
 
-        // 如果是近戰攻擊或混合攻擊，且遠程攻擊未命中，則進行近戰判定
-        if ((attackType == AttackType.Melee || attackType == AttackType.Both) && !hasAttacked)
+        // 如果是近戰、混合（遠程未命中）或自爆攻擊，執行範圍傷害判定
+        if ((attackType == AttackType.Melee || attackType == AttackType.Both || attackType == AttackType.Explosion) && !hasAttacked)
         {
-            Vector2 attackPos = GetAttackPosition();
-            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, attackRange, playerLayer);
+            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPos, currentAttackRadius, playerLayer);
             
             foreach (Collider2D hit in hits)
             { 
@@ -186,7 +205,17 @@ public class MonsterAttackManager : AttackManager
                 
                 if (playerHealth != null && !playerHealth.isInvincible)
                 {
-                    int finalDamage = GetAttackDamage();
+                    float finalDamage = 0f;
+                    // 在這裡再次檢查 ghostInstance 是否為 null，以確保安全
+                    if (attackType == AttackType.Explosion && ghostInstance != null)
+                    {
+                        finalDamage = ghostInstance.attackDamage; // 使用鬼魂特有的自爆傷害值
+                    }
+                    else
+                    {
+                        finalDamage = GetAttackDamage(); // 使用 MonsterAttackManager 計算的傷害值
+                    }
+
                     playerHealth.TakeDamage(finalDamage);
                     hasAttacked = true;
                     Debug.Log($"{gameObject.name} 對玩家造成 {finalDamage} 點傷害");
@@ -203,6 +232,12 @@ public class MonsterAttackManager : AttackManager
         if (hasAttacked)
         {
             hasDamaged = true;
+
+            // 如果是自爆攻擊，在造成傷害後觸發怪物死亡
+            if (attackType == AttackType.Explosion && monster != null)
+            {
+                monster.Die(); 
+            }
         }
     }
     

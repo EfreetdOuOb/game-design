@@ -7,6 +7,7 @@ public abstract class MonsterState
 {
     protected Monster monster; // 引用怪物實例
     
+    
     public MonsterState(Monster _monster)
     {
         monster = _monster;
@@ -852,4 +853,197 @@ public class SkullSecondDead : MonsterState
     public override void FixedUpdate() { }
     public override void OnTriggerEnter2D(Collider2D collision) { }
     public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 鬼魂的閒置狀態
+public class GhostIdle : MonsterState
+{
+    private float idleTimer = 0f;
+    private float nextStateTime = 3f;
+
+    public GhostIdle(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("idle");
+        monster.Stop();
+        nextStateTime = Random.Range(2f, 5f);
+    }
+
+    public override void Update()
+    {
+        idleTimer += Time.deltaTime;
+
+        if (monster.IsPlayerInRange(monster.detectionRange))
+        {
+            monster.SetCurrentState(new GhostChase(monster));
+        }
+        else if (idleTimer >= nextStateTime)
+        {
+            if (Random.value > 0.5f)
+            {
+                monster.SetCurrentState(new GhostWander(monster));
+            }
+            else
+            {
+                idleTimer = 0f;
+                nextStateTime = Random.Range(2f, 5f);
+            }
+        }
+    }
+
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 鬼魂的隨機移動狀態
+public class GhostWander : MonsterState
+{
+    private float wanderTimer = 0f;
+    private float wanderDuration;
+    private Vector2 wanderDirection;
+
+    public GhostWander(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("run");
+        wanderDuration = Random.Range(1f, 3f);
+        float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
+        wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        monster.Face(wanderDirection);
+    }
+
+    public override void Update()
+    {
+        wanderTimer += Time.deltaTime;
+
+        if (monster.IsPlayerInRange(monster.detectionRange))
+        {
+            monster.SetCurrentState(new GhostChase(monster));
+        }
+        else if (wanderTimer >= wanderDuration)
+        {
+            monster.SetCurrentState(new GhostIdle(monster));
+        }
+    }
+
+    public override void FixedUpdate()
+    {
+        monster.transform.Translate(wanderDirection * monster.moveSpeed * 0.5f * Time.deltaTime);
+    }
+
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 鬼魂的追蹤狀態
+public class GhostChase : MonsterState
+{
+    public GhostChase(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("run");
+    }
+
+    public override void Update()
+    {
+        if (monster.IsPlayerInAttackRange())
+        {
+            monster.SetCurrentState(new GhostDead(monster));
+        }
+        else if (!monster.IsPlayerInRange(monster.detectionRange))
+        {
+            monster.SetCurrentState(new GhostIdle(monster));
+        }
+    }
+
+    public override void FixedUpdate()
+    {
+        Vector2 direction = monster.MoveTowardsPlayer();
+        if (direction != Vector2.zero)
+        {
+            monster.Face(direction);
+            monster.transform.Translate(direction * monster.moveSpeed * Time.deltaTime);
+        }
+    }
+
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+
+
+// 鬼魂的受傷狀態
+public class GhostHurt : MonsterState
+{
+    private float hurtTimer = 0f;
+    private float hurtDuration = 0.4f;
+
+    public GhostHurt(Monster _monster) : base(_monster)
+    {
+        monster.PlayAnimation("hurt");
+        monster.Stop();
+    }
+
+    public override void Update()
+    {
+        // 如果血量<=0，立即切到死亡狀態
+        if (monster.currentHealth <= 0)
+        {
+            monster.SetCurrentState(new GhostDead(monster)); // 鬼魂直接死掉，沒有復活
+            return;
+        }
+
+        hurtTimer += Time.deltaTime;
+
+        if (hurtTimer >= hurtDuration)
+        {
+            if (monster.IsPlayerInAttackRange())
+            {
+                monster.SetCurrentState(new GhostDead(monster));
+            }
+            else if (monster.IsPlayerInRange(monster.detectionRange))
+            {
+                monster.SetCurrentState(new GhostChase(monster));
+            }
+            else
+            {
+                monster.SetCurrentState(new GhostIdle(monster));
+            }
+        }
+    }
+
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision) { }
+    public override void OnTriggerStay2D(Collider2D collision) { }
+}
+
+// 鬼魂的死亡狀態 (自爆後)
+public class GhostDead : MonsterState
+{
+    
+
+    public GhostDead(Monster _monster) : base(_monster)
+    {
+        monster.Attack();
+        monster.Stop();
+        monster.PlayAnimation("attack"); // 鬼魂死亡動畫 (自爆後通常直接消失或有簡單死亡動畫) 
+    }
+
+    public override void Update()
+    {
+        if (monster.IsAnimationDone("attack"))
+        {
+            
+            monster.Die(); // 真正銷毀鬼魂
+        }
+    }
+
+    public override void FixedUpdate() { }
+    public override void OnTriggerEnter2D(Collider2D collision)
+    { 
+        
+    }
+    public override void OnTriggerStay2D(Collider2D collision)
+    {
+
+    }
+    
 } 

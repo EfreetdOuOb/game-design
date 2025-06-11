@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2906863191890070820}
-  m_Layer: 11
+  m_Layer: 14
   m_Name: detectionRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2325699414193176792}
-  m_Layer: 11
+  m_Layer: 14
   m_Name: firePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3745662490514019774}
-  m_Layer: 11
+  m_Layer: 14
   m_Name: attackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -35,6 +35,10 @@ public class Skull : Monster
     {
         return new SkullSecondDead(this);
     }
+    protected override int CalculateExpValue()
+    {
+        return 65; 
+    }
 
     public void CallReviveFromState()
     {
